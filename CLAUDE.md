@@ -24,7 +24,7 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
 
 ## Repository & deploy
 - GitHub: https://github.com/hectorally94/child-app (public, branch `main`).
-- Vercel: project `child-app` linked to the repo; every push to `main` deploys.
+- Vercel: project `child-app` linked to the repo; every push to `main` deploys. Live: https://child-app-lime.vercel.app
 
 ## Commands
 - `npm install` then `npm run dev` (local dev server)
@@ -56,7 +56,8 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
 - [x] Phase 0: PRD added to repo
 - [x] Phase 1 prototype: child mode, parent gate + mode, "Write 0" and "Write 1" lessons, tracing with
       demonstration, independent writing, cautious feedback, local progress, device TTS audio, EN/FR
-- [ ] Test with the real child; adjust stroke data to match the teacher's method
+- [x] First test with the real child (2026-11-22): parent loves the UI, the child liked it. Keep this design direction.
+- [ ] Observe more sessions; adjust stroke data to match the teacher's method
 - [x] UI v2: Tailwind + claymorphism + mascot + animations; adaptive demo replay after 2 missed traces; "Write 2" lesson
 - [ ] Prerecorded audio (device TTS for now)
 - [ ] Phase 2: lesson packages/download, backend + sync, more writing lessons
