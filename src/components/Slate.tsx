@@ -218,7 +218,7 @@ export function Slate({ strokes, mode, guide, resetKey, onAttempt, onDemoEnd, mi
   };
 
   return (
-    <div className="clay relative mx-auto aspect-square w-full max-h-[58vh] max-w-[58vh] overflow-hidden !rounded-[36px] bg-[#fffdf8]">
+    <div className="clay relative mx-auto aspect-square w-full overflow-hidden !rounded-[clamp(22px,7%,36px)] bg-[#fffdf8]">
       {showStart &&
         starts.map((start, i) => (
           <motion.span

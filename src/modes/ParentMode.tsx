@@ -33,6 +33,18 @@ export function ParentMode({ data, update, onChildMode }: Props) {
   const [tab, setTab] = useState<Tab>(child ? 'dashboard' : 'settings');
   const [preview, setPreview] = useState<Lesson | null>(null);
 
+  // Open the profile editor and put the cursor in the first-name field.
+  const openProfile = () => {
+    setTab('settings');
+    setPreview(null);
+    window.setTimeout(() => {
+      const input = document.getElementById('profile-name') as HTMLInputElement | null;
+      input?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      input?.focus({ preventScroll: true });
+      input?.select();
+    }, 350);
+  };
+
   const setChild = (patch: Partial<Child>) =>
     update((d) => ({ ...d, children: d.children.map((c) => (c.id === d.activeChildId ? { ...c, ...patch } : c)) }));
 
@@ -44,13 +56,27 @@ export function ParentMode({ data, update, onChildMode }: Props) {
 
   return (
     <div className="flex min-h-full flex-col bg-canvas font-body text-ink">
-      <header className="sticky top-0 z-20 border-b border-white/60 bg-canvas/85 backdrop-blur-md">
+      <header className="sticky top-0 z-20 border-b border-white/60 bg-canvas/85 pt-[env(safe-area-inset-top)] backdrop-blur-md">
         <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-3">
-          {child ? <Avatar child={child} size={44} /> : null}
-          <div className="min-w-0 flex-1">
-            <p className="m-0 truncate font-display text-lg leading-tight font-black">{child ? child.name : t('parentArea', lang)}</p>
-            <p className="m-0 text-sm text-ink-soft">{t('parentArea', lang)}</p>
-          </div>
+          {child ? (
+            <button onClick={openProfile} aria-label={`${t('editProfile', lang)} · ${child.name}`}
+              className="-ml-1.5 flex min-w-0 flex-1 items-center gap-3 rounded-[22px] p-1.5 text-left transition hover:bg-white/70 active:scale-[0.98]">
+              <span className="relative shrink-0">
+                <Avatar child={child} size={44} />
+                <span className="absolute -right-1 -bottom-1 grid h-6 w-6 place-items-center rounded-full border-2 border-canvas bg-blue text-white" aria-hidden="true">
+                  <Icon name="pencil" size={12} />
+                </span>
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate font-display text-lg leading-tight font-black">{child.name}</span>
+                <span className="block text-sm text-ink-soft">{t('editProfile', lang)}</span>
+              </span>
+            </button>
+          ) : (
+            <div className="min-w-0 flex-1">
+              <p className="m-0 truncate font-display text-lg leading-tight font-black">{t('parentArea', lang)}</p>
+            </div>
+          )}
           <button className="clay-btn is-sun !min-h-12 !px-4 text-base" onClick={onChildMode} disabled={!child}>
             <span className="hidden sm:inline">{t('startChildMode', lang).replace(' ▶', '')}</span>
             <span className="sm:hidden">{lang === 'fr' ? 'Enfant' : 'Child'}</span>
@@ -67,7 +93,7 @@ export function ParentMode({ data, update, onChildMode }: Props) {
               ? <Preview lesson={preview} lang={lang} child={child} onBack={() => setPreview(null)}
                   onAssign={() => setChild({ todayLessonId: preview.id })} onChildMode={onChildMode} />
               : <Catalogue lang={lang} child={child} onOpen={setPreview} />)}
-            {tab === 'settings' && <Settings data={data} update={update} />}
+            {tab === 'settings' && <Settings data={data} update={update} onEdit={openProfile} />}
           </motion.div>
         </AnimatePresence>
       </main>
@@ -261,7 +287,7 @@ function Preview({ lesson, lang, child, onBack, onAssign, onChildMode }: {
       </div>
 
       <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-        <div className="relative">
+        <div className="relative mx-auto w-full max-w-[min(100%,60dvh)]">
           <Slate strokes={lesson.strokes} midline={lesson.guideLines === 'midline'} mode="demo" guide="strong" resetKey={demoKey} />
           <button onClick={() => setDemoKey((k) => k + 1)} aria-label={t('watchDemo', lang)}
             className="clay-btn is-white absolute right-3 bottom-3 !h-12 !w-12 !rounded-full !p-0 text-blue">
@@ -314,7 +340,7 @@ function Preview({ lesson, lang, child, onBack, onAssign, onChildMode }: {
   );
 }
 
-function Settings({ data, update }: { data: AppData; update: (fn: (d: AppData) => AppData) => void }) {
+function Settings({ data, update, onEdit }: { data: AppData; update: (fn: (d: AppData) => AppData) => void; onEdit: () => void }) {
   const lang = data.parentLang;
   const [name, setName] = useState('');
   const child = data.children.find((c) => c.id === data.activeChildId);
@@ -340,6 +366,8 @@ function Settings({ data, update }: { data: AppData; update: (fn: (d: AppData) =
 
   return (
     <div className="flex flex-col gap-7">
+      {child && <ProfileEditor key={child.id} child={child} lang={lang} update={update} />}
+
       <section>
         <H2>{t('children', lang)}</H2>
         <div className="clay p-4">
@@ -356,6 +384,10 @@ function Settings({ data, update }: { data: AppData; update: (fn: (d: AppData) =
                       {active
                         ? <span className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-sm font-bold text-blue"><Icon name="check" size={14} />{t('active', lang)}</span>
                         : <button className="clay-btn is-white !min-h-11 !px-4 text-sm" onClick={() => update((d) => ({ ...d, activeChildId: c.id }))}>{t('select', lang)}</button>}
+                      <button className="grid h-11 w-11 place-items-center rounded-full text-blue transition hover:bg-white active:scale-90"
+                        onClick={() => { update((d) => ({ ...d, activeChildId: c.id })); onEdit(); }} aria-label={`${t('edit', lang)} ${c.name}`}>
+                        <Icon name="pencil" size={20} />
+                      </button>
                       <button className="grid h-11 w-11 place-items-center rounded-full text-[#b91c1c] transition hover:bg-white active:scale-90" onClick={() => remove(c.id)} aria-label={`${t('delete', lang)} ${c.name}`}>
                         <Icon name="trash" size={20} />
                       </button>
@@ -374,8 +406,6 @@ function Settings({ data, update }: { data: AppData; update: (fn: (d: AppData) =
           </form>
         </div>
       </section>
-
-      {child && <ProfileEditor key={child.id} child={child} lang={lang} update={update} />}
 
       <section>
         <H2>{t('settings', lang)}</H2>

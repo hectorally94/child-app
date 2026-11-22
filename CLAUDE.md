@@ -58,6 +58,11 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
   orange direction arrow, child draws in pink.
 - Motion: `MotionConfig reducedMotion="user"`; one confetti burst on completion; icons from one set (`src/components/Icon.tsx`).
 - Parent mode: same clay system, calmer; bottom navigation (Tableau de bord / Leçons / Paramètres); preview plays the real demo.
+- **Two layouts** (2026-11-22): phones / short screens (`max-width: 639px` or `max-height: 720px`, see `useCompact` in
+  ChildMode) get a compact layout; wider screens keep the web layout the user loves. Child mode is exactly one screen
+  tall (`h-dvh`, safe-area padding for notches); the lesson board sizes itself with a size container
+  (`width: min(100cqw, 100cqh)`) so it never overflows. Test phone fit at 320×568, 360×640, 375×667.
+- Profile: tap the child's name/avatar in the parent header (pencil badge) → profile editor (first name, avatar color).
 
 ## Current status
 - [x] Phase 0: PRD added to repo

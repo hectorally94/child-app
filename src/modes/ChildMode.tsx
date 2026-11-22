@@ -27,6 +27,19 @@ const screenMotion = {
   exit: { opacity: 0, y: -16, transition: { duration: 0.18 } },
 };
 
+/** True on phones and short screens: use the compact mobile layout. */
+function useCompact() {
+  const query = '(max-width: 639px), (max-height: 720px)';
+  const [compact, setCompact] = useState(() => typeof window !== 'undefined' && window.matchMedia(query).matches);
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const on = () => setCompact(mq.matches);
+    mq.addEventListener('change', on);
+    return () => mq.removeEventListener('change', on);
+  }, []);
+  return compact;
+}
+
 /** Mascot "talks" for a moment whenever it says something. */
 function useTalk(): [Mood, (lang: Lang, text: string, after?: Mood) => void, (m: Mood) => void] {
   const [mood, setMood] = useState<Mood>('idle');
@@ -52,12 +65,12 @@ export function ChildMode({ data, update, onParent }: Props) {
   const done = new Set(data.sessions.filter((s) => s.childId === child?.id && s.completed).map((s) => s.lessonId));
 
   return (
-    <div className="relative isolate flex min-h-full flex-col overflow-x-hidden bg-canvas font-display text-ink select-none">
+    <div className="relative isolate flex h-dvh flex-col overflow-hidden bg-canvas pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] font-display text-ink select-none">
       <Blobs />
       <button
         onClick={() => { stopSpeaking(); onParent(); }}
         aria-label={t('parentArea', lang)}
-        className="absolute top-3 right-3 z-20 grid h-12 w-12 place-items-center rounded-full text-ink-soft/50 transition hover:text-ink-soft active:scale-90"
+        className="absolute top-[calc(env(safe-area-inset-top)+0.5rem)] right-2 z-20 grid h-12 w-12 place-items-center rounded-full text-ink-soft/50 transition hover:text-ink-soft active:scale-90"
       >
         <Icon name="lock" size={22} />
       </button>
@@ -123,6 +136,7 @@ interface WelcomeProps {
 
 function Welcome({ data, child, today, lessons, done, lang, onPick, onSwitch }: WelcomeProps) {
   const [mood, say] = useTalk();
+  const compact = useCompact();
   const [group, setGroup] = useState<string>(today?.group ?? 'numbers');
   const [switching, setSwitching] = useState(false);
   const greeting = child ? t('childWelcome', lang, { name: child.name }) : t('noActivity', lang);
@@ -140,7 +154,8 @@ function Welcome({ data, child, today, lessons, done, lang, onPick, onSwitch }: 
   const others = data.children.filter((c) => c.id !== child?.id);
 
   return (
-    <motion.main {...screenMotion} className="relative z-10 mx-auto flex w-full max-w-2xl flex-1 flex-col items-center gap-5 px-4 pt-3 pb-10">
+    <motion.main {...screenMotion} className="relative z-10 min-h-0 w-full flex-1 overflow-y-auto overscroll-contain">
+     <div className="mx-auto flex w-full max-w-2xl flex-col items-center gap-4 px-4 pt-2 pb-8 sm:gap-5 sm:pt-3">
       {/* profile */}
       <div className="flex w-full items-center pr-12">
         {child && (
@@ -176,44 +191,76 @@ function Welcome({ data, child, today, lessons, done, lang, onPick, onSwitch }: 
       </AnimatePresence>
 
       {/* Pipo + today's activity */}
-      <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:items-end sm:justify-center">
-        <div className="flex flex-col items-center">
-          <SpeechBubble text={greeting} />
-          <Mascot mood={mood} size={112} />
-        </div>
-        {today && child && (
-          <motion.button
-            onClick={() => onPick(today)}
-            aria-label={`${tr(today.title, lang)}. ${t('tapToStart', lang)}`}
-            className="clay relative grid aspect-square w-[min(54vw,220px)] place-items-center !rounded-[44px]"
-            initial={{ scale: 0.6, rotate: -6, opacity: 0 }}
-            animate={{ scale: 1, rotate: 0, opacity: 1, transition: { ...spring, delay: 0.15 } }}
-            whileTap={{ scale: 0.94 }}
-          >
-            <Icon name="sparkle" size={26} className="absolute top-4 left-4 text-sun" />
-            <span className={`bg-gradient-to-b from-blue to-violet bg-clip-text leading-none font-black text-transparent ${today.target.length > 1 ? 'text-[min(26vw,110px)]' : 'text-[min(36vw,150px)]'}`}>
-              {today.target}
-            </span>
-            <motion.span
-              className="absolute -right-4 -bottom-4 grid h-20 w-20 place-items-center rounded-full border-4 border-white bg-sun text-ink shadow-[0_7px_0_var(--color-sun-deep),0_14px_22px_-8px_rgb(217_119_6/0.6)]"
-              animate={{ scale: [1, 1.1, 1] }}
-              transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+      {compact ? (
+        <div className="flex w-full flex-col gap-3">
+          <div className="flex w-full items-end gap-1">
+            <div className="-mb-1 shrink-0"><Mascot mood={mood} size={68} /></div>
+            <div className="min-w-0 flex-1"><SpeechBubble text={greeting} /></div>
+          </div>
+          {today && child && (
+            <motion.button
+              onClick={() => onPick(today)}
+              aria-label={`${tr(today.title, lang)}. ${t('tapToStart', lang)}`}
+              className="clay relative flex w-full items-center gap-4 !rounded-[30px] p-3 pr-4"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1, transition: { ...spring, delay: 0.1 } }}
+              whileTap={{ scale: 0.96 }}
             >
-              <Icon name="play" size={38} />
-            </motion.span>
-          </motion.button>
-        )}
-      </div>
+              <span className="relative grid h-20 w-20 shrink-0 place-items-center rounded-[22px] bg-canvas">
+                <Icon name="sparkle" size={18} className="absolute top-1.5 left-1.5 text-sun" />
+                <span className={`bg-gradient-to-b from-blue to-violet bg-clip-text leading-none font-black text-transparent ${today.target.length > 1 ? 'text-[2.6rem]' : 'text-[3.4rem]'}`}>{today.target}</span>
+              </span>
+              <span className="min-w-0 flex-1 text-left text-lg leading-tight font-black">{tr(today.title, lang)}</span>
+              <motion.span
+                className="grid h-16 w-16 shrink-0 place-items-center rounded-full border-4 border-white bg-sun text-ink shadow-[0_5px_0_var(--color-sun-deep),0_10px_18px_-8px_rgb(217_119_6/0.6)]"
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <Icon name="play" size={30} />
+              </motion.span>
+            </motion.button>
+          )}
+        </div>
+      ) : (
+        <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:items-end sm:justify-center">
+          <div className="flex flex-col items-center">
+            <SpeechBubble text={greeting} />
+            <Mascot mood={mood} size={112} />
+          </div>
+          {today && child && (
+            <motion.button
+              onClick={() => onPick(today)}
+              aria-label={`${tr(today.title, lang)}. ${t('tapToStart', lang)}`}
+              className="clay relative grid aspect-square w-[min(54vw,220px)] place-items-center !rounded-[44px]"
+              initial={{ scale: 0.6, rotate: -6, opacity: 0 }}
+              animate={{ scale: 1, rotate: 0, opacity: 1, transition: { ...spring, delay: 0.15 } }}
+              whileTap={{ scale: 0.94 }}
+            >
+              <Icon name="sparkle" size={26} className="absolute top-4 left-4 text-sun" />
+              <span className={`bg-gradient-to-b from-blue to-violet bg-clip-text leading-none font-black text-transparent ${today.target.length > 1 ? 'text-[min(26vw,110px)]' : 'text-[min(36vw,150px)]'}`}>
+                {today.target}
+              </span>
+              <motion.span
+                className="absolute -right-4 -bottom-4 grid h-20 w-20 place-items-center rounded-full border-4 border-white bg-sun text-ink shadow-[0_7px_0_var(--color-sun-deep),0_14px_22px_-8px_rgb(217_119_6/0.6)]"
+                animate={{ scale: [1, 1.1, 1] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <Icon name="play" size={38} />
+              </motion.span>
+            </motion.button>
+          )}
+        </div>
+      )}
 
       {/* free choice: numbers / letters */}
       {child && (
         <section className="mt-3 w-full" aria-label={t('chooseTitle', lang)}>
-          <div className="mx-auto mb-4 flex w-fit rounded-full bg-white/80 p-1.5 shadow-[inset_2px_3px_6px_rgb(43_39_64/0.08)]" role="tablist">
+          <div className="mx-auto mb-3 flex w-fit rounded-full sm:mb-4 bg-white/80 p-1.5 shadow-[inset_2px_3px_6px_rgb(43_39_64/0.08)]" role="tablist">
             {groups.map((g) => {
               const on = group === g.k;
               return (
                 <button key={g.k} role="tab" aria-selected={on} onClick={() => setGroup(g.k)}
-                  className={`relative flex min-h-14 items-center gap-2 rounded-full px-5 text-lg font-black transition-colors ${on ? 'text-white' : 'text-ink-soft'}`}>
+                  className={`relative flex min-h-12 items-center gap-2 rounded-full px-5 text-lg font-black transition-colors sm:min-h-14 ${on ? 'text-white' : 'text-ink-soft'}`}>
                   {on && <motion.span layoutId="group-pill" className="absolute inset-0 rounded-full bg-blue shadow-[inset_0_-4px_0_rgb(0_0_0/0.15)]" transition={spring} />}
                   <span className="relative text-2xl tracking-tight">{g.sample}</span>
                   <span className="relative hidden text-base sm:inline">{t(g.label, lang)}</span>
@@ -254,20 +301,21 @@ function Welcome({ data, child, today, lessons, done, lang, onPick, onSwitch }: 
           </motion.ul>
         </section>
       )}
+     </div>
     </motion.main>
   );
 }
 
 function SpeechBubble({ text }: { text: string }) {
   return (
-    <div className="relative mb-2 min-h-[3.5rem] max-w-[min(88vw,26rem)]" aria-live="polite">
+    <div className="relative mb-2 min-h-[3rem] max-w-[min(88vw,26rem)] sm:min-h-[3.5rem]" aria-live="polite">
       <AnimatePresence mode="wait">
         <motion.p
           key={text}
           initial={{ opacity: 0, y: 10, scale: 0.9 }}
           animate={{ opacity: 1, y: 0, scale: 1, transition: { type: 'spring', stiffness: 400, damping: 24 } }}
           exit={{ opacity: 0, y: -6, scale: 0.95, transition: { duration: 0.12 } }}
-          className="clay relative m-0 !rounded-[26px] px-5 py-3 text-center text-[clamp(1.25rem,5vw,1.7rem)] leading-tight font-extrabold text-ink"
+          className="clay relative m-0 !rounded-[24px] px-4 py-2.5 text-center text-[clamp(1.05rem,4.8vw,1.7rem)] leading-tight font-extrabold text-ink sm:px-5 sm:py-3"
         >
           {text}
           <span className="absolute -bottom-[9px] left-1/2 h-4 w-4 -translate-x-1/2 rotate-45 rounded-[3px] bg-white" aria-hidden="true" />
@@ -302,6 +350,7 @@ function LessonPlayer({ lesson, child, update, onDone, onHome }: PlayerProps) {
   const [replaying, setReplaying] = useState(false);
   const [glow, setGlow] = useState(false);
   const [mood, say, setMood] = useTalk();
+  const compact = useCompact();
   const sessionId = useRef(newId());
   const created = useRef(false);
   const activity = lesson.activities[index];
@@ -399,7 +448,7 @@ function LessonPlayer({ lesson, child, update, onDone, onHome }: PlayerProps) {
   const bubble = message ?? tr(activity.say, lang);
 
   return (
-    <motion.main {...screenMotion} className="relative z-10 mx-auto flex w-full max-w-xl flex-1 flex-col items-center gap-3 px-4 pt-3 pb-6">
+    <motion.main {...screenMotion} className="relative z-10 mx-auto flex min-h-0 w-full max-w-xl flex-1 flex-col items-center gap-2 px-3 pt-2 pb-3 sm:gap-3 sm:px-4 sm:pt-3 sm:pb-6">
       {/* top bar: home + steps */}
       <div className="flex w-full items-center gap-3 pr-12">
         <button onClick={onHome} aria-label={t('home', lang)} className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-white/80 text-ink-soft shadow-sm active:scale-90">
@@ -422,13 +471,14 @@ function LessonPlayer({ lesson, child, update, onDone, onHome }: PlayerProps) {
 
       {/* mascot + bubble */}
       <div className="flex w-full items-end justify-center gap-1">
-        <div className="shrink-0 -mb-1"><Mascot mood={mood} size={78} /></div>
-        <div className="flex-1"><SpeechBubble text={bubble} /></div>
+        <div className="shrink-0 -mb-1"><Mascot mood={mood} size={compact ? 60 : 78} /></div>
+        <div className="min-w-0 flex-1"><SpeechBubble text={bubble} /></div>
       </div>
 
-      {/* board */}
+      {/* board: takes all the space left, stays square, never overflows the screen */}
+      <div className="grid min-h-0 w-full flex-1 place-items-center" style={{ containerType: 'size' }}>
       <motion.div
-        className="w-full"
+        style={{ width: 'min(100cqw, 100cqh)' }}
         animate={glow ? { scale: [1, 1.04, 1], rotate: [0, -1.5, 1.5, 0] } : { scale: 1 }}
         transition={{ duration: 0.6 }}
       >
@@ -451,9 +501,10 @@ function LessonPlayer({ lesson, child, update, onDone, onHome }: PlayerProps) {
           />
         </div>
       </motion.div>
+      </div>
 
       {/* actions */}
-      <div className="mt-1 flex min-h-24 items-center justify-center gap-5">
+      <div className="flex min-h-20 shrink-0 items-center justify-center gap-4 sm:mt-1 sm:min-h-24 sm:gap-5">
         <RoundButton label={t('listen', lang)} icon="sound" onClick={() => say(lang, bubble)} />
         {activity.type === 'demonstration' && demoDone && (
           <RoundButton label={t('watchDemo', lang)} icon="replay" onClick={() => { setDemoDone(false); setResetKey((k) => k + 1); }} />
@@ -470,7 +521,7 @@ function LessonPlayer({ lesson, child, update, onDone, onHome }: PlayerProps) {
               initial={{ scale: 0, rotate: -30 }}
               animate={{ scale: 1, rotate: 0, transition: { type: 'spring', stiffness: 380, damping: 16 } }}
               exit={{ scale: 0 }}
-              className="clay-btn is-sun !h-24 !w-24 !rounded-full !p-0"
+              className="clay-btn is-sun !h-20 !w-20 !rounded-full !p-0 sm:!h-24 sm:!w-24"
             >
               <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 1.2, repeat: Infinity }}>
                 <Icon name="play" size={46} />
@@ -485,7 +536,7 @@ function LessonPlayer({ lesson, child, update, onDone, onHome }: PlayerProps) {
 
 function RoundButton({ label, icon, onClick }: { label: string; icon: 'sound' | 'replay' | 'erase'; onClick: () => void }) {
   return (
-    <button onClick={onClick} aria-label={label} className="clay-btn is-white !h-16 !w-16 !rounded-full !p-0 text-blue">
+    <button onClick={onClick} aria-label={label} className="clay-btn is-white !h-14 !w-14 !rounded-full !p-0 text-blue sm:!h-16 sm:!w-16">
       <Icon name={icon} size={30} />
     </button>
   );
@@ -497,6 +548,7 @@ function Completion({ lesson, lang, onAgain, onNext, onFinish }: {
   lesson: Lesson; lang: Lang; onAgain: () => void; onNext: () => void; onFinish: () => void;
 }) {
   const [mood, say, setMood] = useTalk();
+  const compact = useCompact();
   useEffect(() => {
     setMood('happy');
     const id = window.setTimeout(() => say(lang, tr(lesson.completion, lang), 'happy'), 500);
@@ -505,29 +557,29 @@ function Completion({ lesson, lang, onAgain, onNext, onFinish }: {
   }, []);
 
   return (
-    <motion.main {...screenMotion} className="relative z-10 flex flex-1 flex-col items-center justify-center gap-4 px-4 py-10">
+    <motion.main {...screenMotion} className="relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center gap-2 overflow-y-auto px-4 py-4 sm:gap-4 sm:py-10">
       <div className="relative grid place-items-center">
         <Confetti />
         <motion.div
-          className="relative grid h-52 w-52 place-items-center"
+          className="relative grid h-[min(52vw,26dvh,13rem)] w-[min(52vw,26dvh,13rem)] place-items-center"
           initial={{ scale: 0, rotate: -120 }}
           animate={{ scale: 1, rotate: 0, transition: { type: 'spring', stiffness: 200, damping: 12, delay: 0.1 } }}
         >
           <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full drop-shadow-[0_12px_18px_rgb(217_119_6/0.45)]" aria-hidden="true">
             <path d="M50 4l12.6 27.4 29.9 3.3-22.3 20.3 6.2 29.5L50 69.4 23.6 84.5l6.2-29.5L7.5 34.7l29.9-3.3L50 4Z" fill="#fbbf24" stroke="#fff" strokeWidth="4" strokeLinejoin="round" />
           </svg>
-          <span className="relative mt-3 text-7xl font-black text-white [text-shadow:0_3px_0_var(--color-sun-deep)]">{lesson.target}</span>
+          <span className="relative mt-[6%] text-[clamp(2.4rem,8dvh,4.5rem)] font-black text-white [text-shadow:0_3px_0_var(--color-sun-deep)]">{lesson.target}</span>
         </motion.div>
       </div>
 
       <motion.h1
-        className="m-0 max-w-[16ch] text-center text-[clamp(1.8rem,7vw,2.6rem)] leading-tight font-black text-pink"
+        className="m-0 max-w-[16ch] text-center text-[clamp(1.5rem,6.5vw,2.6rem)] leading-tight font-black text-pink"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0, transition: { ...spring, delay: 0.35 } }}
       >
         {tr(lesson.completion, lang)}
       </motion.h1>
-      <Mascot mood={mood} size={96} />
+      <Mascot mood={mood} size={compact ? 70 : 96} />
 
       <motion.div
         className="mt-2 grid w-full max-w-sm grid-cols-3 gap-3"
@@ -544,7 +596,7 @@ function Completion({ lesson, lang, onAgain, onNext, onFinish }: {
             key={b.k}
             onClick={b.fn}
             variants={{ hidden: { opacity: 0, y: 20, scale: 0.8 }, show: { opacity: 1, y: 0, scale: 1, transition: spring } }}
-            className={`clay-btn ${b.cls} !h-full !flex-col !gap-1 !rounded-[26px] !px-2 !py-3 !text-[0.9rem]`}
+            className={`clay-btn ${b.cls} !h-full !flex-col !gap-1 !rounded-[26px] !px-2 !py-2.5 !text-[0.9rem] sm:!py-3`}
           >
             <Icon name={b.icon} size={32} />
             <span className="leading-tight">{t(b.k, lang)}</span>

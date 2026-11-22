@@ -36,6 +36,7 @@ const UI = {
   whoPlays: { en: "Who's playing?", fr: 'Qui joue ?' },
   avatarColor: { en: 'Avatar color', fr: "Couleur de l'avatar" },
   editProfile: { en: 'Edit profile', fr: 'Modifier le profil' },
+  edit: { en: 'Edit', fr: 'Modifier' },
   firstName: { en: 'First name', fr: 'Prénom' },
   save: { en: 'Save', fr: 'Enregistrer' },
   saved: { en: 'Saved', fr: 'Enregistré' },
