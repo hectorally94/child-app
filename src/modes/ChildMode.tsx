@@ -6,8 +6,9 @@ import { Icon } from '../components/Icon';
 import { Mascot, type Mood } from '../components/Mascot';
 import { Slate } from '../components/Slate';
 import { loadLessons } from '../content';
-import { evaluateAttempt } from '../engine/evaluate';
-import { speak, stopSpeaking } from '../engine/speech';
+import { evaluateAttempt, type FailReason } from '../engine/evaluate';
+import { learningPath, masteredIds, nextInPath, previousInPath, unlockedIds } from '../engine/progress';
+import { playSound, speak, speakFeedback, stopSpeaking } from '../engine/speech';
 import type { FeedbackKey, Lang, Lesson, Point } from '../engine/types';
 import { t, tr, type UIKey } from '../i18n';
 import { newId, type AppData, type AttemptRecord, type Child, type SessionRecord } from '../storage/store';
@@ -41,11 +42,15 @@ function useCompact() {
 }
 
 /** Mascot "talks" for a moment whenever it says something. */
-function useTalk(): [Mood, (lang: Lang, text: string, after?: Mood) => void, (m: Mood) => void] {
+type Verdict = 'success' | 'miss';
+
+function useTalk(): [Mood, (lang: Lang, text: string, after?: Mood, verdict?: Verdict) => void, (m: Mood) => void] {
   const [mood, setMood] = useState<Mood>('idle');
   const timer = useRef<number>();
-  const say = (lang: Lang, text: string, after: Mood = 'idle') => {
-    speak(text, lang);
+  // verdict: speak "Bravo !" / "Faux !" clearly with a sound before the rest of the sentence
+  const say = (lang: Lang, text: string, after: Mood = 'idle', verdict?: Verdict) => {
+    if (verdict) speakFeedback(text, lang, verdict === 'success');
+    else speak(text, lang);
     window.clearTimeout(timer.current);
     setMood('talk');
     timer.current = window.setTimeout(() => setMood(after), Math.min(3200, 700 + text.length * 45));
@@ -58,11 +63,20 @@ export function ChildMode({ data, update, onParent }: Props) {
   const child = data.children.find((c) => c.id === data.activeChildId) ?? null;
   const lang = child?.childLang ?? 'fr';
   const lessons = loadLessons();
-  const today = lessons.find((l) => l.id === child?.todayLessonId) ?? null;
+  const mastered = masteredIds(data.sessions, child?.id);
+  const unlocked = unlockedIds(lessons, data.sessions, child);
+  // The big card: the parent's choice if it is open and not yet mastered, otherwise the next lesson to learn.
+  const chosen = lessons.find((l) => l.id === child?.todayLessonId && unlocked.has(l.id) && !mastered.has(l.id));
+  const nextToLearn = Object.values(learningPath(lessons)).flat().find((l) => unlocked.has(l.id) && !mastered.has(l.id));
+  const today = chosen ?? nextToLearn ?? null;
   const [screen, setScreen] = useState<Screen>({ kind: 'welcome' });
   const runRef = useRef(0);
-  const startLesson = (lesson: Lesson) => setScreen({ kind: 'lesson', lesson, run: ++runRef.current });
-  const done = new Set(data.sessions.filter((s) => s.childId === child?.id && s.completed).map((s) => s.lessonId));
+  const startLesson = (lesson: Lesson) => {
+    openBefore.current = unlocked;
+    setScreen({ kind: 'lesson', lesson, run: ++runRef.current });
+  };
+  // Remember what was open before the lesson, to announce what the child just unlocked.
+  const openBefore = useRef<Set<string>>(unlocked);
 
   return (
     <div className="relative isolate flex h-dvh flex-col overflow-hidden bg-canvas pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] font-display text-ink select-none">
@@ -83,7 +97,8 @@ export function ChildMode({ data, update, onParent }: Props) {
             child={child}
             today={today}
             lessons={lessons}
-            done={done}
+            done={mastered}
+            unlocked={unlocked}
             lang={lang}
             onPick={startLesson}
             onSwitch={(id) => update((d) => ({ ...d, activeChildId: id }))}
@@ -104,11 +119,13 @@ export function ChildMode({ data, update, onParent }: Props) {
             key="complete"
             lesson={screen.lesson}
             lang={lang}
+            next={nextInPath(lessons, screen.lesson)}
+            justUnlocked={(() => {
+              const n = nextInPath(lessons, screen.lesson);
+              return !!n && unlocked.has(n.id) && !openBefore.current.has(n.id);
+            })()}
             onAgain={() => startLesson(screen.lesson)}
-            onNext={() => {
-              const i = lessons.findIndex((l) => l.id === screen.lesson.id);
-              startLesson(lessons[(i + 1) % lessons.length]);
-            }}
+            onNext={(n) => startLesson(n)}
             onFinish={() => setScreen({ kind: 'welcome' })}
           />
         )}
@@ -129,16 +146,28 @@ interface WelcomeProps {
   today: Lesson | null;
   lessons: Lesson[];
   done: Set<string>;
+  unlocked: Set<string>;
   lang: Lang;
   onPick: (l: Lesson) => void;
   onSwitch: (childId: string) => void;
 }
 
-function Welcome({ data, child, today, lessons, done, lang, onPick, onSwitch }: WelcomeProps) {
+function Welcome({ data, child, today, lessons, done, unlocked, lang, onPick, onSwitch }: WelcomeProps) {
   const [mood, say] = useTalk();
   const compact = useCompact();
   const [group, setGroup] = useState<string>(today?.group ?? 'numbers');
   const [switching, setSwitching] = useState(false);
+  const [refused, setRefused] = useState<{ id: string; n: number } | null>(null);
+  const [note, setNote] = useState<string | null>(null);
+  // A locked tile: Pipo says which one to master first.
+  const pick = (l: Lesson) => {
+    if (unlocked.has(l.id)) return onPick(l);
+    const before = previousInPath(lessons, l);
+    setRefused((r) => ({ id: l.id, n: (r?.n ?? 0) + 1 }));
+    const text = t('lockedSay', lang, { target: before?.target ?? '' });
+    setNote(text);
+    say(lang, text, 'encourage');
+  };
   const greeting = child ? t('childWelcome', lang, { name: child.name }) : t('noActivity', lang);
   useEffect(() => {
     const id = window.setTimeout(() => say(lang, greeting), 450);
@@ -195,7 +224,7 @@ function Welcome({ data, child, today, lessons, done, lang, onPick, onSwitch }: 
         <div className="flex w-full flex-col gap-3">
           <div className="flex w-full items-end gap-1">
             <div className="-mb-1 shrink-0"><Mascot mood={mood} size={68} /></div>
-            <div className="min-w-0 flex-1"><SpeechBubble text={greeting} /></div>
+            <div className="min-w-0 flex-1"><SpeechBubble text={note ?? greeting} /></div>
           </div>
           {today && child && (
             <motion.button
@@ -224,7 +253,7 @@ function Welcome({ data, child, today, lessons, done, lang, onPick, onSwitch }: 
       ) : (
         <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:items-end sm:justify-center">
           <div className="flex flex-col items-center">
-            <SpeechBubble text={greeting} />
+            <SpeechBubble text={note ?? greeting} />
             <Mascot mood={mood} size={112} />
           </div>
           {today && child && (
@@ -278,17 +307,28 @@ function Welcome({ data, child, today, lessons, done, lang, onPick, onSwitch }: 
           >
             {shown.map((l, i) => {
               const isToday = l.id === today?.id;
+              const locked = !unlocked.has(l.id);
+              const wiggle = refused?.id === l.id;
               return (
                 <motion.li key={l.id} variants={{ hidden: { opacity: 0, scale: 0.6, y: 14 }, show: { opacity: 1, scale: 1, y: 0, transition: { type: 'spring', stiffness: 420, damping: 20 } } }}>
                   <motion.button
-                    onClick={() => onPick(l)}
+                    key={wiggle ? `w${refused?.n}` : 'still'}
+                    onClick={() => pick(l)}
                     whileTap={{ scale: 0.88 }}
-                    aria-label={tr(l.title, lang)}
-                    className={`clay relative grid aspect-square w-full place-items-center !rounded-[24px] ${isToday ? 'ring-4 ring-sun' : ''}`}
+                    animate={wiggle ? { rotate: [0, -10, 10, -6, 6, 0] } : undefined}
+                    transition={{ duration: 0.45 }}
+                    aria-label={locked ? `${tr(l.title, lang)} (${t('lockedLabel', lang)})` : tr(l.title, lang)}
+                    aria-disabled={locked}
+                    className={`clay relative grid aspect-square w-full place-items-center !rounded-[24px] ${isToday ? 'ring-4 ring-sun' : ''} ${locked ? '!bg-[#ece8f6] !shadow-none' : ''}`}
                   >
-                    <span className={`bg-gradient-to-b ${TILE_COLORS[i % TILE_COLORS.length]} bg-clip-text leading-none font-black text-transparent ${l.target.length > 1 ? 'text-[clamp(1.6rem,8vw,2.4rem)]' : 'text-[clamp(2.2rem,11vw,3.2rem)]'}`}>
+                    <span className={`leading-none font-black ${locked ? 'text-[#b9b0d3]' : `bg-gradient-to-b ${TILE_COLORS[i % TILE_COLORS.length]} bg-clip-text text-transparent`} ${l.target.length > 1 ? 'text-[clamp(1.6rem,8vw,2.4rem)]' : 'text-[clamp(2.2rem,11vw,3.2rem)]'}`}>
                       {l.target}
                     </span>
+                    {locked && (
+                      <span className="absolute -right-1.5 -bottom-1.5 grid h-7 w-7 place-items-center rounded-full border-2 border-canvas bg-white text-ink-soft shadow-sm" aria-hidden="true">
+                        <Icon name="lock" size={13} />
+                      </span>
+                    )}
                     {done.has(l.id) && (
                       <span className="absolute -top-2 -right-2 grid h-8 w-8 place-items-center rounded-full border-[3px] border-white bg-sun text-white shadow-md" aria-hidden="true">
                         <Icon name="sparkle" size={16} />
@@ -349,6 +389,8 @@ function LessonPlayer({ lesson, child, update, onDone, onHome }: PlayerProps) {
   const [demoDone, setDemoDone] = useState(false);
   const [replaying, setReplaying] = useState(false);
   const [glow, setGlow] = useState(false);
+  const [shake, setShake] = useState(0);
+  const pendingMessage = useRef<string | null>(null);
   const [mood, say, setMood] = useTalk();
   const compact = useCompact();
   const sessionId = useRef(newId());
@@ -373,7 +415,12 @@ function LessonPlayer({ lesson, child, update, onDone, onHome }: PlayerProps) {
     setMisses(0);
     setDemoDone(false);
     setReplaying(false);
-    say(lang, tr(activity.say, lang));
+    const pending = pendingMessage.current;
+    pendingMessage.current = null;
+    if (pending) {
+      setMessage(pending);
+      say(lang, pending, 'encourage');
+    } else say(lang, tr(activity.say, lang));
     return stopSpeaking;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index]);
@@ -394,7 +441,11 @@ function LessonPlayer({ lesson, child, update, onDone, onHome }: PlayerProps) {
   const feedback = (key: FeedbackKey, after: Mood) => {
     const text = tr(lesson.feedback[key], lang);
     setMessage(text);
-    say(lang, text, after);
+    say(lang, text, after, key === 'success' ? 'success' : undefined);
+  };
+
+  const FAIL_TEXT: Record<FailReason, UIKey> = {
+    start: 'failStart', direction: 'failDirection', incomplete: 'failIncomplete', offpath: 'failOffpath',
   };
 
   const handleAttempt = (drawn: Point[][]) => {
@@ -405,9 +456,8 @@ function LessonPlayer({ lesson, child, update, onDone, onHome }: PlayerProps) {
       setResetKey((k) => k + 1);
       return;
     }
-    const n = attempts + 1;
-    setAttempts(n);
-    const hint = metrics.outcome !== 'success' && !metrics.startOk && activity.guide !== 'none';
+    setAttempts(attempts + 1);
+    const hint = metrics.outcome !== 'success' && metrics.reason === 'start';
     const record: AttemptRecord = { ...metrics, activity: activity.type, hintShown: hint, at: Date.now() };
     update((d) => ({
       ...d,
@@ -415,30 +465,40 @@ function LessonPlayer({ lesson, child, update, onDone, onHome }: PlayerProps) {
     }));
 
     if (metrics.outcome === 'success') {
+      // Written well: bravo, then the next step (or the celebration after writing alone)
       setGlow(true);
       feedback('success', 'happy');
       setMood('happy');
       window.setTimeout(() => { setGlow(false); advance(); }, 2000);
-    } else if (n >= activity.maxAttempts) {
-      feedback('moveOn', 'happy');
-      window.setTimeout(advance, 2200);
-    } else {
-      const m = misses + 1;
-      setMisses(m);
-      feedback(hint ? 'hintStart' : metrics.outcome === 'uncertain' ? 'uncertain' : 'retry', 'encourage');
-      window.setTimeout(() => {
-        setResetKey((k) => k + 1);
-        // Adaptive help (PRD §16): after two misses while tracing, show the demonstration again.
-        if (activity.type === 'trace' && m === 2) {
-          setReplaying(true);
-          const again = t('watchAgainSay', lang);
-          setMessage(again);
-          say(lang, again);
-        } else {
-          setMessage(null);
-        }
-      }, 1900);
+      return;
     }
+
+    // Not written well: say clearly that it is wrong and why, then try again
+    const m = misses + 1;
+    setMisses(m);
+    setShake((k) => k + 1);
+    const failText = t(FAIL_TEXT[metrics.reason ?? 'incomplete'], lang);
+    setMessage(failText);
+    say(lang, failText, 'encourage', 'miss');
+
+    window.setTimeout(() => {
+      setResetKey((k) => k + 1);
+      if (activity.type === 'trace' && m % 2 === 0) {
+        // Adaptive help (PRD §16): every two misses while tracing, Pipo shows the movement again.
+        setReplaying(true);
+        const again = t('watchAgainSay', lang);
+        setMessage(again);
+        say(lang, again);
+      } else if (activity.type === 'free_write' && m >= activity.maxAttempts) {
+        // Too hard alone for now: go back to tracing on the model, then try alone again.
+        const traceIndex = lesson.activities.findIndex((a) => a.type === 'trace');
+        pendingMessage.current = t('backToTrace', lang);
+        if (traceIndex >= 0) setIndex(traceIndex);
+        setResetKey((k) => k + 1);
+      } else {
+        setMessage(null);
+      }
+    }, 2100);
   };
 
   const isPractice = activity.type === 'trace' || activity.type === 'free_write';
@@ -479,10 +539,16 @@ function LessonPlayer({ lesson, child, update, onDone, onHome }: PlayerProps) {
       <div className="grid min-h-0 w-full flex-1 place-items-center" style={{ containerType: 'size' }}>
       <motion.div
         style={{ width: 'min(100cqw, 100cqh)' }}
-        animate={glow ? { scale: [1, 1.04, 1], rotate: [0, -1.5, 1.5, 0] } : { scale: 1 }}
-        transition={{ duration: 0.6 }}
+        animate={
+          glow
+            ? { scale: [1, 1.04, 1], rotate: [0, -1.5, 1.5, 0] }
+            : shake
+              ? { x: shake % 2 ? [0, -14, 14, -10, 10, -4, 0] : [0, 14, -14, 10, -10, 4, 0] }
+              : { scale: 1 }
+        }
+        transition={{ duration: glow ? 0.6 : 0.45 }}
       >
-        <div className={`rounded-[40px] p-1.5 transition-colors duration-300 ${glow ? 'bg-mint' : 'bg-transparent'}`}>
+        <div className={`rounded-[40px] p-1.5 transition-colors duration-300 ${glow ? 'bg-mint' : message && !glow && shake ? 'bg-coral' : 'bg-transparent'}`}>
           <Slate
             strokes={lesson.strokes}
             midline={lesson.guideLines === 'midline'}
@@ -544,14 +610,17 @@ function RoundButton({ label, icon, onClick }: { label: string; icon: 'sound' | 
 
 /* ------------------------------------------------------------------ */
 
-function Completion({ lesson, lang, onAgain, onNext, onFinish }: {
-  lesson: Lesson; lang: Lang; onAgain: () => void; onNext: () => void; onFinish: () => void;
+function Completion({ lesson, lang, next, justUnlocked, onAgain, onNext, onFinish }: {
+  lesson: Lesson; lang: Lang; next: Lesson | null; justUnlocked: boolean;
+  onAgain: () => void; onNext: (l: Lesson) => void; onFinish: () => void;
 }) {
   const [mood, say, setMood] = useTalk();
   const compact = useCompact();
   useEffect(() => {
     setMood('happy');
-    const id = window.setTimeout(() => say(lang, tr(lesson.completion, lang), 'happy'), 500);
+    const text = tr(lesson.completion, lang) + (justUnlocked && next ? ' ' + t('unlockedSay', lang, { target: next.target }) : '');
+    if (justUnlocked) window.setTimeout(() => playSound('unlock'), 900);
+    const id = window.setTimeout(() => say(lang, text, 'happy'), 500);
     return () => { window.clearTimeout(id); stopSpeaking(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -579,17 +648,27 @@ function Completion({ lesson, lang, onAgain, onNext, onFinish }: {
       >
         {tr(lesson.completion, lang)}
       </motion.h1>
+      {justUnlocked && next && (
+        <motion.p
+          className="m-0 flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-lg font-black text-ink shadow-[0_6px_16px_-8px_rgb(76_56_140/0.4)]"
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1, transition: { type: 'spring', stiffness: 380, damping: 14, delay: 0.9 } }}
+        >
+          <Icon name="sparkle" size={20} className="text-sun" />
+          {t('unlockedSay', lang, { target: next.target })}
+        </motion.p>
+      )}
       <Mascot mood={mood} size={compact ? 70 : 96} />
 
       <motion.div
-        className="mt-2 grid w-full max-w-sm grid-cols-3 gap-3"
+        className={`mt-2 grid w-full max-w-sm gap-3 ${next ? 'grid-cols-3' : 'grid-cols-2'}`}
         initial="hidden"
         animate="show"
         variants={{ show: { transition: { staggerChildren: 0.08, delayChildren: 0.6 } } }}
       >
         {[
           { k: 'tryAgain' as const, icon: 'replay' as const, cls: 'is-white text-blue', fn: onAgain },
-          { k: 'next' as const, icon: 'next' as const, cls: 'is-sun', fn: onNext },
+          ...(next ? [{ k: 'next' as const, icon: 'next' as const, cls: 'is-sun', fn: () => onNext(next) }] : []),
           { k: 'finish' as const, icon: 'home' as const, cls: 'is-white text-blue', fn: onFinish },
         ].map((b) => (
           <motion.button

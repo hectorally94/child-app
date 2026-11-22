@@ -74,6 +74,8 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
 - [x] v3 (2026-11-22): numbers 3–15 and letters A–E; child home has a free-choice grid (123 / ABC tabs, star on
       completed lessons, today's activity highlighted); profile (name + avatar color, "who's playing?" switch);
       installable PWA (Chrome installability check passes); numbered start dots for multi-stroke shapes
+- [x] v4 (2026-11-22): strict success check with spoken Bravo/Faux + sounds; lessons unlock one by one; parent sees
+      Maîtrisé / À retravailler with "x réussis · y faux"; phone layout; easy profile name editing
 - [ ] Prerecorded audio (device TTS for now)
 - [ ] Phase 2: lesson packages/download, backend + sync, more writing lessons
 
@@ -81,7 +83,17 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
 - 2026-11-22: Start as a **web app** (not mobile). Android packaging later.
 - 2026-11-22: UI v1 (slate/chalk) replaced by UI v2 (claymorphism + mascot) at the user's request.
 - 2026-11-22: Default stroke for 0: start at top, counter-clockwise (common school convention). Change in the lesson JSON if the teacher differs.
-- 2026-11-22: Evaluation is cautious: success / retry / uncertain; uncertain is shown as encouragement, never failure. After max attempts the lesson moves on kindly.
+- 2026-11-22 (replaces the earlier "cautious, move on kindly" rule, at the user's request): **strict progression**.
+  Success = whole shape (coverage ≥ 0.75, little off-path, no scribbling) + started at the green dot + every stroke in
+  the shown direction. Otherwise Pipo says "Faux" + the reason (start / direction / missing piece / off the model).
+  Tracing must succeed to go on (demo replays every 2 misses); writing alone must succeed; after 3 misses alone the
+  child goes back to tracing. Celebration only after a real success.
+- 2026-11-22: **Unlocking**: a lesson is *mastered* when written well alone (`src/engine/progress.ts`). Next lesson in
+  the same group opens only then. Paths: numbers 0→15; letters A→a→B→b→…→e. Parent switch "Tout débloquer"
+  (`child.unlockAll`). Locked tiles show the grey number + padlock; tapping one makes Pipo say which to finish first.
+- 2026-11-22: Voice feedback: "Bravo !" (higher, joyful) and "Faux !" (calm) are spoken as a separate first word,
+  with a short chime / soft "boing" made by Web Audio (`speakFeedback`, `playSound`). Audio is unlocked on the first
+  touch (`primeAudio`) because phones block sound until a user gesture.
 - 2026-11-22: No backend yet; all data stays on the device.
 - 2026-11-22: Test deployments go to Vercel (via the Vercel MCP), connected to the GitHub repo.
 - 2026-11-22: GitHub repo name: **child-app** (public).

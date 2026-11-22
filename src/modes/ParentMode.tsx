@@ -138,8 +138,8 @@ function Glyph({ lesson, size = 'md' }: { lesson: Lesson; size?: 'md' | 'lg' }) 
   );
 }
 
-const STATUS: Record<LessonSummary['status'], { icon: IconName; cls: string; key: 'practiced' | 'needsPractice' | 'inProgress' }> = {
-  practiced: { icon: 'check', cls: 'bg-mint-soft text-mint-deep', key: 'practiced' },
+const STATUS: Record<LessonSummary['status'], { icon: IconName; cls: string; key: 'mastered' | 'needsPractice' | 'inProgress' }> = {
+  mastered: { icon: 'check', cls: 'bg-mint-soft text-mint-deep', key: 'mastered' },
   needsPractice: { icon: 'hand', cls: 'bg-sun-soft text-[#92400e]', key: 'needsPractice' },
   inProgress: { icon: 'clock', cls: 'bg-violet-soft text-violet', key: 'inProgress' },
 };
@@ -196,7 +196,7 @@ function Dashboard({ data, child, lang, onOpen, onGoLessons }: { data: AppData; 
                   <div className="min-w-0 flex-1">
                     <p className="m-0 font-display text-lg font-black">{tr(lesson.title, lang)}</p>
                     <p className="m-0 text-sm text-ink-soft">
-                      {sum.attempts} {t('attempts', lang)} · {sum.minutes} {t('minutes', lang)} · {new Date(sum.lastAt).toLocaleDateString(lang)}
+                      {t('successCount', lang, { ok: sum.successes, ko: sum.failures })} · {sum.minutes} {t('minutes', lang)} · {new Date(sum.lastAt).toLocaleDateString(lang)}
                     </p>
                   </div>
                   <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-3 py-1 text-sm font-bold ${st.cls}`}>
@@ -414,6 +414,17 @@ function Settings({ data, update, onEdit }: { data: AppData; update: (fn: (d: Ap
           {child && (
             <LangSwitch label={`${t('childLanguage', lang)} · ${child.name}`} value={child.childLang}
               onChange={(v) => update((d) => ({ ...d, children: d.children.map((c) => (c.id === child.id ? { ...c, childLang: v } : c)) }))} />
+          )}
+          {child && (
+            <label className="flex cursor-pointer items-start gap-3">
+              <input type="checkbox" className="peer sr-only" checked={!!child.unlockAll}
+                onChange={(e) => update((d) => ({ ...d, children: d.children.map((c) => (c.id === child.id ? { ...c, unlockAll: e.target.checked } : c)) }))} />
+              <span className="relative mt-0.5 h-8 w-14 shrink-0 rounded-full bg-[#ddd6ee] transition-colors peer-checked:bg-blue peer-focus-visible:outline-4 peer-focus-visible:outline-violet after:absolute after:top-1 after:left-1 after:h-6 after:w-6 after:rounded-full after:bg-white after:shadow after:transition-transform peer-checked:after:translate-x-6" aria-hidden="true" />
+              <span>
+                <span className="block font-bold">{t('unlockAll', lang)} · {child.name}</span>
+                <span className="block text-sm text-ink-soft">{t('unlockAllHelp', lang)}</span>
+              </span>
+            </label>
           )}
           <p className="m-0 flex gap-2 rounded-[18px] bg-mint-soft p-3 text-sm text-mint-deep">
             <Icon name="lock" size={18} className="shrink-0" />{t('privacyNote', lang)}

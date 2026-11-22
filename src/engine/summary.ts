@@ -5,13 +5,16 @@ import type { SessionRecord } from '../storage/store';
  * Plain-language progress for parents (PRD §11, §34).
  * No scores: a status plus a few observations, hedged where detection is uncertain.
  */
-export type Status = 'practiced' | 'needsPractice' | 'inProgress';
+export type Status = 'mastered' | 'needsPractice' | 'inProgress';
 
 export interface LessonSummary {
   lessonId: string;
   sessions: number;
   completed: number;
   attempts: number;
+  /** Attempts written well / not well (tracing and writing alone together). */
+  successes: number;
+  failures: number;
   independentAttempts: number;
   minutes: number;
   lastAt: number;
@@ -28,8 +31,10 @@ export function summarize(lessonId: string, sessions: SessionRecord[], lang: Lan
   const completed = mine.filter((s) => s.completed).length;
   const ms = mine.reduce((a, s) => a + Math.max(0, (s.endedAt ?? s.startedAt) - s.startedAt), 0);
 
-  const anySuccess = attempts.some((a) => a.outcome === 'success');
-  const status: Status = completed === 0 ? 'inProgress' : anySuccess ? 'practiced' : 'needsPractice';
+  const successes = attempts.filter((a) => a.outcome === 'success').length;
+  const mastered = mine.some((s) => s.completed && s.attempts.some((a) => a.activity === 'free_write' && a.outcome === 'success'));
+  // Mastered = written well alone. Otherwise: many misses → needs practice; else still in progress.
+  const status: Status = mastered ? 'mastered' : attempts.length - successes >= 3 ? 'needsPractice' : 'inProgress';
 
   const fr = lang === 'fr';
   const notes: string[] = [];
@@ -54,6 +59,8 @@ export function summarize(lessonId: string, sessions: SessionRecord[], lang: Lan
     sessions: mine.length,
     completed,
     attempts: attempts.length,
+    successes,
+    failures: attempts.length - successes,
     independentAttempts: free.length,
     minutes: Math.max(1, Math.round(ms / 60000)),
     lastAt: Math.max(...mine.map((s) => s.endedAt ?? s.startedAt)),

@@ -12,6 +12,8 @@ export interface Child {
   todayLessonId: string | null;
   /** Index into AVATAR_COLORS (profile color). */
   avatar?: number;
+  /** Parent switch: open every lesson without having to master the previous one. */
+  unlockAll?: boolean;
 }
 
 export interface AttemptRecord extends AttemptMetrics {
