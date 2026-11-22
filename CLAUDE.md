@@ -11,7 +11,7 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
 - Demonstrate before asking; one small task at a time; encourage, never punish.
 - Lessons are **data-driven** (JSON + assets), not hard-coded screens. Adding "Write 1" must not need new app code.
 - **Offline-first**: downloaded lessons work with no network; progress survives restarts; sync is idempotent.
-- **i18n from day one**: Kirundi (`rn`), French (`fr`), English (`en`); no strings inside components. Child and parent languages can differ.
+- **i18n from day one**: French (`fr`, default) and English (`en`); no strings inside components. Child and parent languages can differ. Kirundi can be added later.
 - AI is optional; core features never depend on it.
 - Privacy: minimal child data, no ads, no social features, no external links in Child Mode, parental gate for Parent Mode.
 - Never present a single "ability" score; don't claim confident judgments when detection is uncertain.
@@ -22,6 +22,10 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
   Service worker (`public/sw.js`) caches the app for offline use in production builds.
 - Later (PRD §18): REST API, PostgreSQL, object storage, sync of progress; Android packaging.
 
+## Repository & deploy
+- GitHub: https://github.com/hectorally94/child-app (public, branch `main`).
+- Vercel: project `child-app` linked to the repo; every push to `main` deploys.
+
 ## Commands
 - `npm install` then `npm run dev` (local dev server)
 - `npm test` (Vitest), `npm run typecheck`, `npm run build` (outputs `dist/`)
@@ -31,8 +35,9 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
 - `src/content/lessons/*.json` — lessons (data). New lesson = new JSON file, no code.
 - `src/engine/` — lesson types, stroke geometry, attempt evaluation (`evaluate.ts`), parent summary, speech (device TTS).
 - `src/modes/` — `ChildMode` (lesson player), `ParentGate` (multiplication gate), `ParentMode` (dashboard, lessons, settings).
-- `src/components/Slate.tsx` — canvas slate: guide, demo animation, captures strokes.
-- `src/i18n/` — UI strings + fallback (`rn` → `fr` → `en`).
+- `src/components/Slate.tsx` — writing board (canvas): guide, demo animation, captures strokes.
+- `src/components/` — also `Mascot` (Pipo), `Decor` (blobs, confetti), `Icon` (single icon set).
+- `src/i18n/` — UI strings + fallback (`fr` ↔ `en`).
 - `src/storage/` — versioned local store (children, sessions with attempts).
 
 ## Design (v2, 2026-11-22)
@@ -58,7 +63,7 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
 
 ## Decisions log
 - 2026-11-22: Start as a **web app** (not mobile). Android packaging later.
-- 2026-11-22: UI follows the frontend-design skill; slate/chalk concept for child mode, notebook for parent mode.
+- 2026-11-22: UI v1 (slate/chalk) replaced by UI v2 (claymorphism + mascot) at the user's request.
 - 2026-11-22: Default stroke for 0: start at top, counter-clockwise (common school convention). Change in the lesson JSON if the teacher differs.
 - 2026-11-22: Evaluation is cautious: success / retry / uncertain; uncertain is shown as encouragement, never failure. After max attempts the lesson moves on kindly.
 - 2026-11-22: No backend yet; all data stays on the device.
