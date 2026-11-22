@@ -44,10 +44,11 @@ describe('evaluateAttempt', () => {
 describe('lesson content', () => {
   const lessons = loadLessons();
 
-  it('has numbers 0 to 15 and letters A to E, in order', () => {
+  it('has numbers 0 to 15, capital letters A to E and small letters a to e, in order', () => {
     expect(lessons.map((l) => l.target)).toEqual([
       ...Array.from({ length: 16 }, (_, i) => String(i)),
       'A', 'B', 'C', 'D', 'E',
+      'a', 'b', 'c', 'd', 'e',
     ]);
     expect(new Set(lessons.map((l) => l.id)).size).toBe(lessons.length);
   });

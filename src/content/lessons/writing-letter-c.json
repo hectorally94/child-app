@@ -10,8 +10,8 @@
   ],
   "target": "C",
   "title": {
-    "fr": "Écrire C",
-    "en": "Write C"
+    "fr": "Écrire le C majuscule",
+    "en": "Write capital C"
   },
   "objective": {
     "fr": "S'entraîner à reconnaître et à écrire C.",
@@ -164,8 +164,8 @@
     {
       "type": "intro",
       "say": {
-        "fr": "Voici la lettre C.",
-        "en": "This is the letter C."
+        "fr": "Voici la lettre C majuscule.",
+        "en": "This is capital letter C."
       }
     },
     {
@@ -189,8 +189,8 @@
       "guide": "none",
       "maxAttempts": 3,
       "say": {
-        "fr": "Maintenant, écris C tout seul.",
-        "en": "Now write C by yourself."
+        "fr": "Maintenant, écris le C majuscule tout seul.",
+        "en": "Now write capital C by yourself."
       }
     }
   ],
@@ -217,7 +217,7 @@
     }
   },
   "completion": {
-    "fr": "Tu t'es entraîné à écrire C !",
-    "en": "You practiced C!"
+    "fr": "Tu t'es entraîné à écrire le C majuscule !",
+    "en": "You practiced capital C!"
   }
 }

@@ -224,7 +224,7 @@ function Welcome({ data, child, today, lessons, done, lang, onPick, onSwitch }: 
 
           <motion.ul
             key={group}
-            className="m-0 grid list-none grid-cols-4 gap-3 p-0 sm:grid-cols-6"
+            className={`m-0 grid list-none gap-3 p-0 ${group === 'letters' ? 'grid-cols-5' : 'grid-cols-4 sm:grid-cols-6'}`}
             initial="hidden"
             animate="show"
             variants={{ show: { transition: { staggerChildren: 0.03 } } }}
@@ -435,6 +435,7 @@ function LessonPlayer({ lesson, child, update, onDone, onHome }: PlayerProps) {
         <div className={`rounded-[40px] p-1.5 transition-colors duration-300 ${glow ? 'bg-mint' : 'bg-transparent'}`}>
           <Slate
             strokes={lesson.strokes}
+            midline={lesson.guideLines === 'midline'}
             mode={slateMode}
             guide={guide}
             resetKey={resetKey}

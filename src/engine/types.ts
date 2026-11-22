@@ -30,6 +30,8 @@ export interface Lesson {
   area: 'writing' | 'numbers' | 'language' | 'reading' | 'discovery';
   group: 'numbers' | 'letters' | string;
   ageRange: [number, number];
+  /** Extra writing line: 'midline' adds the middle line used for lowercase letters. */
+  guideLines?: 'basic' | 'midline';
   target: string;
   title: Localized;
   objective: Localized;

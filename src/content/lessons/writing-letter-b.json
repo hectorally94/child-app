@@ -10,8 +10,8 @@
   ],
   "target": "B",
   "title": {
-    "fr": "Écrire B",
-    "en": "Write B"
+    "fr": "Écrire le B majuscule",
+    "en": "Write capital B"
   },
   "objective": {
     "fr": "S'entraîner à reconnaître et à écrire B.",
@@ -210,8 +210,8 @@
     {
       "type": "intro",
       "say": {
-        "fr": "Voici la lettre B.",
-        "en": "This is the letter B."
+        "fr": "Voici la lettre B majuscule.",
+        "en": "This is capital letter B."
       }
     },
     {
@@ -235,8 +235,8 @@
       "guide": "none",
       "maxAttempts": 3,
       "say": {
-        "fr": "Maintenant, écris B tout seul.",
-        "en": "Now write B by yourself."
+        "fr": "Maintenant, écris le B majuscule tout seul.",
+        "en": "Now write capital B by yourself."
       }
     }
   ],
@@ -263,7 +263,7 @@
     }
   },
   "completion": {
-    "fr": "Tu t'es entraîné à écrire B !",
-    "en": "You practiced B!"
+    "fr": "Tu t'es entraîné à écrire le B majuscule !",
+    "en": "You practiced capital B!"
   }
 }

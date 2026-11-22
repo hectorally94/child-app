@@ -1,0 +1,237 @@
+{
+  "id": "writing-letter-d-small",
+  "version": 1,
+  "order": 113,
+  "area": "writing",
+  "group": "letters",
+  "ageRange": [
+    3,
+    6
+  ],
+  "target": "d",
+  "title": {
+    "fr": "Écrire le d minuscule",
+    "en": "Write small d"
+  },
+  "objective": {
+    "fr": "S'entraîner à reconnaître et à écrire d.",
+    "en": "Practice recognizing and writing d."
+  },
+  "parentGuide": {
+    "fr": "D'abord le petit rond, puis un grand trait qui descend depuis la ligne du haut. Faites le geste dans l'air ensemble avant d'écrire.",
+    "en": "First the small round, then a tall line coming down from the top line. Make the movement in the air together before writing."
+  },
+  "guideLines": "midline",
+  "strokes": [
+    {
+      "kind": "polyline",
+      "points": [
+        [
+          0.615,
+          0.565
+        ],
+        [
+          0.593,
+          0.532
+        ],
+        [
+          0.566,
+          0.503
+        ],
+        [
+          0.534,
+          0.482
+        ],
+        [
+          0.499,
+          0.467
+        ],
+        [
+          0.462,
+          0.46
+        ],
+        [
+          0.425,
+          0.462
+        ],
+        [
+          0.389,
+          0.471
+        ],
+        [
+          0.355,
+          0.488
+        ],
+        [
+          0.325,
+          0.512
+        ],
+        [
+          0.299,
+          0.542
+        ],
+        [
+          0.28,
+          0.577
+        ],
+        [
+          0.266,
+          0.616
+        ],
+        [
+          0.26,
+          0.656
+        ],
+        [
+          0.262,
+          0.697
+        ],
+        [
+          0.27,
+          0.738
+        ],
+        [
+          0.285,
+          0.775
+        ],
+        [
+          0.307,
+          0.808
+        ],
+        [
+          0.334,
+          0.837
+        ],
+        [
+          0.366,
+          0.858
+        ],
+        [
+          0.401,
+          0.873
+        ],
+        [
+          0.438,
+          0.88
+        ],
+        [
+          0.475,
+          0.878
+        ],
+        [
+          0.511,
+          0.869
+        ],
+        [
+          0.545,
+          0.852
+        ],
+        [
+          0.575,
+          0.828
+        ],
+        [
+          0.601,
+          0.798
+        ],
+        [
+          0.62,
+          0.763
+        ],
+        [
+          0.634,
+          0.724
+        ],
+        [
+          0.64,
+          0.684
+        ],
+        [
+          0.638,
+          0.643
+        ],
+        [
+          0.63,
+          0.602
+        ],
+        [
+          0.615,
+          0.565
+        ]
+      ]
+    },
+    {
+      "kind": "polyline",
+      "points": [
+        [
+          0.64,
+          0.12
+        ],
+        [
+          0.64,
+          0.88
+        ]
+      ]
+    }
+  ],
+  "activities": [
+    {
+      "type": "intro",
+      "say": {
+        "fr": "Voici la lettre d minuscule.",
+        "en": "This is small letter d."
+      }
+    },
+    {
+      "type": "demonstration",
+      "say": {
+        "fr": "Commence au point vert. Suis les traits dans l’ordre des numéros.",
+        "en": "Start at the green dot. Follow the lines in the order of the numbers."
+      }
+    },
+    {
+      "type": "trace",
+      "guide": "strong",
+      "maxAttempts": 3,
+      "say": {
+        "fr": "À toi. Commence au point vert.",
+        "en": "Now you. Start at the green dot."
+      }
+    },
+    {
+      "type": "free_write",
+      "guide": "none",
+      "maxAttempts": 3,
+      "say": {
+        "fr": "Maintenant, écris le d minuscule tout seul.",
+        "en": "Now write small d by yourself."
+      }
+    }
+  ],
+  "feedback": {
+    "success": {
+      "fr": "Bravo ! Tu as réussi.",
+      "en": "Great! You did it."
+    },
+    "retry": {
+      "fr": "Essayons encore.",
+      "en": "Let's try again."
+    },
+    "uncertain": {
+      "fr": "Bien. Essayons encore une fois.",
+      "en": "Good. Let's try once more."
+    },
+    "hintStart": {
+      "fr": "Regarde le point de départ.",
+      "en": "Look at the starting dot."
+    },
+    "moveOn": {
+      "fr": "Bel entraînement ! On continue.",
+      "en": "Good practice! Let's keep going."
+    }
+  },
+  "completion": {
+    "fr": "Tu t'es entraîné à écrire le d minuscule !",
+    "en": "You practiced small d!"
+  }
+}

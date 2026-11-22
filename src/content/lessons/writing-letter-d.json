@@ -10,8 +10,8 @@
   ],
   "target": "D",
   "title": {
-    "fr": "Écrire D",
-    "en": "Write D"
+    "fr": "Écrire le D majuscule",
+    "en": "Write capital D"
   },
   "objective": {
     "fr": "S'entraîner à reconnaître et à écrire D.",
@@ -173,8 +173,8 @@
     {
       "type": "intro",
       "say": {
-        "fr": "Voici la lettre D.",
-        "en": "This is the letter D."
+        "fr": "Voici la lettre D majuscule.",
+        "en": "This is capital letter D."
       }
     },
     {
@@ -198,8 +198,8 @@
       "guide": "none",
       "maxAttempts": 3,
       "say": {
-        "fr": "Maintenant, écris D tout seul.",
-        "en": "Now write D by yourself."
+        "fr": "Maintenant, écris le D majuscule tout seul.",
+        "en": "Now write capital D by yourself."
       }
     }
   ],
@@ -226,7 +226,7 @@
     }
   },
   "completion": {
-    "fr": "Tu t'es entraîné à écrire D !",
-    "en": "You practiced D!"
+    "fr": "Tu t'es entraîné à écrire le D majuscule !",
+    "en": "You practiced capital D!"
   }
 }

@@ -10,8 +10,8 @@
   ],
   "target": "E",
   "title": {
-    "fr": "Écrire E",
-    "en": "Write E"
+    "fr": "Écrire le E majuscule",
+    "en": "Write capital E"
   },
   "objective": {
     "fr": "S'entraîner à reconnaître et à écrire E.",
@@ -79,8 +79,8 @@
     {
       "type": "intro",
       "say": {
-        "fr": "Voici la lettre E.",
-        "en": "This is the letter E."
+        "fr": "Voici la lettre E majuscule.",
+        "en": "This is capital letter E."
       }
     },
     {
@@ -104,8 +104,8 @@
       "guide": "none",
       "maxAttempts": 3,
       "say": {
-        "fr": "Maintenant, écris E tout seul.",
-        "en": "Now write E by yourself."
+        "fr": "Maintenant, écris le E majuscule tout seul.",
+        "en": "Now write capital E by yourself."
       }
     }
   ],
@@ -132,7 +132,7 @@
     }
   },
   "completion": {
-    "fr": "Tu t'es entraîné à écrire E !",
-    "en": "You practiced E!"
+    "fr": "Tu t'es entraîné à écrire le E majuscule !",
+    "en": "You practiced capital E!"
   }
 }

@@ -33,9 +33,10 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
 
 ## Code map
 - `src/content/lessons/*.json` — lessons (data). New lesson = new JSON file, no code. `order` sets the list position;
-  `group` is `numbers` or `letters`. Lessons now: numbers 0–15, letters A–E.
+  `group` is `numbers` or `letters`. Lessons now: numbers 0–15, capital letters A–E, small letters a–e
+  (print/script lowercase, `guideLines: "midline"` adds the middle writing line at y=0.46).
 - `tools/generate_lessons.py` — helper that computes stroke points (curves, two-digit numbers, letters) and writes
-  lesson JSON for 3–15 and A–E. 0, 1, 2 are hand-written. Re-run after changing a shape, then `npm test`.
+  lesson JSON for 3–15, A–E and a–e. 0, 1, 2 are hand-written. Re-run after changing a shape, then `npm test`.
 - `src/engine/` — lesson types, stroke geometry, attempt evaluation (`evaluate.ts`), parent summary, speech (device TTS).
 - `src/modes/` — `ChildMode` (lesson player), `ParentGate` (multiplication gate), `ParentMode` (dashboard, lessons, settings).
 - `src/components/Slate.tsx` — writing board (canvas): guide, demo animation, captures strokes.
@@ -85,6 +86,8 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
   2 = start left, round back over the top, slide down-left, straight base line.
 - 2026-11-22: The child chooses freely what to practice (grid on the child home). "Next activity" just opens the next
   lesson; it no longer changes the parent's "today's activity".
+- 2026-11-22: Letters come in capital AND lowercase (user request). Lowercase uses print letters; switch to cursive
+  if the school teaches cursive. Child grid shows capitals on one row, lowercase below (5 columns).
 - 2026-11-22: The daughter perceives Pipo's voice as "the teacher (madam)". Keep the guide voice warm and teacher-like.
 
 ## Open questions

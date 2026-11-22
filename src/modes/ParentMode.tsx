@@ -262,7 +262,7 @@ function Preview({ lesson, lang, child, onBack, onAssign, onChildMode }: {
 
       <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <div className="relative">
-          <Slate strokes={lesson.strokes} mode="demo" guide="strong" resetKey={demoKey} />
+          <Slate strokes={lesson.strokes} midline={lesson.guideLines === 'midline'} mode="demo" guide="strong" resetKey={demoKey} />
           <button onClick={() => setDemoKey((k) => k + 1)} aria-label={t('watchDemo', lang)}
             className="clay-btn is-white absolute right-3 bottom-3 !h-12 !w-12 !rounded-full !p-0 text-blue">
             <Icon name="replay" size={22} />

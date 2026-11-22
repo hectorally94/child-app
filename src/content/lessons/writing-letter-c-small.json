@@ -1,0 +1,208 @@
+{
+  "id": "writing-letter-c-small",
+  "version": 1,
+  "order": 112,
+  "area": "writing",
+  "group": "letters",
+  "ageRange": [
+    3,
+    6
+  ],
+  "target": "c",
+  "title": {
+    "fr": "Écrire le c minuscule",
+    "en": "Write small c"
+  },
+  "objective": {
+    "fr": "S'entraîner à reconnaître et à écrire c.",
+    "en": "Practice recognizing and writing c."
+  },
+  "parentGuide": {
+    "fr": "Comme le C, mais petit : un rond ouvert qui reste entre les deux lignes du bas. Faites le geste dans l'air ensemble avant d'écrire.",
+    "en": "Like the C, but small: an open curve that stays between the two lower lines. Make the movement in the air together before writing."
+  },
+  "guideLines": "midline",
+  "strokes": [
+    {
+      "kind": "polyline",
+      "points": [
+        [
+          0.666,
+          0.535
+        ],
+        [
+          0.642,
+          0.509
+        ],
+        [
+          0.615,
+          0.488
+        ],
+        [
+          0.585,
+          0.473
+        ],
+        [
+          0.553,
+          0.463
+        ],
+        [
+          0.52,
+          0.46
+        ],
+        [
+          0.487,
+          0.463
+        ],
+        [
+          0.455,
+          0.473
+        ],
+        [
+          0.425,
+          0.488
+        ],
+        [
+          0.398,
+          0.509
+        ],
+        [
+          0.374,
+          0.535
+        ],
+        [
+          0.355,
+          0.565
+        ],
+        [
+          0.341,
+          0.598
+        ],
+        [
+          0.333,
+          0.634
+        ],
+        [
+          0.33,
+          0.67
+        ],
+        [
+          0.333,
+          0.706
+        ],
+        [
+          0.341,
+          0.742
+        ],
+        [
+          0.355,
+          0.775
+        ],
+        [
+          0.374,
+          0.805
+        ],
+        [
+          0.398,
+          0.831
+        ],
+        [
+          0.425,
+          0.852
+        ],
+        [
+          0.455,
+          0.867
+        ],
+        [
+          0.487,
+          0.877
+        ],
+        [
+          0.52,
+          0.88
+        ],
+        [
+          0.553,
+          0.877
+        ],
+        [
+          0.585,
+          0.867
+        ],
+        [
+          0.615,
+          0.852
+        ],
+        [
+          0.642,
+          0.831
+        ],
+        [
+          0.666,
+          0.805
+        ]
+      ]
+    }
+  ],
+  "activities": [
+    {
+      "type": "intro",
+      "say": {
+        "fr": "Voici la lettre c minuscule.",
+        "en": "This is small letter c."
+      }
+    },
+    {
+      "type": "demonstration",
+      "say": {
+        "fr": "Commence au point vert. Suis la ligne.",
+        "en": "Start at the green dot. Follow the line."
+      }
+    },
+    {
+      "type": "trace",
+      "guide": "strong",
+      "maxAttempts": 3,
+      "say": {
+        "fr": "À toi. Commence au point vert.",
+        "en": "Now you. Start at the green dot."
+      }
+    },
+    {
+      "type": "free_write",
+      "guide": "none",
+      "maxAttempts": 3,
+      "say": {
+        "fr": "Maintenant, écris le c minuscule tout seul.",
+        "en": "Now write small c by yourself."
+      }
+    }
+  ],
+  "feedback": {
+    "success": {
+      "fr": "Bravo ! Tu as réussi.",
+      "en": "Great! You did it."
+    },
+    "retry": {
+      "fr": "Essayons encore.",
+      "en": "Let's try again."
+    },
+    "uncertain": {
+      "fr": "Bien. Essayons encore une fois.",
+      "en": "Good. Let's try once more."
+    },
+    "hintStart": {
+      "fr": "Regarde le point de départ.",
+      "en": "Look at the starting dot."
+    },
+    "moveOn": {
+      "fr": "Bel entraînement ! On continue.",
+      "en": "Good practice! Let's keep going."
+    }
+  },
+  "completion": {
+    "fr": "Tu t'es entraîné à écrire le c minuscule !",
+    "en": "You practiced small c!"
+  }
+}

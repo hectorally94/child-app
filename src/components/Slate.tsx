@@ -18,6 +18,8 @@ interface Props {
   /** Called when the child pauses after drawing. */
   onAttempt?: (drawn: Point[][]) => void;
   onDemoEnd?: () => void;
+  /** Show the middle writing line (lowercase letters). */
+  midline?: boolean;
 }
 
 const GUIDE = '#c4b5fd'; // soft violet dots
@@ -28,7 +30,7 @@ const CHILD = '#ec4899'; // the child's pink crayon
 const LINES = '#e7e1f5';
 const PAUSE_MS = 1100;
 
-export function Slate({ strokes, mode, guide, resetKey, onAttempt, onDemoEnd }: Props) {
+export function Slate({ strokes, mode, guide, resetKey, onAttempt, onDemoEnd, midline = false }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawnRef = useRef<Point[][]>([]);
   const drawingRef = useRef(false);
@@ -53,7 +55,7 @@ export function Slate({ strokes, mode, guide, resetKey, onAttempt, onDemoEnd }: 
     ctx.strokeStyle = LINES;
     ctx.lineWidth = Math.max(2, size * 0.006);
     ctx.setLineDash([size * 0.02, size * 0.02]);
-    for (const y of [0.1, 0.9]) {
+    for (const y of midline ? [0.1, 0.46, 0.9] : [0.1, 0.9]) {
       ctx.beginPath();
       ctx.moveTo(size * 0.06, size * y);
       ctx.lineTo(size * 0.94, size * y);
@@ -117,7 +119,7 @@ export function Slate({ strokes, mode, guide, resetKey, onAttempt, onDemoEnd }: 
       ctx.stroke();
     }
     ctx.restore();
-  }, [strokes, mode, guide]);
+  }, [strokes, mode, guide, midline]);
 
   // Keep the canvas sharp at any size
   useEffect(() => {

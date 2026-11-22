@@ -1,0 +1,212 @@
+{
+  "id": "writing-letter-e-small",
+  "version": 1,
+  "order": 114,
+  "area": "writing",
+  "group": "letters",
+  "ageRange": [
+    3,
+    6
+  ],
+  "target": "e",
+  "title": {
+    "fr": "Écrire le e minuscule",
+    "en": "Write small e"
+  },
+  "objective": {
+    "fr": "S'entraîner à reconnaître et à écrire e.",
+    "en": "Practice recognizing and writing e."
+  },
+  "parentGuide": {
+    "fr": "Un petit trait couché au milieu, puis on tourne vers le haut et on fait le tour sans fermer. Faites le geste dans l'air ensemble avant d'écrire.",
+    "en": "A short flat line in the middle, then turn up and go around without closing. Make the movement in the air together before writing."
+  },
+  "guideLines": "midline",
+  "strokes": [
+    {
+      "kind": "polyline",
+      "points": [
+        [
+          0.33,
+          0.67
+        ],
+        [
+          0.71,
+          0.67
+        ],
+        [
+          0.706,
+          0.63
+        ],
+        [
+          0.696,
+          0.591
+        ],
+        [
+          0.679,
+          0.555
+        ],
+        [
+          0.656,
+          0.523
+        ],
+        [
+          0.628,
+          0.497
+        ],
+        [
+          0.596,
+          0.478
+        ],
+        [
+          0.561,
+          0.465
+        ],
+        [
+          0.525,
+          0.46
+        ],
+        [
+          0.488,
+          0.463
+        ],
+        [
+          0.453,
+          0.474
+        ],
+        [
+          0.42,
+          0.491
+        ],
+        [
+          0.391,
+          0.516
+        ],
+        [
+          0.366,
+          0.546
+        ],
+        [
+          0.348,
+          0.581
+        ],
+        [
+          0.336,
+          0.619
+        ],
+        [
+          0.33,
+          0.66
+        ],
+        [
+          0.332,
+          0.7
+        ],
+        [
+          0.341,
+          0.739
+        ],
+        [
+          0.356,
+          0.776
+        ],
+        [
+          0.378,
+          0.809
+        ],
+        [
+          0.404,
+          0.837
+        ],
+        [
+          0.435,
+          0.858
+        ],
+        [
+          0.47,
+          0.873
+        ],
+        [
+          0.506,
+          0.879
+        ],
+        [
+          0.542,
+          0.879
+        ],
+        [
+          0.578,
+          0.87
+        ],
+        [
+          0.612,
+          0.854
+        ],
+        [
+          0.642,
+          0.831
+        ]
+      ]
+    }
+  ],
+  "activities": [
+    {
+      "type": "intro",
+      "say": {
+        "fr": "Voici la lettre e minuscule.",
+        "en": "This is small letter e."
+      }
+    },
+    {
+      "type": "demonstration",
+      "say": {
+        "fr": "Commence au point vert. Suis la ligne.",
+        "en": "Start at the green dot. Follow the line."
+      }
+    },
+    {
+      "type": "trace",
+      "guide": "strong",
+      "maxAttempts": 3,
+      "say": {
+        "fr": "À toi. Commence au point vert.",
+        "en": "Now you. Start at the green dot."
+      }
+    },
+    {
+      "type": "free_write",
+      "guide": "none",
+      "maxAttempts": 3,
+      "say": {
+        "fr": "Maintenant, écris le e minuscule tout seul.",
+        "en": "Now write small e by yourself."
+      }
+    }
+  ],
+  "feedback": {
+    "success": {
+      "fr": "Bravo ! Tu as réussi.",
+      "en": "Great! You did it."
+    },
+    "retry": {
+      "fr": "Essayons encore.",
+      "en": "Let's try again."
+    },
+    "uncertain": {
+      "fr": "Bien. Essayons encore une fois.",
+      "en": "Good. Let's try once more."
+    },
+    "hintStart": {
+      "fr": "Regarde le point de départ.",
+      "en": "Look at the starting dot."
+    },
+    "moveOn": {
+      "fr": "Bel entraînement ! On continue.",
+      "en": "Good practice! Let's keep going."
+    }
+  },
+  "completion": {
+    "fr": "Tu t'es entraîné à écrire le e minuscule !",
+    "en": "You practiced small e!"
+  }
+}

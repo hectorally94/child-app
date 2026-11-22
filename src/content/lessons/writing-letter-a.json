@@ -10,8 +10,8 @@
   ],
   "target": "A",
   "title": {
-    "fr": "Écrire A",
-    "en": "Write A"
+    "fr": "Écrire le A majuscule",
+    "en": "Write capital A"
   },
   "objective": {
     "fr": "S'entraîner à reconnaître et à écrire A.",
@@ -66,8 +66,8 @@
     {
       "type": "intro",
       "say": {
-        "fr": "Voici la lettre A.",
-        "en": "This is the letter A."
+        "fr": "Voici la lettre A majuscule.",
+        "en": "This is capital letter A."
       }
     },
     {
@@ -91,8 +91,8 @@
       "guide": "none",
       "maxAttempts": 3,
       "say": {
-        "fr": "Maintenant, écris A tout seul.",
-        "en": "Now write A by yourself."
+        "fr": "Maintenant, écris le A majuscule tout seul.",
+        "en": "Now write capital A by yourself."
       }
     }
   ],
@@ -119,7 +119,7 @@
     }
   },
   "completion": {
-    "fr": "Tu t'es entraîné à écrire A !",
-    "en": "You practiced A!"
+    "fr": "Tu t'es entraîné à écrire le A majuscule !",
+    "en": "You practiced capital A!"
   }
 }

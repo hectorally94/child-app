@@ -1,0 +1,237 @@
+{
+  "id": "writing-letter-a-small",
+  "version": 1,
+  "order": 110,
+  "area": "writing",
+  "group": "letters",
+  "ageRange": [
+    3,
+    6
+  ],
+  "target": "a",
+  "title": {
+    "fr": "Écrire le a minuscule",
+    "en": "Write small a"
+  },
+  "objective": {
+    "fr": "S'entraîner à reconnaître et à écrire a.",
+    "en": "Practice recognizing and writing a."
+  },
+  "parentGuide": {
+    "fr": "On fait un petit rond en commençant en haut à droite, puis un petit trait qui descend à droite. Faites le geste dans l'air ensemble avant d'écrire.",
+    "en": "Make a small round starting at the top right, then a short line down on the right. Make the movement in the air together before writing."
+  },
+  "guideLines": "midline",
+  "strokes": [
+    {
+      "kind": "polyline",
+      "points": [
+        [
+          0.635,
+          0.565
+        ],
+        [
+          0.613,
+          0.532
+        ],
+        [
+          0.586,
+          0.503
+        ],
+        [
+          0.554,
+          0.482
+        ],
+        [
+          0.519,
+          0.467
+        ],
+        [
+          0.482,
+          0.46
+        ],
+        [
+          0.445,
+          0.462
+        ],
+        [
+          0.409,
+          0.471
+        ],
+        [
+          0.375,
+          0.488
+        ],
+        [
+          0.345,
+          0.512
+        ],
+        [
+          0.319,
+          0.542
+        ],
+        [
+          0.3,
+          0.577
+        ],
+        [
+          0.286,
+          0.616
+        ],
+        [
+          0.28,
+          0.656
+        ],
+        [
+          0.282,
+          0.697
+        ],
+        [
+          0.29,
+          0.738
+        ],
+        [
+          0.305,
+          0.775
+        ],
+        [
+          0.327,
+          0.808
+        ],
+        [
+          0.354,
+          0.837
+        ],
+        [
+          0.386,
+          0.858
+        ],
+        [
+          0.421,
+          0.873
+        ],
+        [
+          0.458,
+          0.88
+        ],
+        [
+          0.495,
+          0.878
+        ],
+        [
+          0.531,
+          0.869
+        ],
+        [
+          0.565,
+          0.852
+        ],
+        [
+          0.595,
+          0.828
+        ],
+        [
+          0.621,
+          0.798
+        ],
+        [
+          0.64,
+          0.763
+        ],
+        [
+          0.654,
+          0.724
+        ],
+        [
+          0.66,
+          0.684
+        ],
+        [
+          0.658,
+          0.643
+        ],
+        [
+          0.65,
+          0.602
+        ],
+        [
+          0.635,
+          0.565
+        ]
+      ]
+    },
+    {
+      "kind": "polyline",
+      "points": [
+        [
+          0.66,
+          0.46
+        ],
+        [
+          0.66,
+          0.88
+        ]
+      ]
+    }
+  ],
+  "activities": [
+    {
+      "type": "intro",
+      "say": {
+        "fr": "Voici la lettre a minuscule.",
+        "en": "This is small letter a."
+      }
+    },
+    {
+      "type": "demonstration",
+      "say": {
+        "fr": "Commence au point vert. Suis les traits dans l’ordre des numéros.",
+        "en": "Start at the green dot. Follow the lines in the order of the numbers."
+      }
+    },
+    {
+      "type": "trace",
+      "guide": "strong",
+      "maxAttempts": 3,
+      "say": {
+        "fr": "À toi. Commence au point vert.",
+        "en": "Now you. Start at the green dot."
+      }
+    },
+    {
+      "type": "free_write",
+      "guide": "none",
+      "maxAttempts": 3,
+      "say": {
+        "fr": "Maintenant, écris le a minuscule tout seul.",
+        "en": "Now write small a by yourself."
+      }
+    }
+  ],
+  "feedback": {
+    "success": {
+      "fr": "Bravo ! Tu as réussi.",
+      "en": "Great! You did it."
+    },
+    "retry": {
+      "fr": "Essayons encore.",
+      "en": "Let's try again."
+    },
+    "uncertain": {
+      "fr": "Bien. Essayons encore une fois.",
+      "en": "Good. Let's try once more."
+    },
+    "hintStart": {
+      "fr": "Regarde le point de départ.",
+      "en": "Look at the starting dot."
+    },
+    "moveOn": {
+      "fr": "Bel entraînement ! On continue.",
+      "en": "Good practice! Let's keep going."
+    }
+  },
+  "completion": {
+    "fr": "Tu t'es entraîné à écrire le a minuscule !",
+    "en": "You practiced small a!"
+  }
+}

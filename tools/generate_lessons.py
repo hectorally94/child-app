@@ -51,6 +51,30 @@ LETTERS = {
 }
 
 
+# Lowercase print letters sit between the midline (y=0.46) and the base line (y=0.9);
+# b and d reach up to the top line.
+SMALL = {
+    'a': [arc(0.47, 0.67, 0.19, 0.21, -30, -390, 32), [[0.66, 0.46], [0.66, 0.88]]],
+    'b': [[[0.34, 0.12], [0.34, 0.88]], arc(0.53, 0.67, 0.19, 0.21, 200, 520, 32)],
+    'c': [arc(0.52, 0.67, 0.19, 0.21, -40, -320, 28)],
+    'd': [arc(0.45, 0.67, 0.19, 0.21, -30, -390, 32), [[0.64, 0.12], [0.64, 0.88]]],
+    'e': [[[0.33, 0.67], [0.71, 0.67]] + arc(0.52, 0.67, 0.19, 0.21, 0, -310, 28)[1:]],
+}
+
+SMALL_GUIDE = {
+    'a': ("On fait un petit rond en commençant en haut à droite, puis un petit trait qui descend à droite.",
+          'Make a small round starting at the top right, then a short line down on the right.'),
+    'b': ("Un grand trait qui descend depuis la ligne du haut, puis un petit ventre en bas.",
+          'A tall line down from the top line, then a small belly at the bottom.'),
+    'c': ("Comme le C, mais petit : un rond ouvert qui reste entre les deux lignes du bas.",
+          'Like the C, but small: an open curve that stays between the two lower lines.'),
+    'd': ("D'abord le petit rond, puis un grand trait qui descend depuis la ligne du haut.",
+          'First the small round, then a tall line coming down from the top line.'),
+    'e': ("Un petit trait couché au milieu, puis on tourne vers le haut et on fait le tour sans fermer.",
+          'A short flat line in the middle, then turn up and go around without closing.'),
+}
+
+
 def place(strokes, cx, scale):
     """Scale a shape around the box center and move it horizontally (for two-digit numbers)."""
     return [[[cx + (x - 0.5) * scale, 0.5 + (y - 0.5) * scale] for x, y in s] for s in strokes]
@@ -100,18 +124,20 @@ FEEDBACK = {
 }
 
 
-def lesson(id_, order, group, target, strokes, name_fr, name_en, intro_fr, intro_en, guide):
+def lesson(id_, order, group, target, strokes, name_fr, name_en, intro_fr, intro_en, guide, midline=False):
     multi = len(strokes) > 1
     demo_fr = 'Commence au point vert. Suis les traits dans l’ordre des numéros.' if multi else 'Commence au point vert. Suis la ligne.'
     demo_en = 'Start at the green dot. Follow the lines in the order of the numbers.' if multi else 'Start at the green dot. Follow the line.'
     return {
         'id': id_, 'version': 1, 'order': order, 'area': 'writing', 'group': group, 'ageRange': [3, 6],
         'target': target,
-        'title': {'fr': f'Écrire {target}', 'en': f'Write {target}'},
+        'title': ({'fr': f'Écrire {name_fr}', 'en': f'Write {name_en}'} if group == 'letters'
+                  else {'fr': f'Écrire {target}', 'en': f'Write {target}'}),
         'objective': {'fr': f"S'entraîner à reconnaître et à écrire {target}.",
                       'en': f'Practice recognizing and writing {target}.'},
         'parentGuide': {'fr': guide[0] + " Faites le geste dans l'air ensemble avant d'écrire.",
                         'en': guide[1] + ' Make the movement in the air together before writing.'},
+        **({'guideLines': 'midline'} if midline else {}),
         'strokes': rounded(strokes),
         'activities': [
             {'type': 'intro', 'say': {'fr': intro_fr, 'en': intro_en}},
@@ -149,8 +175,14 @@ def main():
                      f'Voici {NUM_FR[n]}.', f'This is {NUM_EN[n]}.', guide))
 
     for i, ch in enumerate('ABCDE'):
-        write(lesson(f'writing-letter-{ch.lower()}', 100 + i, 'letters', ch, LETTERS[ch], ch, ch,
-                     f'Voici la lettre {ch}.', f'This is the letter {ch}.', GUIDE[ch]))
+        write(lesson(f'writing-letter-{ch.lower()}', 100 + i, 'letters', ch, LETTERS[ch],
+                     f'le {ch} majuscule', f'capital {ch}',
+                     f'Voici la lettre {ch} majuscule.', f'This is capital letter {ch}.', GUIDE[ch]))
+
+    for i, ch in enumerate('abcde'):
+        write(lesson(f'writing-letter-{ch}-small', 110 + i, 'letters', ch, SMALL[ch],
+                     f'le {ch} minuscule', f'small {ch}',
+                     f'Voici la lettre {ch} minuscule.', f'This is small letter {ch}.', SMALL_GUIDE[ch], midline=True))
 
 
 if __name__ == '__main__':
