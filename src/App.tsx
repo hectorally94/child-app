@@ -11,7 +11,6 @@ export function App() {
   const [data, update] = useAppData();
   // First launch: the parent must set things up first.
   const [mode, setMode] = useState<Mode>(data.children.length ? 'child' : 'gate');
-  const child = data.children.find((c) => c.id === data.activeChildId) ?? null;
 
   return (
     <MotionConfig reducedMotion="user">
@@ -32,7 +31,7 @@ export function App() {
             />
           )}
           {mode === 'parent' && <ParentMode data={data} update={update} onChildMode={() => setMode('child')} />}
-          {mode === 'child' && <ChildMode child={child} update={update} onParent={() => setMode('gate')} />}
+          {mode === 'child' && <ChildMode data={data} update={update} onParent={() => setMode('gate')} />}
         </motion.div>
       </AnimatePresence>
     </MotionConfig>

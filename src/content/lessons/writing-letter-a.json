@@ -1,0 +1,125 @@
+{
+  "id": "writing-letter-a",
+  "version": 1,
+  "order": 100,
+  "area": "writing",
+  "group": "letters",
+  "ageRange": [
+    3,
+    6
+  ],
+  "target": "A",
+  "title": {
+    "fr": "Écrire A",
+    "en": "Write A"
+  },
+  "objective": {
+    "fr": "S'entraîner à reconnaître et à écrire A.",
+    "en": "Practice recognizing and writing A."
+  },
+  "parentGuide": {
+    "fr": "Deux grands traits en pente qui se touchent en haut, puis le petit pont au milieu. Faites le geste dans l'air ensemble avant d'écrire.",
+    "en": "Two long slanted lines that meet at the top, then the little bridge in the middle. Make the movement in the air together before writing."
+  },
+  "strokes": [
+    {
+      "kind": "polyline",
+      "points": [
+        [
+          0.5,
+          0.12
+        ],
+        [
+          0.25,
+          0.88
+        ]
+      ]
+    },
+    {
+      "kind": "polyline",
+      "points": [
+        [
+          0.5,
+          0.12
+        ],
+        [
+          0.75,
+          0.88
+        ]
+      ]
+    },
+    {
+      "kind": "polyline",
+      "points": [
+        [
+          0.35,
+          0.6
+        ],
+        [
+          0.65,
+          0.6
+        ]
+      ]
+    }
+  ],
+  "activities": [
+    {
+      "type": "intro",
+      "say": {
+        "fr": "Voici la lettre A.",
+        "en": "This is the letter A."
+      }
+    },
+    {
+      "type": "demonstration",
+      "say": {
+        "fr": "Commence au point vert. Suis les traits dans l’ordre des numéros.",
+        "en": "Start at the green dot. Follow the lines in the order of the numbers."
+      }
+    },
+    {
+      "type": "trace",
+      "guide": "strong",
+      "maxAttempts": 3,
+      "say": {
+        "fr": "À toi. Commence au point vert.",
+        "en": "Now you. Start at the green dot."
+      }
+    },
+    {
+      "type": "free_write",
+      "guide": "none",
+      "maxAttempts": 3,
+      "say": {
+        "fr": "Maintenant, écris A tout seul.",
+        "en": "Now write A by yourself."
+      }
+    }
+  ],
+  "feedback": {
+    "success": {
+      "fr": "Bravo ! Tu as réussi.",
+      "en": "Great! You did it."
+    },
+    "retry": {
+      "fr": "Essayons encore.",
+      "en": "Let's try again."
+    },
+    "uncertain": {
+      "fr": "Bien. Essayons encore une fois.",
+      "en": "Good. Let's try once more."
+    },
+    "hintStart": {
+      "fr": "Regarde le point de départ.",
+      "en": "Look at the starting dot."
+    },
+    "moveOn": {
+      "fr": "Bel entraînement ! On continue.",
+      "en": "Good practice! Let's keep going."
+    }
+  },
+  "completion": {
+    "fr": "Tu t'es entraîné à écrire A !",
+    "en": "You practiced A!"
+  }
+}

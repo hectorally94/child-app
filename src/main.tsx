@@ -6,6 +6,7 @@ import '@fontsource/dm-sans/latin-400.css';
 import '@fontsource/dm-sans/latin-500.css';
 import '@fontsource/dm-sans/latin-700.css';
 import './index.css';
+import './pwa/install';
 import { App } from './App';
 
 createRoot(document.getElementById('root')!).render(<App />);

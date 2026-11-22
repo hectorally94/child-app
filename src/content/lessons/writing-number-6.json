@@ -1,0 +1,239 @@
+{
+  "id": "writing-number-6",
+  "version": 1,
+  "order": 6,
+  "area": "writing",
+  "group": "numbers",
+  "ageRange": [
+    3,
+    6
+  ],
+  "target": "6",
+  "title": {
+    "fr": "Écrire 6",
+    "en": "Write 6"
+  },
+  "objective": {
+    "fr": "S'entraîner à reconnaître et à écrire 6.",
+    "en": "Practice recognizing and writing 6."
+  },
+  "parentGuide": {
+    "fr": "On part d'en haut, on descend en glissant comme un toboggan, puis on fait la boucle en bas. Faites le geste dans l'air ensemble avant d'écrire.",
+    "en": "Start at the top, slide down like a slide, then make the loop at the bottom. Make the movement in the air together before writing."
+  },
+  "strokes": [
+    {
+      "kind": "polyline",
+      "points": [
+        [
+          0.66,
+          0.13
+        ],
+        [
+          0.52,
+          0.17
+        ],
+        [
+          0.38,
+          0.3
+        ],
+        [
+          0.3,
+          0.46
+        ],
+        [
+          0.28,
+          0.66
+        ],
+        [
+          0.284,
+          0.703
+        ],
+        [
+          0.297,
+          0.744
+        ],
+        [
+          0.317,
+          0.782
+        ],
+        [
+          0.344,
+          0.816
+        ],
+        [
+          0.378,
+          0.843
+        ],
+        [
+          0.416,
+          0.863
+        ],
+        [
+          0.457,
+          0.876
+        ],
+        [
+          0.5,
+          0.88
+        ],
+        [
+          0.543,
+          0.876
+        ],
+        [
+          0.584,
+          0.863
+        ],
+        [
+          0.622,
+          0.843
+        ],
+        [
+          0.656,
+          0.816
+        ],
+        [
+          0.683,
+          0.782
+        ],
+        [
+          0.703,
+          0.744
+        ],
+        [
+          0.716,
+          0.703
+        ],
+        [
+          0.72,
+          0.66
+        ],
+        [
+          0.716,
+          0.617
+        ],
+        [
+          0.703,
+          0.576
+        ],
+        [
+          0.683,
+          0.538
+        ],
+        [
+          0.656,
+          0.504
+        ],
+        [
+          0.622,
+          0.477
+        ],
+        [
+          0.584,
+          0.457
+        ],
+        [
+          0.543,
+          0.444
+        ],
+        [
+          0.5,
+          0.44
+        ],
+        [
+          0.457,
+          0.444
+        ],
+        [
+          0.416,
+          0.457
+        ],
+        [
+          0.378,
+          0.477
+        ],
+        [
+          0.344,
+          0.504
+        ],
+        [
+          0.317,
+          0.538
+        ],
+        [
+          0.297,
+          0.576
+        ],
+        [
+          0.284,
+          0.617
+        ],
+        [
+          0.28,
+          0.66
+        ]
+      ]
+    }
+  ],
+  "activities": [
+    {
+      "type": "intro",
+      "say": {
+        "fr": "Voici six.",
+        "en": "This is six."
+      }
+    },
+    {
+      "type": "demonstration",
+      "say": {
+        "fr": "Commence au point vert. Suis la ligne.",
+        "en": "Start at the green dot. Follow the line."
+      }
+    },
+    {
+      "type": "trace",
+      "guide": "strong",
+      "maxAttempts": 3,
+      "say": {
+        "fr": "À toi. Commence au point vert.",
+        "en": "Now you. Start at the green dot."
+      }
+    },
+    {
+      "type": "free_write",
+      "guide": "none",
+      "maxAttempts": 3,
+      "say": {
+        "fr": "Maintenant, écris six tout seul.",
+        "en": "Now write six by yourself."
+      }
+    }
+  ],
+  "feedback": {
+    "success": {
+      "fr": "Bravo ! Tu as réussi.",
+      "en": "Great! You did it."
+    },
+    "retry": {
+      "fr": "Essayons encore.",
+      "en": "Let's try again."
+    },
+    "uncertain": {
+      "fr": "Bien. Essayons encore une fois.",
+      "en": "Good. Let's try once more."
+    },
+    "hintStart": {
+      "fr": "Regarde le point de départ.",
+      "en": "Look at the starting dot."
+    },
+    "moveOn": {
+      "fr": "Bel entraînement ! On continue.",
+      "en": "Good practice! Let's keep going."
+    }
+  },
+  "completion": {
+    "fr": "Tu t'es entraîné à écrire six !",
+    "en": "You practiced six!"
+  }
+}

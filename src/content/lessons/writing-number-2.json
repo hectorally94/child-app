@@ -1,6 +1,7 @@
 {
   "id": "writing-number-2",
   "version": 1,
+  "order": 2,
   "area": "writing",
   "group": "numbers",
   "ageRange": [

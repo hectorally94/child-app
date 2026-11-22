@@ -10,6 +10,8 @@ export interface Child {
   name: string;
   childLang: Lang;
   todayLessonId: string | null;
+  /** Index into AVATAR_COLORS (profile color). */
+  avatar?: number;
 }
 
 export interface AttemptRecord extends AttemptMetrics {

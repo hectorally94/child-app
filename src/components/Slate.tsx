@@ -167,7 +167,17 @@ export function Slate({ strokes, mode, guide, resetKey, onAttempt, onDemoEnd }: 
 
   const interactive = mode === 'trace' || mode === 'free';
   const showStart = mode !== 'show' && (guide !== 'none' || mode === 'demo');
-  const start = sampleStroke(strokes[0])[0];
+  // Where to put each numbered start dot. If a stroke starts where an earlier one starts (like the two
+  // legs of A), its dot moves a little way along its own line so both numbers stay visible.
+  const starts = strokes.map((st, i) => {
+    const pts = sampleStroke(st);
+    const clash = strokes.slice(0, i).some((prev) => {
+      const q = sampleStroke(prev)[0];
+      return Math.hypot(q[0] - pts[0][0], q[1] - pts[0][1]) < 0.07;
+    });
+    return clash ? pts[Math.round(pts.length * 0.16)] : pts[0];
+  });
+  const numbered = strokes.length > 1;
 
   const toPoint = (e: React.PointerEvent<HTMLCanvasElement>): Point => {
     const r = e.currentTarget.getBoundingClientRect();
@@ -207,23 +217,33 @@ export function Slate({ strokes, mode, guide, resetKey, onAttempt, onDemoEnd }: 
 
   return (
     <div className="clay relative mx-auto aspect-square w-full max-h-[58vh] max-w-[58vh] overflow-hidden !rounded-[36px] bg-[#fffdf8]">
-      {showStart && (
-        <motion.span
-          className="pointer-events-none absolute z-10 grid -translate-x-1/2 -translate-y-1/2 place-items-center"
-          style={{ left: `${start[0] * 100}%`, top: `${start[1] * 100}%`, width: '11%', height: '11%' }}
-          aria-hidden="true"
-        >
-          {!reduceMotion && (
-            <motion.span
-              className="absolute inset-0 rounded-full"
-              style={{ background: START }}
-              animate={{ scale: [1, 1.9], opacity: [0.45, 0] }}
-              transition={{ duration: 1.4, repeat: Infinity, ease: 'easeOut' }}
-            />
-          )}
-          <span className="relative block h-[70%] w-[70%] rounded-full border-[3px] border-white shadow-[0_3px_8px_rgb(16_185_129/0.5)]" style={{ background: START }} />
-        </motion.span>
-      )}
+      {showStart &&
+        starts.map((start, i) => (
+          <motion.span
+            key={i}
+            className="pointer-events-none absolute z-10 grid -translate-x-1/2 -translate-y-1/2 place-items-center"
+            style={{ left: `${start[0] * 100}%`, top: `${start[1] * 100}%`, width: numbered ? '9%' : '11%', height: numbered ? '9%' : '11%' }}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 18, delay: i * 0.12 }}
+            aria-hidden="true"
+          >
+            {!reduceMotion && i === 0 && (
+              <motion.span
+                className="absolute inset-0 rounded-full"
+                style={{ background: START }}
+                animate={{ scale: [1, 1.9], opacity: [0.45, 0] }}
+                transition={{ duration: 1.4, repeat: Infinity, ease: 'easeOut' }}
+              />
+            )}
+            <span
+              className="relative grid h-[78%] w-[78%] place-items-center rounded-full border-[3px] border-white font-display text-[clamp(0.7rem,3vw,1.1rem)] leading-none font-black text-white shadow-[0_3px_8px_rgb(16_185_129/0.5)]"
+              style={{ background: START, opacity: i === 0 ? 1 : 0.85 }}
+            >
+              {numbered ? i + 1 : ''}
+            </span>
+          </motion.span>
+        ))}
       <canvas
         ref={canvasRef}
         className={`relative block h-full w-full touch-none ${interactive ? 'cursor-crosshair' : ''}`}

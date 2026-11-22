@@ -25,8 +25,10 @@ export type FeedbackKey = 'success' | 'retry' | 'uncertain' | 'hintStart' | 'mov
 export interface Lesson {
   id: string;
   version: number;
+  /** Position in the lists shown to the child and the parent. */
+  order: number;
   area: 'writing' | 'numbers' | 'language' | 'reading' | 'discovery';
-  group: string;
+  group: 'numbers' | 'letters' | string;
   ageRange: [number, number];
   target: string;
   title: Localized;

@@ -1,11 +1,18 @@
 {
   "id": "writing-number-1",
   "version": 1,
+  "order": 1,
   "area": "writing",
   "group": "numbers",
-  "ageRange": [3, 6],
+  "ageRange": [
+    3,
+    6
+  ],
   "target": "1",
-  "title": { "en": "Write 1", "fr": "Écrire 1" },
+  "title": {
+    "en": "Write 1",
+    "fr": "Écrire 1"
+  },
   "objective": {
     "en": "Practice recognizing and writing 1.",
     "fr": "S'entraîner à reconnaître et à écrire 1."
@@ -15,20 +22,82 @@
     "fr": "Commencer au point vert, faire un petit trait vers le haut, puis descendre tout droit. Aidez en dessinant le trait dans l'air ensemble."
   },
   "strokes": [
-    { "kind": "polyline", "points": [[0.38, 0.3], [0.55, 0.12], [0.55, 0.88]] }
+    {
+      "kind": "polyline",
+      "points": [
+        [
+          0.38,
+          0.3
+        ],
+        [
+          0.55,
+          0.12
+        ],
+        [
+          0.55,
+          0.88
+        ]
+      ]
+    }
   ],
   "activities": [
-    { "type": "intro", "say": { "en": "This is one.", "fr": "Voici un." } },
-    { "type": "demonstration", "say": { "en": "Start here. Go up, then straight down.", "fr": "Commence ici. Monte, puis descends tout droit." } },
-    { "type": "trace", "guide": "strong", "maxAttempts": 3, "say": { "en": "Now you. Start at the green dot.", "fr": "À toi. Commence au point vert." } },
-    { "type": "free_write", "guide": "none", "maxAttempts": 3, "say": { "en": "Now write one by yourself.", "fr": "Maintenant, écris un tout seul." } }
+    {
+      "type": "intro",
+      "say": {
+        "en": "This is one.",
+        "fr": "Voici un."
+      }
+    },
+    {
+      "type": "demonstration",
+      "say": {
+        "en": "Start here. Go up, then straight down.",
+        "fr": "Commence ici. Monte, puis descends tout droit."
+      }
+    },
+    {
+      "type": "trace",
+      "guide": "strong",
+      "maxAttempts": 3,
+      "say": {
+        "en": "Now you. Start at the green dot.",
+        "fr": "À toi. Commence au point vert."
+      }
+    },
+    {
+      "type": "free_write",
+      "guide": "none",
+      "maxAttempts": 3,
+      "say": {
+        "en": "Now write one by yourself.",
+        "fr": "Maintenant, écris un tout seul."
+      }
+    }
   ],
   "feedback": {
-    "success": { "en": "Great! You did it.", "fr": "Bravo ! Tu as réussi." },
-    "retry": { "en": "Let's try again.", "fr": "Essayons encore." },
-    "uncertain": { "en": "Good. Let's try once more.", "fr": "Bien. Essayons encore une fois." },
-    "hintStart": { "en": "Look at the starting dot.", "fr": "Regarde le point de départ." },
-    "moveOn": { "en": "Good practice! Let's keep going.", "fr": "Bel entraînement ! On continue." }
+    "success": {
+      "en": "Great! You did it.",
+      "fr": "Bravo ! Tu as réussi."
+    },
+    "retry": {
+      "en": "Let's try again.",
+      "fr": "Essayons encore."
+    },
+    "uncertain": {
+      "en": "Good. Let's try once more.",
+      "fr": "Bien. Essayons encore une fois."
+    },
+    "hintStart": {
+      "en": "Look at the starting dot.",
+      "fr": "Regarde le point de départ."
+    },
+    "moveOn": {
+      "en": "Good practice! Let's keep going.",
+      "fr": "Bel entraînement ! On continue."
+    }
   },
-  "completion": { "en": "You practiced one!", "fr": "Tu t'es entraîné à écrire un !" }
+  "completion": {
+    "en": "You practiced one!",
+    "fr": "Tu t'es entraîné à écrire un !"
+  }
 }

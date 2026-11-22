@@ -1,0 +1,263 @@
+{
+  "id": "writing-number-3",
+  "version": 1,
+  "order": 3,
+  "area": "writing",
+  "group": "numbers",
+  "ageRange": [
+    3,
+    6
+  ],
+  "target": "3",
+  "title": {
+    "fr": "Écrire 3",
+    "en": "Write 3"
+  },
+  "objective": {
+    "fr": "S'entraîner à reconnaître et à écrire 3.",
+    "en": "Practice recognizing and writing 3."
+  },
+  "parentGuide": {
+    "fr": "Deux petits ventres : on fait le premier rond, on revient au milieu, puis le deuxième plus grand. Faites le geste dans l'air ensemble avant d'écrire.",
+    "en": "Two little bellies: make the first curve, come back to the middle, then the second, bigger one. Make the movement in the air together before writing."
+  },
+  "strokes": [
+    {
+      "kind": "polyline",
+      "points": [
+        [
+          0.314,
+          0.21
+        ],
+        [
+          0.336,
+          0.18
+        ],
+        [
+          0.364,
+          0.154
+        ],
+        [
+          0.397,
+          0.136
+        ],
+        [
+          0.433,
+          0.124
+        ],
+        [
+          0.47,
+          0.12
+        ],
+        [
+          0.507,
+          0.124
+        ],
+        [
+          0.543,
+          0.136
+        ],
+        [
+          0.576,
+          0.154
+        ],
+        [
+          0.604,
+          0.18
+        ],
+        [
+          0.626,
+          0.21
+        ],
+        [
+          0.641,
+          0.244
+        ],
+        [
+          0.649,
+          0.281
+        ],
+        [
+          0.649,
+          0.319
+        ],
+        [
+          0.641,
+          0.356
+        ],
+        [
+          0.626,
+          0.39
+        ],
+        [
+          0.604,
+          0.42
+        ],
+        [
+          0.576,
+          0.446
+        ],
+        [
+          0.543,
+          0.464
+        ],
+        [
+          0.507,
+          0.476
+        ],
+        [
+          0.47,
+          0.48
+        ],
+        [
+          0.507,
+          0.483
+        ],
+        [
+          0.543,
+          0.493
+        ],
+        [
+          0.577,
+          0.509
+        ],
+        [
+          0.608,
+          0.531
+        ],
+        [
+          0.634,
+          0.558
+        ],
+        [
+          0.654,
+          0.589
+        ],
+        [
+          0.669,
+          0.624
+        ],
+        [
+          0.678,
+          0.66
+        ],
+        [
+          0.68,
+          0.697
+        ],
+        [
+          0.675,
+          0.735
+        ],
+        [
+          0.664,
+          0.77
+        ],
+        [
+          0.647,
+          0.804
+        ],
+        [
+          0.624,
+          0.833
+        ],
+        [
+          0.596,
+          0.858
+        ],
+        [
+          0.564,
+          0.878
+        ],
+        [
+          0.529,
+          0.891
+        ],
+        [
+          0.492,
+          0.899
+        ],
+        [
+          0.455,
+          0.899
+        ],
+        [
+          0.418,
+          0.893
+        ],
+        [
+          0.383,
+          0.881
+        ],
+        [
+          0.35,
+          0.862
+        ],
+        [
+          0.322,
+          0.838
+        ]
+      ]
+    }
+  ],
+  "activities": [
+    {
+      "type": "intro",
+      "say": {
+        "fr": "Voici trois.",
+        "en": "This is three."
+      }
+    },
+    {
+      "type": "demonstration",
+      "say": {
+        "fr": "Commence au point vert. Suis la ligne.",
+        "en": "Start at the green dot. Follow the line."
+      }
+    },
+    {
+      "type": "trace",
+      "guide": "strong",
+      "maxAttempts": 3,
+      "say": {
+        "fr": "À toi. Commence au point vert.",
+        "en": "Now you. Start at the green dot."
+      }
+    },
+    {
+      "type": "free_write",
+      "guide": "none",
+      "maxAttempts": 3,
+      "say": {
+        "fr": "Maintenant, écris trois tout seul.",
+        "en": "Now write three by yourself."
+      }
+    }
+  ],
+  "feedback": {
+    "success": {
+      "fr": "Bravo ! Tu as réussi.",
+      "en": "Great! You did it."
+    },
+    "retry": {
+      "fr": "Essayons encore.",
+      "en": "Let's try again."
+    },
+    "uncertain": {
+      "fr": "Bien. Essayons encore une fois.",
+      "en": "Good. Let's try once more."
+    },
+    "hintStart": {
+      "fr": "Regarde le point de départ.",
+      "en": "Look at the starting dot."
+    },
+    "moveOn": {
+      "fr": "Bel entraînement ! On continue.",
+      "en": "Good practice! Let's keep going."
+    }
+  },
+  "completion": {
+    "fr": "Tu t'es entraîné à écrire trois !",
+    "en": "You practiced three!"
+  }
+}

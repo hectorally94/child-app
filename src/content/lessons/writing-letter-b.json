@@ -1,0 +1,269 @@
+{
+  "id": "writing-letter-b",
+  "version": 1,
+  "order": 101,
+  "area": "writing",
+  "group": "letters",
+  "ageRange": [
+    3,
+    6
+  ],
+  "target": "B",
+  "title": {
+    "fr": "Écrire B",
+    "en": "Write B"
+  },
+  "objective": {
+    "fr": "S'entraîner à reconnaître et à écrire B.",
+    "en": "Practice recognizing and writing B."
+  },
+  "parentGuide": {
+    "fr": "Un grand trait qui descend, puis deux ventres l'un sous l'autre. Faites le geste dans l'air ensemble avant d'écrire.",
+    "en": "A long line down, then two bellies, one under the other. Make the movement in the air together before writing."
+  },
+  "strokes": [
+    {
+      "kind": "polyline",
+      "points": [
+        [
+          0.32,
+          0.12
+        ],
+        [
+          0.32,
+          0.88
+        ]
+      ]
+    },
+    {
+      "kind": "polyline",
+      "points": [
+        [
+          0.32,
+          0.12
+        ],
+        [
+          0.5,
+          0.12
+        ],
+        [
+          0.5,
+          0.12
+        ],
+        [
+          0.535,
+          0.123
+        ],
+        [
+          0.569,
+          0.134
+        ],
+        [
+          0.6,
+          0.15
+        ],
+        [
+          0.627,
+          0.173
+        ],
+        [
+          0.65,
+          0.2
+        ],
+        [
+          0.666,
+          0.231
+        ],
+        [
+          0.677,
+          0.265
+        ],
+        [
+          0.68,
+          0.3
+        ],
+        [
+          0.677,
+          0.335
+        ],
+        [
+          0.666,
+          0.369
+        ],
+        [
+          0.65,
+          0.4
+        ],
+        [
+          0.627,
+          0.427
+        ],
+        [
+          0.6,
+          0.45
+        ],
+        [
+          0.569,
+          0.466
+        ],
+        [
+          0.535,
+          0.477
+        ],
+        [
+          0.5,
+          0.48
+        ],
+        [
+          0.32,
+          0.48
+        ]
+      ]
+    },
+    {
+      "kind": "polyline",
+      "points": [
+        [
+          0.32,
+          0.48
+        ],
+        [
+          0.54,
+          0.48
+        ],
+        [
+          0.54,
+          0.48
+        ],
+        [
+          0.579,
+          0.484
+        ],
+        [
+          0.617,
+          0.495
+        ],
+        [
+          0.651,
+          0.514
+        ],
+        [
+          0.681,
+          0.539
+        ],
+        [
+          0.706,
+          0.569
+        ],
+        [
+          0.725,
+          0.603
+        ],
+        [
+          0.736,
+          0.641
+        ],
+        [
+          0.74,
+          0.68
+        ],
+        [
+          0.736,
+          0.719
+        ],
+        [
+          0.725,
+          0.757
+        ],
+        [
+          0.706,
+          0.791
+        ],
+        [
+          0.681,
+          0.821
+        ],
+        [
+          0.651,
+          0.846
+        ],
+        [
+          0.617,
+          0.865
+        ],
+        [
+          0.579,
+          0.876
+        ],
+        [
+          0.54,
+          0.88
+        ],
+        [
+          0.32,
+          0.88
+        ]
+      ]
+    }
+  ],
+  "activities": [
+    {
+      "type": "intro",
+      "say": {
+        "fr": "Voici la lettre B.",
+        "en": "This is the letter B."
+      }
+    },
+    {
+      "type": "demonstration",
+      "say": {
+        "fr": "Commence au point vert. Suis les traits dans l’ordre des numéros.",
+        "en": "Start at the green dot. Follow the lines in the order of the numbers."
+      }
+    },
+    {
+      "type": "trace",
+      "guide": "strong",
+      "maxAttempts": 3,
+      "say": {
+        "fr": "À toi. Commence au point vert.",
+        "en": "Now you. Start at the green dot."
+      }
+    },
+    {
+      "type": "free_write",
+      "guide": "none",
+      "maxAttempts": 3,
+      "say": {
+        "fr": "Maintenant, écris B tout seul.",
+        "en": "Now write B by yourself."
+      }
+    }
+  ],
+  "feedback": {
+    "success": {
+      "fr": "Bravo ! Tu as réussi.",
+      "en": "Great! You did it."
+    },
+    "retry": {
+      "fr": "Essayons encore.",
+      "en": "Let's try again."
+    },
+    "uncertain": {
+      "fr": "Bien. Essayons encore une fois.",
+      "en": "Good. Let's try once more."
+    },
+    "hintStart": {
+      "fr": "Regarde le point de départ.",
+      "en": "Look at the starting dot."
+    },
+    "moveOn": {
+      "fr": "Bel entraînement ! On continue.",
+      "en": "Good practice! Let's keep going."
+    }
+  },
+  "completion": {
+    "fr": "Tu t'es entraîné à écrire B !",
+    "en": "You practiced B!"
+  }
+}

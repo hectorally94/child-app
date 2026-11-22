@@ -8,7 +8,7 @@ import type { Lesson } from '../engine/types';
 const modules = import.meta.glob<Lesson>('./lessons/*.json', { eager: true, import: 'default' });
 
 export function loadLessons(): Lesson[] {
-  return Object.values(modules).sort((a, b) => a.id.localeCompare(b.id));
+  return Object.values(modules).sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
 }
 
 export function getLesson(id: string): Lesson | undefined {

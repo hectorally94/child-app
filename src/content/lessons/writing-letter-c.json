@@ -1,0 +1,223 @@
+{
+  "id": "writing-letter-c",
+  "version": 1,
+  "order": 102,
+  "area": "writing",
+  "group": "letters",
+  "ageRange": [
+    3,
+    6
+  ],
+  "target": "C",
+  "title": {
+    "fr": "Écrire C",
+    "en": "Write C"
+  },
+  "objective": {
+    "fr": "S'entraîner à reconnaître et à écrire C.",
+    "en": "Practice recognizing and writing C."
+  },
+  "parentGuide": {
+    "fr": "On part en haut à droite et on fait un grand rond ouvert, sans le fermer. Faites le geste dans l'air ensemble avant d'écrire.",
+    "en": "Start at the top right and make a big open curve, without closing it. Make the movement in the air together before writing."
+  },
+  "strokes": [
+    {
+      "kind": "polyline",
+      "points": [
+        [
+          0.719,
+          0.256
+        ],
+        [
+          0.691,
+          0.214
+        ],
+        [
+          0.66,
+          0.18
+        ],
+        [
+          0.625,
+          0.152
+        ],
+        [
+          0.587,
+          0.133
+        ],
+        [
+          0.548,
+          0.122
+        ],
+        [
+          0.509,
+          0.12
+        ],
+        [
+          0.469,
+          0.127
+        ],
+        [
+          0.431,
+          0.143
+        ],
+        [
+          0.395,
+          0.167
+        ],
+        [
+          0.362,
+          0.199
+        ],
+        [
+          0.332,
+          0.237
+        ],
+        [
+          0.307,
+          0.282
+        ],
+        [
+          0.287,
+          0.332
+        ],
+        [
+          0.272,
+          0.386
+        ],
+        [
+          0.263,
+          0.442
+        ],
+        [
+          0.26,
+          0.5
+        ],
+        [
+          0.263,
+          0.558
+        ],
+        [
+          0.272,
+          0.614
+        ],
+        [
+          0.287,
+          0.668
+        ],
+        [
+          0.307,
+          0.718
+        ],
+        [
+          0.332,
+          0.763
+        ],
+        [
+          0.362,
+          0.801
+        ],
+        [
+          0.395,
+          0.833
+        ],
+        [
+          0.431,
+          0.857
+        ],
+        [
+          0.469,
+          0.873
+        ],
+        [
+          0.509,
+          0.88
+        ],
+        [
+          0.548,
+          0.878
+        ],
+        [
+          0.587,
+          0.867
+        ],
+        [
+          0.625,
+          0.848
+        ],
+        [
+          0.66,
+          0.82
+        ],
+        [
+          0.691,
+          0.786
+        ],
+        [
+          0.719,
+          0.744
+        ]
+      ]
+    }
+  ],
+  "activities": [
+    {
+      "type": "intro",
+      "say": {
+        "fr": "Voici la lettre C.",
+        "en": "This is the letter C."
+      }
+    },
+    {
+      "type": "demonstration",
+      "say": {
+        "fr": "Commence au point vert. Suis la ligne.",
+        "en": "Start at the green dot. Follow the line."
+      }
+    },
+    {
+      "type": "trace",
+      "guide": "strong",
+      "maxAttempts": 3,
+      "say": {
+        "fr": "À toi. Commence au point vert.",
+        "en": "Now you. Start at the green dot."
+      }
+    },
+    {
+      "type": "free_write",
+      "guide": "none",
+      "maxAttempts": 3,
+      "say": {
+        "fr": "Maintenant, écris C tout seul.",
+        "en": "Now write C by yourself."
+      }
+    }
+  ],
+  "feedback": {
+    "success": {
+      "fr": "Bravo ! Tu as réussi.",
+      "en": "Great! You did it."
+    },
+    "retry": {
+      "fr": "Essayons encore.",
+      "en": "Let's try again."
+    },
+    "uncertain": {
+      "fr": "Bien. Essayons encore une fois.",
+      "en": "Good. Let's try once more."
+    },
+    "hintStart": {
+      "fr": "Regarde le point de départ.",
+      "en": "Look at the starting dot."
+    },
+    "moveOn": {
+      "fr": "Bel entraînement ! On continue.",
+      "en": "Good practice! Let's keep going."
+    }
+  },
+  "completion": {
+    "fr": "Tu t'es entraîné à écrire C !",
+    "en": "You practiced C!"
+  }
+}

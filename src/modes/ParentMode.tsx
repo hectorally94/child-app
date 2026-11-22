@@ -1,6 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
+import { AVATAR_COLORS, Avatar } from '../components/Avatar';
 import { Icon, type IconName } from '../components/Icon';
+import { InstallCard } from '../components/InstallCard';
 import { Slate } from '../components/Slate';
 import { loadLessons } from '../content';
 import { summarize, type LessonSummary } from '../engine/summary';
@@ -44,11 +46,7 @@ export function ParentMode({ data, update, onChildMode }: Props) {
     <div className="flex min-h-full flex-col bg-canvas font-body text-ink">
       <header className="sticky top-0 z-20 border-b border-white/60 bg-canvas/85 backdrop-blur-md">
         <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-3">
-          {child ? (
-            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-gradient-to-br from-sun to-coral font-display text-lg font-black text-white shadow-[inset_0_-3px_0_rgb(0_0_0/0.12)]" aria-hidden="true">
-              {child.name.slice(0, 1).toUpperCase()}
-            </span>
-          ) : null}
+          {child ? <Avatar child={child} size={44} /> : null}
           <div className="min-w-0 flex-1">
             <p className="m-0 truncate font-display text-lg leading-tight font-black">{child ? child.name : t('parentArea', lang)}</p>
             <p className="m-0 text-sm text-ink-soft">{t('parentArea', lang)}</p>
@@ -105,7 +103,8 @@ function H2({ children }: { children: React.ReactNode }) {
 }
 
 function Glyph({ lesson, size = 'md' }: { lesson: Lesson; size?: 'md' | 'lg' }) {
-  const s = size === 'lg' ? 'h-24 w-24 text-6xl rounded-[28px]' : 'h-16 w-16 text-4xl rounded-[20px]';
+  const two = lesson.target.length > 1;
+  const s = size === 'lg' ? `h-24 w-24 rounded-[28px] ${two ? 'text-5xl' : 'text-6xl'}` : `h-16 w-16 rounded-[20px] ${two ? 'text-3xl' : 'text-4xl'}`;
   return (
     <span className={`grid shrink-0 place-items-center bg-gradient-to-br from-blue to-violet font-display font-black text-white shadow-[inset_0_-4px_0_rgb(0_0_0/0.15),inset_0_3px_6px_rgb(255_255_255/0.35),0_8px_16px_-6px_rgb(37_99_235/0.6)] ${s}`} aria-hidden="true">
       {lesson.target}
@@ -131,6 +130,7 @@ function Dashboard({ data, child, lang, onOpen, onGoLessons }: { data: AppData; 
 
   return (
     <motion.div variants={list} initial="initial" animate="animate" className="flex flex-col gap-7">
+      <InstallCard lang={lang} />
       <motion.section variants={item}>
         <H2>{t('todayActivity', lang)}</H2>
         {today ? (
@@ -205,18 +205,18 @@ function Chip({ icon, text }: { icon: IconName; text: string }) {
 
 function Catalogue({ lang, child, onOpen }: { lang: Lang; child: Child | null; onOpen: (l: Lesson) => void }) {
   const lessons = loadLessons();
-  const areas = [...new Set(lessons.map((l) => l.area))];
+  const areas = [...new Set(lessons.map((l) => l.group))];
   const areaName: Record<string, { en: string; fr: string }> = {
-    writing: { en: 'Writing', fr: 'Écriture' }, numbers: { en: 'Numbers', fr: 'Nombres' },
-    language: { en: 'Language', fr: 'Langage' }, reading: { en: 'Reading', fr: 'Lecture' }, discovery: { en: 'Discovery', fr: 'Découverte' },
+    numbers: { en: 'Writing numbers', fr: 'Écrire les chiffres et les nombres' },
+    letters: { en: 'Writing letters', fr: 'Écrire les lettres' },
   };
   return (
     <div className="flex flex-col gap-7">
       {areas.map((area) => (
         <section key={area}>
-          <H2>{tr(areaName[area], lang)}</H2>
+          <H2>{tr(areaName[area] ?? { en: area, fr: area }, lang)}</H2>
           <motion.ul variants={list} initial="initial" animate="animate" className="m-0 grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2">
-            {lessons.filter((l) => l.area === area).map((l) => (
+            {lessons.filter((l) => l.group === area).map((l) => (
               <motion.li variants={item} key={l.id}>
                 <button onClick={() => onOpen(l)} className="clay flex h-full w-full items-center gap-4 p-4 text-left transition active:scale-[0.98]">
                   <Glyph lesson={l} />
@@ -323,7 +323,7 @@ function Settings({ data, update }: { data: AppData; update: (fn: (d: AppData) =
     e.preventDefault();
     const clean = name.trim();
     if (!clean) return;
-    const c: Child = { id: newId(), name: clean, childLang: lang, todayLessonId: loadLessons()[0]?.id ?? null };
+    const c: Child = { id: newId(), name: clean, childLang: lang, todayLessonId: loadLessons()[0]?.id ?? null, avatar: data.children.length % AVATAR_COLORS.length };
     update((d) => ({ ...d, children: [...d.children, c], activeChildId: c.id }));
     setName('');
   };
@@ -351,9 +351,7 @@ function Settings({ data, update }: { data: AppData; update: (fn: (d: AppData) =
                   return (
                     <motion.li key={c.id} layout initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, x: -30 }}
                       className={`flex flex-wrap items-center gap-3 rounded-[20px] p-2.5 ${active ? 'bg-blue-soft' : 'bg-canvas'}`}>
-                      <span className="grid h-11 w-11 place-items-center rounded-full bg-gradient-to-br from-sun to-coral font-display text-lg font-black text-white" aria-hidden="true">
-                        {c.name.slice(0, 1).toUpperCase()}
-                      </span>
+                      <Avatar child={c} size={44} />
                       <strong className="min-w-0 flex-1 truncate font-display text-lg">{c.name}</strong>
                       {active
                         ? <span className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-sm font-bold text-blue"><Icon name="check" size={14} />{t('active', lang)}</span>
@@ -376,6 +374,8 @@ function Settings({ data, update }: { data: AppData; update: (fn: (d: AppData) =
           </form>
         </div>
       </section>
+
+      {child && <ProfileEditor key={child.id} child={child} lang={lang} update={update} />}
 
       <section>
         <H2>{t('settings', lang)}</H2>
@@ -411,5 +411,57 @@ function LangSwitch({ label, value, onChange }: { label: string; value: Lang; on
         })}
       </div>
     </fieldset>
+  );
+}
+
+function ProfileEditor({ child, lang, update }: { child: Child; lang: Lang; update: (fn: (d: AppData) => AppData) => void }) {
+  const [name, setName] = useState(child.name);
+  const [saved, setSaved] = useState(false);
+  const patch = (p: Partial<Child>) =>
+    update((d) => ({ ...d, children: d.children.map((c) => (c.id === child.id ? { ...c, ...p } : c)) }));
+  const saveName = (e: React.FormEvent) => {
+    e.preventDefault();
+    const clean = name.trim();
+    if (!clean) return;
+    patch({ name: clean });
+    setSaved(true);
+    window.setTimeout(() => setSaved(false), 1600);
+  };
+  return (
+    <section>
+      <H2>{t('childProfile', lang)}</H2>
+      <div className="clay flex flex-col gap-5 p-5">
+        <div className="flex items-center gap-4">
+          <motion.div key={`${child.avatar}-${child.name}`} initial={{ scale: 0.7, rotate: -10 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', stiffness: 400, damping: 14 }}>
+            <Avatar child={{ ...child, name: name || child.name }} size={72} ring />
+          </motion.div>
+          <form onSubmit={saveName} className="min-w-0 flex-1">
+            <label htmlFor="profile-name" className="mb-1.5 block font-bold">{t('firstName', lang)}</label>
+            <div className="flex flex-wrap gap-2">
+              <input id="profile-name" className="clay-input min-w-[10ch] flex-1" value={name} maxLength={30} autoComplete="off" onChange={(e) => setName(e.target.value)} />
+              <button type="submit" className={`clay-btn ${saved ? 'is-mint' : ''} !min-h-[54px]`} disabled={!name.trim() || (name.trim() === child.name && !saved)}>
+                <Icon name="check" size={18} />{saved ? t('saved', lang) : t('save', lang)}
+              </button>
+            </div>
+          </form>
+        </div>
+        <fieldset className="m-0 border-0 p-0">
+          <legend className="mb-2 p-0 font-bold">{t('avatarColor', lang)}</legend>
+          <div className="flex flex-wrap gap-3" role="radiogroup">
+            {AVATAR_COLORS.map(([a, b], i) => {
+              const on = (child.avatar ?? 0) === i;
+              return (
+                <button key={i} type="button" role="radio" aria-checked={on} aria-label={`${t('avatarColor', lang)} ${i + 1}`}
+                  onClick={() => patch({ avatar: i })}
+                  className={`grid h-12 w-12 place-items-center rounded-full text-white transition active:scale-90 ${on ? 'ring-4 ring-ink/80 ring-offset-2' : ''}`}
+                  style={{ background: `linear-gradient(135deg, ${a}, ${b})` }}>
+                  {on && <Icon name="check" size={20} />}
+                </button>
+              );
+            })}
+          </div>
+        </fieldset>
+      </div>
+    </section>
   );
 }

@@ -32,11 +32,17 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
 - Deploy for testing: Vercel (Vite preset, output `dist`).
 
 ## Code map
-- `src/content/lessons/*.json` — lessons (data). New lesson = new JSON file, no code.
+- `src/content/lessons/*.json` — lessons (data). New lesson = new JSON file, no code. `order` sets the list position;
+  `group` is `numbers` or `letters`. Lessons now: numbers 0–15, letters A–E.
+- `tools/generate_lessons.py` — helper that computes stroke points (curves, two-digit numbers, letters) and writes
+  lesson JSON for 3–15 and A–E. 0, 1, 2 are hand-written. Re-run after changing a shape, then `npm test`.
 - `src/engine/` — lesson types, stroke geometry, attempt evaluation (`evaluate.ts`), parent summary, speech (device TTS).
 - `src/modes/` — `ChildMode` (lesson player), `ParentGate` (multiplication gate), `ParentMode` (dashboard, lessons, settings).
 - `src/components/Slate.tsx` — writing board (canvas): guide, demo animation, captures strokes.
-- `src/components/` — also `Mascot` (Pipo), `Decor` (blobs, confetti), `Icon` (single icon set).
+- `src/components/` — also `Mascot` (Pipo), `Decor` (blobs, confetti), `Icon` (single icon set),
+  `Avatar` (profile colors), `InstallCard` (install-the-app card, parent side only).
+- `src/pwa/install.ts` — captures `beforeinstallprompt` (imported first in `main.tsx`); iPhone gets instructions instead.
+- `public/` — `manifest.webmanifest`, PNG icons (192, 512, maskable 512, apple-touch 180), `sw.js` (offline cache).
 - `src/i18n/` — UI strings + fallback (`fr` ↔ `en`).
 - `src/storage/` — versioned local store (children, sessions with attempts).
 
@@ -59,6 +65,9 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
 - [x] First test with the real child (2026-11-22): parent loves the UI, the child liked it. Keep this design direction.
 - [ ] Observe more sessions; adjust stroke data to match the teacher's method
 - [x] UI v2: Tailwind + claymorphism + mascot + animations; adaptive demo replay after 2 missed traces; "Write 2" lesson
+- [x] v3 (2026-11-22): numbers 3–15 and letters A–E; child home has a free-choice grid (123 / ABC tabs, star on
+      completed lessons, today's activity highlighted); profile (name + avatar color, "who's playing?" switch);
+      installable PWA (Chrome installability check passes); numbered start dots for multi-stroke shapes
 - [ ] Prerecorded audio (device TTS for now)
 - [ ] Phase 2: lesson packages/download, backend + sync, more writing lessons
 
@@ -74,6 +83,9 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
 - 2026-11-22: Stack confirmed by user: React + Tailwind CSS, with animations.
 - 2026-11-22: Teacher method improvised: 0 = start top, counter-clockwise; 1 = small stroke up then straight down;
   2 = start left, round back over the top, slide down-left, straight base line.
+- 2026-11-22: The child chooses freely what to practice (grid on the child home). "Next activity" just opens the next
+  lesson; it no longer changes the parent's "today's activity".
+- 2026-11-22: The daughter perceives Pipo's voice as "the teacher (madam)". Keep the guide voice warm and teacher-like.
 
 ## Open questions
 - Packaging approach for Android later (PWA, Capacitor, or other).

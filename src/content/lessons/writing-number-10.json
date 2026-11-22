@@ -1,0 +1,272 @@
+{
+  "id": "writing-number-10",
+  "version": 1,
+  "order": 10,
+  "area": "writing",
+  "group": "numbers",
+  "ageRange": [
+    3,
+    6
+  ],
+  "target": "10",
+  "title": {
+    "fr": "Écrire 10",
+    "en": "Write 10"
+  },
+  "objective": {
+    "fr": "S'entraîner à reconnaître et à écrire 10.",
+    "en": "Practice recognizing and writing 10."
+  },
+  "parentGuide": {
+    "fr": "On écrit d'abord le 1, puis le 0 juste à côté. Faites le geste dans l'air ensemble avant d'écrire.",
+    "en": "First write the 1, then the 0 right next to it. Make the movement in the air together before writing."
+  },
+  "strokes": [
+    {
+      "kind": "polyline",
+      "points": [
+        [
+          0.216,
+          0.376
+        ],
+        [
+          0.321,
+          0.264
+        ],
+        [
+          0.321,
+          0.736
+        ]
+      ]
+    },
+    {
+      "kind": "polyline",
+      "points": [
+        [
+          0.71,
+          0.264
+        ],
+        [
+          0.684,
+          0.267
+        ],
+        [
+          0.658,
+          0.276
+        ],
+        [
+          0.634,
+          0.29
+        ],
+        [
+          0.612,
+          0.309
+        ],
+        [
+          0.592,
+          0.333
+        ],
+        [
+          0.575,
+          0.362
+        ],
+        [
+          0.561,
+          0.393
+        ],
+        [
+          0.551,
+          0.427
+        ],
+        [
+          0.545,
+          0.463
+        ],
+        [
+          0.543,
+          0.5
+        ],
+        [
+          0.545,
+          0.537
+        ],
+        [
+          0.551,
+          0.573
+        ],
+        [
+          0.561,
+          0.607
+        ],
+        [
+          0.575,
+          0.638
+        ],
+        [
+          0.592,
+          0.667
+        ],
+        [
+          0.612,
+          0.691
+        ],
+        [
+          0.634,
+          0.71
+        ],
+        [
+          0.658,
+          0.724
+        ],
+        [
+          0.684,
+          0.733
+        ],
+        [
+          0.71,
+          0.736
+        ],
+        [
+          0.736,
+          0.733
+        ],
+        [
+          0.762,
+          0.724
+        ],
+        [
+          0.786,
+          0.71
+        ],
+        [
+          0.808,
+          0.691
+        ],
+        [
+          0.828,
+          0.667
+        ],
+        [
+          0.845,
+          0.638
+        ],
+        [
+          0.859,
+          0.607
+        ],
+        [
+          0.869,
+          0.573
+        ],
+        [
+          0.875,
+          0.537
+        ],
+        [
+          0.877,
+          0.5
+        ],
+        [
+          0.875,
+          0.463
+        ],
+        [
+          0.869,
+          0.427
+        ],
+        [
+          0.859,
+          0.393
+        ],
+        [
+          0.845,
+          0.362
+        ],
+        [
+          0.828,
+          0.333
+        ],
+        [
+          0.808,
+          0.309
+        ],
+        [
+          0.786,
+          0.29
+        ],
+        [
+          0.762,
+          0.276
+        ],
+        [
+          0.736,
+          0.267
+        ],
+        [
+          0.71,
+          0.264
+        ]
+      ]
+    }
+  ],
+  "activities": [
+    {
+      "type": "intro",
+      "say": {
+        "fr": "Voici dix.",
+        "en": "This is ten."
+      }
+    },
+    {
+      "type": "demonstration",
+      "say": {
+        "fr": "Commence au point vert. Suis les traits dans l’ordre des numéros.",
+        "en": "Start at the green dot. Follow the lines in the order of the numbers."
+      }
+    },
+    {
+      "type": "trace",
+      "guide": "strong",
+      "maxAttempts": 3,
+      "say": {
+        "fr": "À toi. Commence au point vert.",
+        "en": "Now you. Start at the green dot."
+      }
+    },
+    {
+      "type": "free_write",
+      "guide": "none",
+      "maxAttempts": 3,
+      "say": {
+        "fr": "Maintenant, écris dix tout seul.",
+        "en": "Now write ten by yourself."
+      }
+    }
+  ],
+  "feedback": {
+    "success": {
+      "fr": "Bravo ! Tu as réussi.",
+      "en": "Great! You did it."
+    },
+    "retry": {
+      "fr": "Essayons encore.",
+      "en": "Let's try again."
+    },
+    "uncertain": {
+      "fr": "Bien. Essayons encore une fois.",
+      "en": "Good. Let's try once more."
+    },
+    "hintStart": {
+      "fr": "Regarde le point de départ.",
+      "en": "Look at the starting dot."
+    },
+    "moveOn": {
+      "fr": "Bel entraînement ! On continue.",
+      "en": "Good practice! Let's keep going."
+    }
+  },
+  "completion": {
+    "fr": "Tu t'es entraîné à écrire dix !",
+    "en": "You practiced ten!"
+  }
+}

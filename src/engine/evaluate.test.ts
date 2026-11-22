@@ -42,6 +42,36 @@ describe('evaluateAttempt', () => {
 });
 
 describe('lesson content', () => {
+  const lessons = loadLessons();
+
+  it('has numbers 0 to 15 and letters A to E, in order', () => {
+    expect(lessons.map((l) => l.target)).toEqual([
+      ...Array.from({ length: 16 }, (_, i) => String(i)),
+      'A', 'B', 'C', 'D', 'E',
+    ]);
+    expect(new Set(lessons.map((l) => l.id)).size).toBe(lessons.length);
+  });
+
+  it('every lesson has French and English texts', () => {
+    for (const l of lessons) {
+      for (const text of [l.title, l.objective, l.parentGuide, l.completion, ...l.activities.map((a) => a.say)]) {
+        expect(text.fr, l.id).toBeTruthy();
+        expect(text.en, l.id).toBeTruthy();
+      }
+    }
+  });
+
+  it('every stroke stays inside the writing board', () => {
+    for (const l of lessons) {
+      for (const p of l.strokes.flatMap((s) => sampleStroke(s))) {
+        expect(p[0], l.id).toBeGreaterThanOrEqual(0.05);
+        expect(p[0], l.id).toBeLessThanOrEqual(0.95);
+        expect(p[1], l.id).toBeGreaterThanOrEqual(0.08);
+        expect(p[1], l.id).toBeLessThanOrEqual(0.92);
+      }
+    }
+  });
+
   it('every bundled lesson is usable by the same engine (PRD experiment 2)', () => {
     for (const lesson of loadLessons()) {
       const guide = lesson.strokes.map((s) => sampleStroke(s));

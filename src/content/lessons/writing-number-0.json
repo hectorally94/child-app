@@ -1,11 +1,18 @@
 {
   "id": "writing-number-0",
   "version": 1,
+  "order": 0,
   "area": "writing",
   "group": "numbers",
-  "ageRange": [3, 6],
+  "ageRange": [
+    3,
+    6
+  ],
   "target": "0",
-  "title": { "en": "Write 0", "fr": "Écrire 0" },
+  "title": {
+    "en": "Write 0",
+    "fr": "Écrire 0"
+  },
   "objective": {
     "en": "Practice recognizing and writing 0.",
     "fr": "S'entraîner à reconnaître et à écrire 0."
@@ -15,20 +22,74 @@
     "fr": "La leçon montre où commencer (le point vert) et dans quel sens aller, puis l'enfant trace le 0 et essaie seul. Aidez en montrant le point vert et en faisant lentement le tour de la forme avec votre enfant. Félicitez l'effort, pas seulement le résultat."
   },
   "strokes": [
-    { "kind": "ellipse", "cx": 0.5, "cy": 0.5, "rx": 0.27, "ry": 0.38, "startAngle": -90, "direction": "ccw" }
+    {
+      "kind": "ellipse",
+      "cx": 0.5,
+      "cy": 0.5,
+      "rx": 0.27,
+      "ry": 0.38,
+      "startAngle": -90,
+      "direction": "ccw"
+    }
   ],
   "activities": [
-    { "type": "intro", "say": { "en": "This is zero.", "fr": "Voici zéro." } },
-    { "type": "demonstration", "say": { "en": "Start here. Follow the line around.", "fr": "Commence ici. Suis la ligne tout autour." } },
-    { "type": "trace", "guide": "strong", "maxAttempts": 3, "say": { "en": "Now you. Start at the green dot.", "fr": "À toi. Commence au point vert." } },
-    { "type": "free_write", "guide": "none", "maxAttempts": 3, "say": { "en": "Now write zero by yourself.", "fr": "Maintenant, écris zéro tout seul." } }
+    {
+      "type": "intro",
+      "say": {
+        "en": "This is zero.",
+        "fr": "Voici zéro."
+      }
+    },
+    {
+      "type": "demonstration",
+      "say": {
+        "en": "Start here. Follow the line around.",
+        "fr": "Commence ici. Suis la ligne tout autour."
+      }
+    },
+    {
+      "type": "trace",
+      "guide": "strong",
+      "maxAttempts": 3,
+      "say": {
+        "en": "Now you. Start at the green dot.",
+        "fr": "À toi. Commence au point vert."
+      }
+    },
+    {
+      "type": "free_write",
+      "guide": "none",
+      "maxAttempts": 3,
+      "say": {
+        "en": "Now write zero by yourself.",
+        "fr": "Maintenant, écris zéro tout seul."
+      }
+    }
   ],
   "feedback": {
-    "success": { "en": "Great! You did it.", "fr": "Bravo ! Tu as réussi." },
-    "retry": { "en": "Let's try again.", "fr": "Essayons encore." },
-    "uncertain": { "en": "Good. Let's try once more.", "fr": "Bien. Essayons encore une fois." },
-    "hintStart": { "en": "Look at the starting dot.", "fr": "Regarde le point de départ." },
-    "moveOn": { "en": "Good practice! Let's keep going.", "fr": "Bel entraînement ! On continue." }
+    "success": {
+      "en": "Great! You did it.",
+      "fr": "Bravo ! Tu as réussi."
+    },
+    "retry": {
+      "en": "Let's try again.",
+      "fr": "Essayons encore."
+    },
+    "uncertain": {
+      "en": "Good. Let's try once more.",
+      "fr": "Bien. Essayons encore une fois."
+    },
+    "hintStart": {
+      "en": "Look at the starting dot.",
+      "fr": "Regarde le point de départ."
+    },
+    "moveOn": {
+      "en": "Good practice! Let's keep going.",
+      "fr": "Bel entraînement ! On continue."
+    }
   },
-  "completion": { "en": "You practiced zero!", "fr": "Tu t'es entraîné à écrire zéro !" }
+  "completion": {
+    "en": "You practiced zero!",
+    "fr": "Tu t'es entraîné à écrire zéro !"
+  }
 }

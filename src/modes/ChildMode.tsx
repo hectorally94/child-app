@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
+import { Avatar } from '../components/Avatar';
 import { Blobs, Confetti } from '../components/Decor';
 import { Icon } from '../components/Icon';
 import { Mascot, type Mood } from '../components/Mascot';
@@ -12,7 +13,7 @@ import { t, tr, type UIKey } from '../i18n';
 import { newId, type AppData, type AttemptRecord, type Child, type SessionRecord } from '../storage/store';
 
 interface Props {
-  child: Child | null;
+  data: AppData;
   update: (fn: (d: AppData) => AppData) => void;
   onParent: () => void;
 }
@@ -40,16 +41,18 @@ function useTalk(): [Mood, (lang: Lang, text: string, after?: Mood) => void, (m:
   return [mood, say, setMood];
 }
 
-export function ChildMode({ child, update, onParent }: Props) {
+export function ChildMode({ data, update, onParent }: Props) {
+  const child = data.children.find((c) => c.id === data.activeChildId) ?? null;
   const lang = child?.childLang ?? 'fr';
   const lessons = loadLessons();
   const today = lessons.find((l) => l.id === child?.todayLessonId) ?? null;
   const [screen, setScreen] = useState<Screen>({ kind: 'welcome' });
   const runRef = useRef(0);
   const startLesson = (lesson: Lesson) => setScreen({ kind: 'lesson', lesson, run: ++runRef.current });
+  const done = new Set(data.sessions.filter((s) => s.childId === child?.id && s.completed).map((s) => s.lessonId));
 
   return (
-    <div className="relative isolate flex min-h-full flex-col overflow-hidden bg-canvas font-display text-ink select-none">
+    <div className="relative isolate flex min-h-full flex-col overflow-x-hidden bg-canvas font-display text-ink select-none">
       <Blobs />
       <button
         onClick={() => { stopSpeaking(); onParent(); }}
@@ -61,7 +64,17 @@ export function ChildMode({ child, update, onParent }: Props) {
 
       <AnimatePresence mode="wait">
         {screen.kind === 'welcome' && (
-          <Welcome key="welcome" child={child} lesson={today} lang={lang} onStart={() => today && startLesson(today)} />
+          <Welcome
+            key={`welcome-${child?.id}`}
+            data={data}
+            child={child}
+            today={today}
+            lessons={lessons}
+            done={done}
+            lang={lang}
+            onPick={startLesson}
+            onSwitch={(id) => update((d) => ({ ...d, activeChildId: id }))}
+          />
         )}
         {screen.kind === 'lesson' && child && (
           <LessonPlayer
@@ -81,9 +94,7 @@ export function ChildMode({ child, update, onParent }: Props) {
             onAgain={() => startLesson(screen.lesson)}
             onNext={() => {
               const i = lessons.findIndex((l) => l.id === screen.lesson.id);
-              const next = lessons[(i + 1) % lessons.length];
-              update((d) => ({ ...d, children: d.children.map((c) => (c.id === child?.id ? { ...c, todayLessonId: next.id } : c)) }));
-              startLesson(next);
+              startLesson(lessons[(i + 1) % lessons.length]);
             }}
             onFinish={() => setScreen({ kind: 'welcome' })}
           />
@@ -95,42 +106,153 @@ export function ChildMode({ child, update, onParent }: Props) {
 
 /* ------------------------------------------------------------------ */
 
-function Welcome({ child, lesson, lang, onStart }: { child: Child | null; lesson: Lesson | null; lang: Lang; onStart: () => void }) {
+const TILE_COLORS = [
+  'from-blue to-violet', 'from-pink to-[#f97362]', 'from-mint to-[#0ea5e9]', 'from-sun to-[#f97316]', 'from-violet to-pink',
+];
+
+interface WelcomeProps {
+  data: AppData;
+  child: Child | null;
+  today: Lesson | null;
+  lessons: Lesson[];
+  done: Set<string>;
+  lang: Lang;
+  onPick: (l: Lesson) => void;
+  onSwitch: (childId: string) => void;
+}
+
+function Welcome({ data, child, today, lessons, done, lang, onPick, onSwitch }: WelcomeProps) {
   const [mood, say] = useTalk();
-  const greeting = lesson ? t('childWelcome', lang, { name: child?.name ?? '' }) : t('noActivity', lang);
+  const [group, setGroup] = useState<string>(today?.group ?? 'numbers');
+  const [switching, setSwitching] = useState(false);
+  const greeting = child ? t('childWelcome', lang, { name: child.name }) : t('noActivity', lang);
   useEffect(() => {
     const id = window.setTimeout(() => say(lang, greeting), 450);
     return () => { window.clearTimeout(id); stopSpeaking(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [greeting, lang]);
 
+  const groups: { k: string; label: UIKey; sample: string }[] = [
+    { k: 'numbers', label: 'numbers', sample: '123' },
+    { k: 'letters', label: 'letters', sample: 'ABC' },
+  ];
+  const shown = lessons.filter((l) => l.group === group);
+  const others = data.children.filter((c) => c.id !== child?.id);
+
   return (
-    <motion.main {...screenMotion} className="relative z-10 flex flex-1 flex-col items-center justify-center gap-6 px-4 py-10">
-      <div className="flex flex-col items-center">
-        <SpeechBubble text={greeting} />
-        <Mascot mood={mood} size={132} />
+    <motion.main {...screenMotion} className="relative z-10 mx-auto flex w-full max-w-2xl flex-1 flex-col items-center gap-5 px-4 pt-3 pb-10">
+      {/* profile */}
+      <div className="flex w-full items-center pr-12">
+        {child && (
+          <button
+            onClick={() => others.length && setSwitching((v) => !v)}
+            className="flex items-center gap-2 rounded-full bg-white/85 py-1.5 pr-4 pl-1.5 shadow-[0_6px_16px_-8px_rgb(76_56_140/0.4)] active:scale-95"
+            aria-label={others.length ? t('whoPlays', lang) : child.name}
+            aria-expanded={others.length ? switching : undefined}
+          >
+            <Avatar child={child} size={40} />
+            <span className="max-w-[40vw] truncate text-lg font-black">{child.name}</span>
+          </button>
+        )}
+      </div>
+      <AnimatePresence>
+        {switching && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -10, scale: 0.95 }}
+            className="clay -mt-2 flex w-full flex-wrap items-center justify-center gap-4 p-4"
+          >
+            <p className="m-0 w-full text-center text-lg font-black">{t('whoPlays', lang)}</p>
+            {data.children.map((c) => (
+              <button key={c.id} onClick={() => { onSwitch(c.id); setSwitching(false); }}
+                className={`flex flex-col items-center gap-1 rounded-[22px] p-2 active:scale-95 ${c.id === child?.id ? 'bg-blue-soft' : ''}`}>
+                <Avatar child={c} size={64} ring />
+                <span className="text-base font-extrabold">{c.name}</span>
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Pipo + today's activity */}
+      <div className="flex w-full flex-col items-center gap-4 sm:flex-row sm:items-end sm:justify-center">
+        <div className="flex flex-col items-center">
+          <SpeechBubble text={greeting} />
+          <Mascot mood={mood} size={112} />
+        </div>
+        {today && child && (
+          <motion.button
+            onClick={() => onPick(today)}
+            aria-label={`${tr(today.title, lang)}. ${t('tapToStart', lang)}`}
+            className="clay relative grid aspect-square w-[min(54vw,220px)] place-items-center !rounded-[44px]"
+            initial={{ scale: 0.6, rotate: -6, opacity: 0 }}
+            animate={{ scale: 1, rotate: 0, opacity: 1, transition: { ...spring, delay: 0.15 } }}
+            whileTap={{ scale: 0.94 }}
+          >
+            <Icon name="sparkle" size={26} className="absolute top-4 left-4 text-sun" />
+            <span className={`bg-gradient-to-b from-blue to-violet bg-clip-text leading-none font-black text-transparent ${today.target.length > 1 ? 'text-[min(26vw,110px)]' : 'text-[min(36vw,150px)]'}`}>
+              {today.target}
+            </span>
+            <motion.span
+              className="absolute -right-4 -bottom-4 grid h-20 w-20 place-items-center rounded-full border-4 border-white bg-sun text-ink shadow-[0_7px_0_var(--color-sun-deep),0_14px_22px_-8px_rgb(217_119_6/0.6)]"
+              animate={{ scale: [1, 1.1, 1] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <Icon name="play" size={38} />
+            </motion.span>
+          </motion.button>
+        )}
       </div>
 
-      {lesson && (
-        <motion.button
-          onClick={onStart}
-          aria-label={`${tr(lesson.title, lang)}. ${t('tapToStart', lang)}`}
-          className="clay relative grid aspect-square w-[min(68vw,300px)] place-items-center !rounded-[48px]"
-          initial={{ scale: 0.6, rotate: -6, opacity: 0 }}
-          animate={{ scale: 1, rotate: 0, opacity: 1, transition: { ...spring, delay: 0.15 } }}
-          whileTap={{ scale: 0.94 }}
-        >
-          <span className="bg-gradient-to-b from-blue to-violet bg-clip-text text-[min(46vw,200px)] leading-none font-black text-transparent">
-            {lesson.target}
-          </span>
-          <motion.span
-            className="absolute -right-5 -bottom-5 grid h-24 w-24 place-items-center rounded-full border-4 border-white bg-sun text-ink shadow-[0_8px_0_var(--color-sun-deep),0_16px_24px_-8px_rgb(217_119_6/0.6)]"
-            animate={{ scale: [1, 1.1, 1] }}
-            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+      {/* free choice: numbers / letters */}
+      {child && (
+        <section className="mt-3 w-full" aria-label={t('chooseTitle', lang)}>
+          <div className="mx-auto mb-4 flex w-fit rounded-full bg-white/80 p-1.5 shadow-[inset_2px_3px_6px_rgb(43_39_64/0.08)]" role="tablist">
+            {groups.map((g) => {
+              const on = group === g.k;
+              return (
+                <button key={g.k} role="tab" aria-selected={on} onClick={() => setGroup(g.k)}
+                  className={`relative flex min-h-14 items-center gap-2 rounded-full px-5 text-lg font-black transition-colors ${on ? 'text-white' : 'text-ink-soft'}`}>
+                  {on && <motion.span layoutId="group-pill" className="absolute inset-0 rounded-full bg-blue shadow-[inset_0_-4px_0_rgb(0_0_0/0.15)]" transition={spring} />}
+                  <span className="relative text-2xl tracking-tight">{g.sample}</span>
+                  <span className="relative hidden text-base sm:inline">{t(g.label, lang)}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <motion.ul
+            key={group}
+            className="m-0 grid list-none grid-cols-4 gap-3 p-0 sm:grid-cols-6"
+            initial="hidden"
+            animate="show"
+            variants={{ show: { transition: { staggerChildren: 0.03 } } }}
           >
-            <Icon name="play" size={44} />
-          </motion.span>
-        </motion.button>
+            {shown.map((l, i) => {
+              const isToday = l.id === today?.id;
+              return (
+                <motion.li key={l.id} variants={{ hidden: { opacity: 0, scale: 0.6, y: 14 }, show: { opacity: 1, scale: 1, y: 0, transition: { type: 'spring', stiffness: 420, damping: 20 } } }}>
+                  <motion.button
+                    onClick={() => onPick(l)}
+                    whileTap={{ scale: 0.88 }}
+                    aria-label={tr(l.title, lang)}
+                    className={`clay relative grid aspect-square w-full place-items-center !rounded-[24px] ${isToday ? 'ring-4 ring-sun' : ''}`}
+                  >
+                    <span className={`bg-gradient-to-b ${TILE_COLORS[i % TILE_COLORS.length]} bg-clip-text leading-none font-black text-transparent ${l.target.length > 1 ? 'text-[clamp(1.6rem,8vw,2.4rem)]' : 'text-[clamp(2.2rem,11vw,3.2rem)]'}`}>
+                      {l.target}
+                    </span>
+                    {done.has(l.id) && (
+                      <span className="absolute -top-2 -right-2 grid h-8 w-8 place-items-center rounded-full border-[3px] border-white bg-sun text-white shadow-md" aria-hidden="true">
+                        <Icon name="sparkle" size={16} />
+                      </span>
+                    )}
+                  </motion.button>
+                </motion.li>
+              );
+            })}
+          </motion.ul>
+        </section>
       )}
     </motion.main>
   );

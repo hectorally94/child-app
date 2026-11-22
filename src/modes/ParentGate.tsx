@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useMemo, useState } from 'react';
 import { Icon } from '../components/Icon';
+import { InstallCard } from '../components/InstallCard';
 import { Mascot } from '../components/Mascot';
 import type { Lang } from '../engine/types';
 import { t } from '../i18n';
@@ -23,7 +24,7 @@ export function ParentGate({ lang, firstRun, onPass, onCancel }: { lang: Lang; f
   };
 
   return (
-    <div className="flex min-h-full items-center justify-center bg-canvas px-4 py-10">
+    <div className="flex min-h-full flex-col items-center justify-center gap-4 bg-canvas px-4 py-10">
       <motion.form
         key={shake}
         onSubmit={submit}
@@ -69,6 +70,7 @@ export function ParentGate({ lang, firstRun, onPass, onCancel }: { lang: Lang; f
           </button>
         </div>
       </motion.form>
+      <div className="w-full max-w-md"><InstallCard lang={lang} compact /></div>
     </div>
   );
 }
