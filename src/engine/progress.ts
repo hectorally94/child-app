@@ -24,7 +24,7 @@ export function learningPath(lessons: Lesson[]): Record<string, Lesson[]> {
 export function masteredIds(sessions: SessionRecord[], childId: string | undefined): Set<string> {
   return new Set(
     sessions
-      .filter((s) => s.childId === childId && s.completed && s.attempts.some((a) => a.activity === 'free_write' && a.outcome === 'success'))
+      .filter((s) => s.childId === childId && s.completed && (s.mastered || s.attempts.some((a) => a.activity === 'free_write' && a.outcome === 'success')))
       .map((s) => s.lessonId),
   );
 }
@@ -56,4 +56,16 @@ export function nextInPath(lessons: Lesson[], lesson: Lesson): Lesson | null {
   const path = learningPath(lessons)[lesson.group] ?? [];
   const i = path.findIndex((l) => l.id === lesson.id);
   return i >= 0 && i + 1 < path.length ? path[i + 1] : null;
+}
+
+/** Generic "one after the other" unlocking (word sets, conversation reels). */
+export function sequentialUnlocked(keys: string[], mastered: Set<string>, unlockAll = false): Set<string> {
+  if (unlockAll) return new Set(keys);
+  const open = new Set<string>();
+  for (const [i, k] of keys.entries()) {
+    if (i === 0 || mastered.has(keys[i - 1])) open.add(k);
+    else break;
+  }
+  for (const k of keys) if (mastered.has(k)) open.add(k);
+  return open;
 }

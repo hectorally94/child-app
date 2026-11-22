@@ -44,6 +44,18 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
   `Avatar` (profile colors), `InstallCard` (install-the-app card, parent side only).
 - `src/pwa/install.ts` — captures `beforeinstallprompt` (imported first in `main.tsx`); iPhone gets instructions instead.
 - `public/` — `manifest.webmanifest`, PNG icons (192, 512, maskable 512, apple-touch 180), `sw.js` (offline cache).
+- **Speaking spaces** (2026-11-22): `src/content/words/sets.json` (9 sets × 4 daily words: animals, kitchen, house,
+  things, me, food) and `src/content/talk/reels.json` (10 conversation reels with Pipo and Tika), loaded by
+  `src/content/speak.ts`. Pictures: `public/pictures/<code>.svg` (Twemoji CC-BY 4.0, credited in Paramètres; `table.svg`
+  is ours). Players: `src/modes/WordsPlayer.tsx` (learn: picture → word → sentence → child repeats; quiz "Où est … ?"
+  with 3 pictures — a set is mastered only after a perfect quiz round) and `src/modes/TalkReels.tsx` (vertical reels,
+  swipe up/down with a pan gesture — NOT framer `drag`, which reset the layer position on re-render).
+- `src/components/SpeakButton.tsx` + `src/engine/voice.ts` — microphone: records, detects that the child spoke
+  (level above room noise for >350 ms), praises, plays her voice back. **Pronunciation is not graded** (PRD §14,
+  child has a speech delay). Recordings stay in memory only. No mic → "Je l'ai dit !" button.
+- `src/engine/speech.ts` — `speak`, `speakAsync` (resolves when a line ends; reels take turns: Pipo pitch 1.05,
+  Tika pitch 1.45), `speakFeedback` (Bravo/Faux), `playSound`, `primeAudio`.
+- Sessions use `lessonId` = lesson id, `words:<setId>` or `talk:<reelId>`; `mastered: true` on success.
 - `src/i18n/` — UI strings + fallback (`fr` ↔ `en`).
 - `src/storage/` — versioned local store (children, sessions with attempts).
 
@@ -85,6 +97,9 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
 - [x] v4 (2026-11-22): strict success check with spoken Bravo/Faux + sounds; lessons unlock one by one; parent sees
       Maîtrisé / À retravailler with "x réussis · y faux"; phone layout; easy profile name editing
 - [x] v5 (2026-11-22): `/parent` address, parent code (PIN), progress bars per child
+- [x] v6 (2026-11-22): speaking practice for the daughter (6 years old, speech delay in French): "Mots" (daily words
+      with pictures, repeat + picture game) and "Parler" (original conversation reels replacing YouTube cartoons);
+      both unlock one by one; parent sees Mots x/9, Conversations x/10 and "A parlé N fois"
 - [ ] Prerecorded audio (device TTS for now)
 - [ ] Phase 2: lesson packages/download, backend + sync, more writing lessons
 
@@ -114,6 +129,9 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
   lesson; it no longer changes the parent's "today's activity".
 - 2026-11-22: Letters come in capital AND lowercase (user request). Lowercase uses print letters; switch to cursive
   if the school teaches cursive. Child grid shows capitals on one row, lowercase below (5 columns).
+- 2026-11-22: The daughter is 6 (earlier notes said 4) and has a speech delay in French; the parent wants the app to
+  replace YouTube. Added speaking spaces with ORIGINAL characters (no copyrighted cartoons). Speaking is rewarded,
+  never marked "Faux"; only the picture game says Faux. Child home tabs: 123 · ABC · Mots · Parler.
 - 2026-11-22: The daughter perceives Pipo's voice as "the teacher (madam)". Keep the guide voice warm and teacher-like.
 
 ## Open questions

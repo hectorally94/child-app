@@ -7,7 +7,10 @@ import { Mascot, type Mood } from '../components/Mascot';
 import { Slate } from '../components/Slate';
 import { loadLessons } from '../content';
 import { evaluateAttempt, type FailReason } from '../engine/evaluate';
-import { learningPath, masteredIds, nextInPath, previousInPath, unlockedIds } from '../engine/progress';
+import { learningPath, masteredIds, nextInPath, previousInPath, sequentialUnlocked, unlockedIds } from '../engine/progress';
+import { loadReels, loadWordSets, pictureUrl, talkKey, wordsKey, type Reel, type WordSet } from '../content/speak';
+import { TalkReels } from './TalkReels';
+import { WordsPlayer } from './WordsPlayer';
 import { playSound, speak, speakFeedback, stopSpeaking } from '../engine/speech';
 import type { FeedbackKey, Lang, Lesson, Point } from '../engine/types';
 import { t, tr, type UIKey } from '../i18n';
@@ -19,7 +22,12 @@ interface Props {
   onParent: () => void;
 }
 
-type Screen = { kind: 'welcome' } | { kind: 'lesson'; lesson: Lesson; run: number } | { kind: 'complete'; lesson: Lesson };
+type Screen =
+  | { kind: 'welcome' }
+  | { kind: 'lesson'; lesson: Lesson; run: number }
+  | { kind: 'complete'; lesson: Lesson }
+  | { kind: 'words'; set: WordSet; run: number }
+  | { kind: 'talk'; index: number; run: number };
 
 const spring = { type: 'spring', stiffness: 260, damping: 22 } as const;
 const screenMotion = {
@@ -75,6 +83,13 @@ export function ChildMode({ data, update, onParent }: Props) {
     openBefore.current = unlocked;
     setScreen({ kind: 'lesson', lesson, run: ++runRef.current });
   };
+  // Speaking spaces: word sets and conversation reels, each unlocking one after the other
+  const wordSets = loadWordSets();
+  const reels = loadReels();
+  const wordsOpen = sequentialUnlocked(wordSets.map((w) => wordsKey(w.id)), mastered, child?.unlockAll);
+  const reelsOpen = sequentialUnlocked(reels.map((r) => talkKey(r.id)), mastered, child?.unlockAll);
+  const compactLayout = useCompact();
+
   // Remember what was open before the lesson, to announce what the child just unlocked.
   const openBefore = useRef<Set<string>>(unlocked);
 
@@ -102,6 +117,35 @@ export function ChildMode({ data, update, onParent }: Props) {
             lang={lang}
             onPick={startLesson}
             onSwitch={(id) => update((d) => ({ ...d, activeChildId: id }))}
+            wordSets={wordSets}
+            reels={reels}
+            wordsOpen={wordsOpen}
+            reelsOpen={reelsOpen}
+            onPickSet={(set) => setScreen({ kind: 'words', set, run: ++runRef.current })}
+            onPickReel={(index) => setScreen({ kind: 'talk', index, run: ++runRef.current })}
+          />
+        )}
+        {screen.kind === 'words' && child && (
+          <WordsPlayer
+            key={`words-${screen.run}`}
+            set={screen.set}
+            child={child}
+            update={update}
+            compact={compactLayout}
+            next={wordSets[wordSets.findIndex((w) => w.id === screen.set.id) + 1] ?? null}
+            onHome={() => { stopSpeaking(); setScreen({ kind: 'welcome' }); }}
+            onNext={(set) => setScreen({ kind: 'words', set, run: ++runRef.current })}
+          />
+        )}
+        {screen.kind === 'talk' && child && (
+          <TalkReels
+            key={`talk-${screen.run}`}
+            reels={reels}
+            start={screen.index}
+            child={child}
+            unlocked={new Set(reels.filter((r) => reelsOpen.has(talkKey(r.id))).map((r) => r.id))}
+            update={update}
+            onHome={() => { stopSpeaking(); setScreen({ kind: 'welcome' }); }}
           />
         )}
         {screen.kind === 'lesson' && child && (
@@ -141,6 +185,12 @@ const TILE_COLORS = [
 ];
 
 interface WelcomeProps {
+  wordSets: WordSet[];
+  reels: Reel[];
+  wordsOpen: Set<string>;
+  reelsOpen: Set<string>;
+  onPickSet: (s: WordSet) => void;
+  onPickReel: (index: number) => void;
   data: AppData;
   child: Child | null;
   today: Lesson | null;
@@ -152,7 +202,7 @@ interface WelcomeProps {
   onSwitch: (childId: string) => void;
 }
 
-function Welcome({ data, child, today, lessons, done, unlocked, lang, onPick, onSwitch }: WelcomeProps) {
+function Welcome({ data, child, today, lessons, done, unlocked, lang, onPick, onSwitch, wordSets, reels, wordsOpen, reelsOpen, onPickSet, onPickReel }: WelcomeProps) {
   const [mood, say] = useTalk();
   const compact = useCompact();
   const [group, setGroup] = useState<string>(today?.group ?? 'numbers');
@@ -178,6 +228,8 @@ function Welcome({ data, child, today, lessons, done, unlocked, lang, onPick, on
   const groups: { k: string; label: UIKey; sample: string }[] = [
     { k: 'numbers', label: 'numbers', sample: '123' },
     { k: 'letters', label: 'letters', sample: 'ABC' },
+    { k: 'words', label: 'words', sample: '' },
+    { k: 'talk', label: 'talk', sample: '' },
   ];
   const shown = lessons.filter((l) => l.group === group);
   const others = data.children.filter((c) => c.id !== child?.id);
@@ -284,20 +336,108 @@ function Welcome({ data, child, today, lessons, done, unlocked, lang, onPick, on
       {/* free choice: numbers / letters */}
       {child && (
         <section className="mt-3 w-full" aria-label={t('chooseTitle', lang)}>
-          <div className="mx-auto mb-3 flex w-fit rounded-full sm:mb-4 bg-white/80 p-1.5 shadow-[inset_2px_3px_6px_rgb(43_39_64/0.08)]" role="tablist">
+          <div className="mx-auto mb-3 grid w-full max-w-lg grid-cols-4 gap-1 rounded-[26px] bg-white/80 p-1.5 shadow-[inset_2px_3px_6px_rgb(43_39_64/0.08)] sm:mb-4" role="tablist">
             {groups.map((g) => {
               const on = group === g.k;
               return (
                 <button key={g.k} role="tab" aria-selected={on} onClick={() => setGroup(g.k)}
-                  className={`relative flex min-h-12 items-center gap-2 rounded-full px-5 text-lg font-black transition-colors sm:min-h-14 ${on ? 'text-white' : 'text-ink-soft'}`}>
-                  {on && <motion.span layoutId="group-pill" className="absolute inset-0 rounded-full bg-blue shadow-[inset_0_-4px_0_rgb(0_0_0/0.15)]" transition={spring} />}
-                  <span className="relative text-2xl tracking-tight">{g.sample}</span>
-                  <span className="relative hidden text-base sm:inline">{t(g.label, lang)}</span>
+                  className={`relative flex min-h-16 flex-col items-center justify-center rounded-[20px] px-1 font-black transition-colors ${on ? 'text-white' : 'text-ink-soft'}`}>
+                  {on && <motion.span layoutId="group-pill" className="absolute inset-0 rounded-[20px] bg-blue shadow-[inset_0_-4px_0_rgb(0_0_0/0.15)]" transition={spring} />}
+                  <span className="relative grid h-8 place-items-center text-[1.45rem] leading-none tracking-tight">
+                    {g.k === 'words' ? <img src={pictureUrl('1f408')} alt="" className="h-8 w-8" />
+                      : g.k === 'talk' ? <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path fill="currentColor" d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-8l-5 4v-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" opacity=".9" /><circle cx="8" cy="10.5" r="1.4" fill={on ? '#2563eb' : '#fff'} /><circle cx="12" cy="10.5" r="1.4" fill={on ? '#2563eb' : '#fff'} /><circle cx="16" cy="10.5" r="1.4" fill={on ? '#2563eb' : '#fff'} /></svg>
+                      : g.sample}
+                  </span>
+                  <span className="relative mt-0.5 text-[0.8rem] leading-tight sm:text-sm">{t(g.label, lang)}</span>
                 </button>
               );
             })}
           </div>
 
+          {group === 'words' && (
+            <motion.ul key="words" className="m-0 grid list-none grid-cols-3 gap-3 p-0 sm:grid-cols-4" initial="hidden" animate="show"
+              variants={{ show: { transition: { staggerChildren: 0.04 } } }}>
+              {wordSets.map((ws) => {
+                const key = wordsKey(ws.id);
+                const locked = !wordsOpen.has(key);
+                const wiggle = refused?.id === key;
+                return (
+                  <motion.li key={ws.id} variants={{ hidden: { opacity: 0, scale: 0.6, y: 14 }, show: { opacity: 1, scale: 1, y: 0, transition: { type: 'spring', stiffness: 420, damping: 20 } } }}>
+                    <motion.button
+                      key={wiggle ? `w${refused?.n}` : 'still'}
+                      onClick={() => {
+                        if (!locked) return onPickSet(ws);
+                        const before = wordSets[wordSets.indexOf(ws) - 1];
+                        setRefused((r) => ({ id: key, n: (r?.n ?? 0) + 1 }));
+                        const text = t('lockedWords', lang, { title: before ? tr(before.title, lang) : '' });
+                        setNote(text);
+                        say(lang, text, 'encourage');
+                      }}
+                      whileTap={{ scale: 0.9 }}
+                      animate={wiggle ? { rotate: [0, -8, 8, -5, 5, 0] } : undefined}
+                      aria-label={locked ? `${tr(ws.title, lang)} (${t('lockedLabel', lang)})` : tr(ws.title, lang)}
+                      aria-disabled={locked}
+                      className={`clay relative flex aspect-[4/5] w-full flex-col items-center justify-center gap-1 !rounded-[24px] p-2 ${locked ? '!bg-[#ece8f6] !shadow-none' : ''}`}
+                    >
+                      <span className={`grid grid-cols-2 gap-1 ${locked ? 'opacity-35 grayscale' : ''}`}>
+                        {ws.words.map((w) => <img key={w.id} src={pictureUrl(w.image)} alt="" className="h-[clamp(1.6rem,8vw,2.4rem)] w-[clamp(1.6rem,8vw,2.4rem)]" />)}
+                      </span>
+                      <span className={`text-center text-[0.8rem] leading-tight font-black sm:text-sm ${locked ? 'text-[#b9b0d3]' : 'text-ink'}`}>{tr(ws.title, lang)}</span>
+                      {locked && (
+                        <span className="absolute -right-1.5 -bottom-1.5 grid h-7 w-7 place-items-center rounded-full border-2 border-canvas bg-white text-ink-soft shadow-sm" aria-hidden="true"><Icon name="lock" size={13} /></span>
+                      )}
+                      {done.has(key) && (
+                        <span className="absolute -top-2 -right-2 grid h-8 w-8 place-items-center rounded-full border-[3px] border-white bg-sun text-white shadow-md" aria-hidden="true"><Icon name="sparkle" size={16} /></span>
+                      )}
+                    </motion.button>
+                  </motion.li>
+                );
+              })}
+            </motion.ul>
+          )}
+
+          {group === 'talk' && (
+            <motion.ul key="talk" className="m-0 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3" initial="hidden" animate="show"
+              variants={{ show: { transition: { staggerChildren: 0.04 } } }}>
+              {reels.map((r, k) => {
+                const key = talkKey(r.id);
+                const locked = !reelsOpen.has(key);
+                const wiggle = refused?.id === key;
+                return (
+                  <motion.li key={r.id} variants={{ hidden: { opacity: 0, scale: 0.6, y: 14 }, show: { opacity: 1, scale: 1, y: 0, transition: { type: 'spring', stiffness: 420, damping: 20 } } }}>
+                    <motion.button
+                      key={wiggle ? `w${refused?.n}` : 'still'}
+                      onClick={() => {
+                        if (!locked) return onPickReel(k);
+                        setRefused((x) => ({ id: key, n: (x?.n ?? 0) + 1 }));
+                        const text = t('finishReelFirst', lang);
+                        setNote(text);
+                        say(lang, text, 'encourage');
+                      }}
+                      whileTap={{ scale: 0.92 }}
+                      animate={wiggle ? { rotate: [0, -6, 6, -4, 4, 0] } : undefined}
+                      aria-label={locked ? `${tr(r.title, lang)} (${t('lockedLabel', lang)})` : tr(r.title, lang)}
+                      aria-disabled={locked}
+                      className={`clay relative flex w-full items-center gap-2 !rounded-[24px] p-3 text-left ${locked ? '!bg-[#ece8f6] !shadow-none' : ''}`}
+                    >
+                      <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-[16px] bg-canvas ${locked ? 'opacity-35 grayscale' : ''}`}>
+                        <img src={pictureUrl(r.prop)} alt="" className="h-9 w-9" />
+                      </span>
+                      <span className={`min-w-0 text-[0.95rem] leading-tight font-black ${locked ? 'text-[#b9b0d3]' : 'text-ink'}`}>{tr(r.title, lang)}</span>
+                      {locked && (
+                        <span className="absolute -right-1.5 -bottom-1.5 grid h-7 w-7 place-items-center rounded-full border-2 border-canvas bg-white text-ink-soft shadow-sm" aria-hidden="true"><Icon name="lock" size={13} /></span>
+                      )}
+                      {done.has(key) && (
+                        <span className="absolute -top-2 -right-2 grid h-8 w-8 place-items-center rounded-full border-[3px] border-white bg-sun text-white shadow-md" aria-hidden="true"><Icon name="sparkle" size={16} /></span>
+                      )}
+                    </motion.button>
+                  </motion.li>
+                );
+              })}
+            </motion.ul>
+          )}
+
+          {(group === 'numbers' || group === 'letters') && (
           <motion.ul
             key={group}
             className={`m-0 grid list-none gap-3 p-0 ${group === 'letters' ? 'grid-cols-5' : 'grid-cols-4 sm:grid-cols-6'}`}
@@ -339,6 +479,7 @@ function Welcome({ data, child, today, lessons, done, unlocked, lang, onPick, on
               );
             })}
           </motion.ul>
+          )}
         </section>
       )}
      </div>

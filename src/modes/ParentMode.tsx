@@ -5,6 +5,7 @@ import { Icon, type IconName } from '../components/Icon';
 import { InstallCard } from '../components/InstallCard';
 import { PinPad } from '../components/PinPad';
 import { learningPath, masteredIds } from '../engine/progress';
+import { loadReels, loadWordSets, talkKey, wordsKey } from '../content/speak';
 import { hashPin } from '../storage/pin';
 import { Slate } from '../components/Slate';
 import { loadLessons } from '../content';
@@ -453,8 +454,9 @@ function Settings({ data, update, onEdit }: { data: AppData; update: (fn: (d: Ap
             </label>
           )}
           <p className="m-0 flex gap-2 rounded-[18px] bg-mint-soft p-3 text-sm text-mint-deep">
-            <Icon name="lock" size={18} className="shrink-0" />{t('privacyNote', lang)}
+            <Icon name="lock" size={18} className="shrink-0" />{t('privacyNote', lang)} {t('micPrivacy', lang)}
           </p>
+          <p className="m-0 text-xs text-ink-soft">{t('picturesCredit', lang)}</p>
         </div>
       </section>
     </div>
@@ -538,15 +540,18 @@ function ProfileEditor({ child, lang, update }: { child: Child; lang: Lang; upda
 /** One card per child: progress bars for numbers and letters (lessons mastered). */
 function ChildrenProgress({ data, activeId, lang, onSelect }: { data: AppData; activeId: string; lang: Lang; onSelect: (id: string) => void }) {
   const paths = learningPath(loadLessons());
-  const bars: { k: 'numbers' | 'letters'; color: string }[] = [
-    { k: 'numbers', color: 'from-blue to-violet' },
-    { k: 'letters', color: 'from-pink to-[#f97362]' },
+  const bars: { k: 'numbers' | 'letters' | 'wordsProgress' | 'talkProgress'; color: string; keys: string[] }[] = [
+    { k: 'numbers', color: 'from-blue to-violet', keys: (paths.numbers ?? []).map((l) => l.id) },
+    { k: 'letters', color: 'from-pink to-[#f97362]', keys: (paths.letters ?? []).map((l) => l.id) },
+    { k: 'wordsProgress', color: 'from-mint to-[#0ea5e9]', keys: loadWordSets().map((w) => wordsKey(w.id)) },
+    { k: 'talkProgress', color: 'from-sun to-[#f97316]', keys: loadReels().map((r) => talkKey(r.id)) },
   ];
   return (
     <ul className="m-0 grid list-none gap-3 p-0 sm:grid-cols-2">
       {data.children.map((c) => {
         const mastered = masteredIds(data.sessions, c.id);
         const active = c.id === activeId;
+        const spoke = data.sessions.filter((x) => x.childId === c.id).flatMap((x) => x.attempts).filter((a) => a.activity === 'speak' && a.outcome === 'success').length;
         return (
           <li key={c.id}>
             <button onClick={() => onSelect(c.id)} aria-pressed={active}
@@ -556,9 +561,15 @@ function ChildrenProgress({ data, activeId, lang, onSelect }: { data: AppData; a
                 <span className="min-w-0 flex-1 truncate font-display text-lg font-black">{c.name}</span>
                 {active && <span className="rounded-full bg-blue-soft px-2.5 py-0.5 text-xs font-bold text-blue">{t('active', lang)}</span>}
               </span>
-              {bars.map(({ k, color }) => {
-                const path = paths[k] ?? [];
-                const n = path.filter((l) => mastered.has(l.id)).length;
+              {spoke > 0 && (
+                <span className="flex items-center gap-1.5 text-sm font-bold text-pink">
+                  <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor" /><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" stroke="currentColor" strokeWidth="2.4" fill="none" strokeLinecap="round" /></svg>
+                  {t('spokeTimes', lang, { n: spoke })}
+                </span>
+              )}
+              {bars.map(({ k, color, keys }) => {
+                const path = keys;
+                const n = keys.filter((id) => mastered.has(id)).length;
                 const pct = path.length ? Math.round((n / path.length) * 100) : 0;
                 return (
                   <span key={k} className="block">

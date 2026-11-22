@@ -16,8 +16,10 @@ export interface Child {
   unlockAll?: boolean;
 }
 
-export interface AttemptRecord extends AttemptMetrics {
-  activity: 'trace' | 'free_write';
+export interface AttemptRecord extends Omit<AttemptMetrics, 'outcome'> {
+  outcome: AttemptMetrics['outcome'];
+  /** trace / free_write: writing. quiz: "Où est …?" picture game. speak: the child repeated a word or a sentence. */
+  activity: 'trace' | 'free_write' | 'quiz' | 'speak';
   hintShown: boolean;
   at: number;
 }
@@ -29,6 +31,8 @@ export interface SessionRecord {
   startedAt: number;
   endedAt: number | null;
   completed: boolean;
+  /** Set when the activity was finished with success (writing alone, perfect quiz, or reel repeated). */
+  mastered?: boolean;
   attempts: AttemptRecord[];
 }
 

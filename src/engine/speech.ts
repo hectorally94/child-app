@@ -59,6 +59,28 @@ export function speakFeedback(text: string, lang: Lang, success: boolean): void 
   window.setTimeout(say, success ? 260 : 220);
 }
 
+/**
+ * Say a line and resolve when it is finished (used by the conversation reels so characters take turns).
+ * Falls back to an estimated duration when the device gives no "end" event.
+ */
+export function speakAsync(text: string, lang: Lang, opts?: SpeakOptions): Promise<void> {
+  return new Promise((resolve) => {
+    const estimate = 600 + text.length * 75;
+    let done = false;
+    const finish = () => { if (!done) { done = true; resolve(); } };
+    window.setTimeout(finish, estimate + 2500); // safety net
+    if (!('speechSynthesis' in window) || !text) return void window.setTimeout(finish, estimate);
+    const synth = window.speechSynthesis;
+    synth.cancel();
+    const u = utterance(text, lang, opts);
+    u.onend = finish;
+    u.onerror = finish;
+    synth.speak(u);
+    // Some devices never fire "end": also finish after the estimate if nothing is speaking.
+    window.setTimeout(() => { if (!synth.speaking) finish(); }, estimate);
+  });
+}
+
 export function stopSpeaking(): void {
   if ('speechSynthesis' in window) window.speechSynthesis.cancel();
 }

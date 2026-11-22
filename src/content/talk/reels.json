@@ -1,0 +1,374 @@
+{
+ "reels": [
+  {
+   "id": "bonjour",
+   "scene": "morning",
+   "prop": "2600",
+   "title": {
+    "fr": "Bonjour !",
+    "en": "Hello!"
+   },
+   "lines": [
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Bonjour Tika !",
+      "en": "Hello Tika!"
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Bonjour Pipo ! Ça va ?",
+      "en": "Hello Pipo! How are you?"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Ça va bien, merci !",
+      "en": "I'm fine, thank you!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Bonjour ! Ça va ?",
+    "en": "Hello! How are you?"
+   },
+   "order": 0
+  },
+  {
+   "id": "prenom",
+   "scene": "park",
+   "prop": "1f44b",
+   "title": {
+    "fr": "Je m'appelle…",
+    "en": "My name is…"
+   },
+   "lines": [
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Comment tu t'appelles ?",
+      "en": "What is your name?"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Je m'appelle Pipo. Et toi ?",
+      "en": "My name is Pipo. And you?"
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Je m'appelle Tika.",
+      "en": "My name is Tika."
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Je m'appelle {name}.",
+    "en": "My name is {name}."
+   },
+   "order": 1
+  },
+  {
+   "id": "faim",
+   "scene": "kitchen",
+   "prop": "1f34e",
+   "title": {
+    "fr": "J'ai faim",
+    "en": "I'm hungry"
+   },
+   "lines": [
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "J'ai faim.",
+      "en": "I'm hungry."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Tu veux une pomme ?",
+      "en": "Do you want an apple?"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Oui, s'il te plaît !",
+      "en": "Yes, please!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "J'ai faim.",
+    "en": "I'm hungry."
+   },
+   "order": 2
+  },
+  {
+   "id": "soif",
+   "scene": "kitchen",
+   "prop": "1f95b",
+   "title": {
+    "fr": "J'ai soif",
+    "en": "I'm thirsty"
+   },
+   "lines": [
+    {
+     "who": "tika",
+     "text": {
+      "fr": "J'ai soif.",
+      "en": "I'm thirsty."
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Voilà de l'eau.",
+      "en": "Here is some water."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Merci Pipo !",
+      "en": "Thank you Pipo!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "J'ai soif. De l'eau, s'il te plaît.",
+    "en": "I'm thirsty. Water, please."
+   },
+   "order": 3
+  },
+  {
+   "id": "merci",
+   "scene": "home",
+   "prop": "1f381",
+   "title": {
+    "fr": "Merci !",
+    "en": "Thank you!"
+   },
+   "lines": [
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "C'est pour toi, Tika.",
+      "en": "This is for you, Tika."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Oh, merci beaucoup !",
+      "en": "Oh, thank you very much!"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "De rien !",
+      "en": "You're welcome!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Merci beaucoup !",
+    "en": "Thank you very much!"
+   },
+   "order": 4
+  },
+  {
+   "id": "jouer",
+   "scene": "park",
+   "prop": "26bd",
+   "title": {
+    "fr": "On joue ?",
+    "en": "Let's play?"
+   },
+   "lines": [
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Tu veux jouer avec moi ?",
+      "en": "Do you want to play with me?"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Oui ! On joue au ballon.",
+      "en": "Yes! Let's play ball."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Super !",
+      "en": "Great!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Tu veux jouer avec moi ?",
+    "en": "Do you want to play with me?"
+   },
+   "order": 5
+  },
+  {
+   "id": "aide",
+   "scene": "park",
+   "prop": "1fa79",
+   "title": {
+    "fr": "J'ai mal",
+    "en": "It hurts"
+   },
+   "lines": [
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Aïe ! J'ai mal.",
+      "en": "Ouch! It hurts."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Où as-tu mal ?",
+      "en": "Where does it hurt?"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "J'ai mal au pied. Aide-moi, s'il te plaît.",
+      "en": "My foot hurts. Help me, please."
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Aide-moi, s'il te plaît.",
+    "en": "Help me, please."
+   },
+   "order": 6
+  },
+  {
+   "id": "maman",
+   "scene": "home",
+   "prop": "1f469",
+   "title": {
+    "fr": "Où est maman ?",
+    "en": "Where is mum?"
+   },
+   "lines": [
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Où est maman ?",
+      "en": "Where is mum?"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Maman est dans la cuisine.",
+      "en": "Mum is in the kitchen."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Merci, j'y vais !",
+      "en": "Thanks, I'm going!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Où est maman ?",
+    "en": "Where is mum?"
+   },
+   "order": 7
+  },
+  {
+   "id": "emotions",
+   "scene": "home",
+   "prop": "1f60a",
+   "title": {
+    "fr": "Je suis content",
+    "en": "I'm happy"
+   },
+   "lines": [
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Aujourd'hui, je suis content !",
+      "en": "Today I am happy!"
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Moi, je suis un peu triste.",
+      "en": "I am a little sad."
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Viens, on fait un câlin.",
+      "en": "Come, let's hug."
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Je suis content !",
+    "en": "I am happy!"
+   },
+   "order": 8
+  },
+  {
+   "id": "aurevoir",
+   "scene": "night",
+   "prop": "1f319",
+   "title": {
+    "fr": "Au revoir !",
+    "en": "Goodbye!"
+   },
+   "lines": [
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Il est tard. Au revoir Pipo !",
+      "en": "It's late. Goodbye Pipo!"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Au revoir Tika, à demain !",
+      "en": "Goodbye Tika, see you tomorrow!"
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Bonne nuit !",
+      "en": "Good night!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Au revoir, à demain !",
+    "en": "Goodbye, see you tomorrow!"
+   },
+   "order": 9
+  }
+ ]
+}

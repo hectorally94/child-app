@@ -1,5 +1,5 @@
 import { motion, useReducedMotion, type Variants } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 
 /**
  * Pipo, the guide: a round little bird. Pure SVG, animated with Framer Motion.
@@ -14,8 +14,14 @@ const body: Variants = {
   encourage: { y: 0, rotate: [0, -10, -6], transition: { duration: 0.6, ease: 'easeOut' } },
 };
 
-export function Mascot({ mood = 'idle', size = 120 }: { mood?: Mood; size?: number }) {
+/** Colors of a character. Pipo is the default; Tika is his friend (blue bird). */
+export interface Palette { light: string; mid: string; dark: string; wing: string; tuft: string; belly: string }
+export const PIPO: Palette = { light: '#fff1a8', mid: '#fbbf24', dark: '#f59e0b', wing: '#2563eb', tuft: '#ec4899', belly: '#ffeeb3' };
+export const TIKA: Palette = { light: '#c7f0ff', mid: '#38bdf8', dark: '#0284c7', wing: '#ec4899', tuft: '#10b981', belly: '#e0f6ff' };
+
+export function Mascot({ mood = 'idle', size = 120, palette = PIPO }: { mood?: Mood; size?: number; palette?: Palette }) {
   const reduce = useReducedMotion();
+  const uid = useId().replace(/:/g, '');
   const [blink, setBlink] = useState(false);
 
   useEffect(() => {
@@ -44,37 +50,37 @@ export function Mascot({ mood = 'idle', size = 120 }: { mood?: Mood; size?: numb
       <path d="M48 100 l-4 9 M48 100 l2 9 M72 100 l-2 9 M72 100 l4 9" stroke="#f97362" strokeWidth="4" strokeLinecap="round" />
       {/* body */}
       <defs>
-        <radialGradient id="pipo-body" cx="38%" cy="30%" r="75%">
-          <stop offset="0%" stopColor="#fff1a8" />
-          <stop offset="55%" stopColor="#fbbf24" />
-          <stop offset="100%" stopColor="#f59e0b" />
+        <radialGradient id={`body-${uid}`} cx="38%" cy="30%" r="75%">
+          <stop offset="0%" stopColor={palette.light} />
+          <stop offset="55%" stopColor={palette.mid} />
+          <stop offset="100%" stopColor={palette.dark} />
         </radialGradient>
-        <radialGradient id="pipo-belly" cx="50%" cy="40%" r="60%">
+        <radialGradient id={`belly-${uid}`} cx="50%" cy="40%" r="60%">
           <stop offset="0%" stopColor="#fffdf2" />
-          <stop offset="100%" stopColor="#ffeeb3" />
+          <stop offset="100%" stopColor={palette.belly} />
         </radialGradient>
       </defs>
       {/* tuft */}
       <motion.path
         d="M58 18 C52 6 60 2 62 10 C64 2 72 6 64 18 Z"
-        fill="#ec4899"
+        fill={palette.tuft}
         animate={reduce ? undefined : { rotate: happy ? [0, -20, 20, 0] : [0, -6, 0] }}
         transition={{ duration: happy ? 0.6 : 2.4, repeat: happy ? 0 : Infinity }}
         style={{ originX: '60px', originY: '18px' }}
       />
-      <ellipse cx="60" cy="62" rx="42" ry="44" fill="url(#pipo-body)" />
-      <ellipse cx="60" cy="76" rx="25" ry="22" fill="url(#pipo-belly)" />
+      <ellipse cx="60" cy="62" rx="42" ry="44" fill={`url(#body-${uid})`} />
+      <ellipse cx="60" cy="76" rx="25" ry="22" fill={`url(#belly-${uid})`} />
       {/* wings */}
       <motion.path
         d="M20 62 C6 66 8 86 24 84 C30 80 30 68 20 62 Z"
-        fill="#2563eb"
+        fill={palette.wing}
         animate={reduce ? undefined : { rotate: happy ? [0, 40, 0, 40, 0] : mood === 'talk' ? [0, 10, 0] : 0 }}
         transition={{ duration: happy ? 0.8 : 0.9, repeat: mood === 'talk' ? Infinity : 0 }}
         style={{ originX: '26px', originY: '66px' }}
       />
       <motion.path
         d="M100 62 C114 66 112 86 96 84 C90 80 90 68 100 62 Z"
-        fill="#2563eb"
+        fill={palette.wing}
         animate={reduce ? undefined : { rotate: happy ? [0, -40, 0, -40, 0] : mood === 'encourage' ? [0, -35, -25] : 0 }}
         transition={{ duration: 0.8 }}
         style={{ originX: '94px', originY: '66px' }}
