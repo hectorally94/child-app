@@ -63,6 +63,14 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
   tall (`h-dvh`, safe-area padding for notches); the lesson board sizes itself with a size container
   (`width: min(100cqw, 100cqh)`) so it never overflows. Test phone fit at 320×568, 360×640, 375×667.
 - Profile: tap the child's name/avatar in the parent header (pencil badge) → profile editor (first name, avatar color).
+- **Addresses**: `/` = child space, `/parent` = parent space (always behind the gate). Handled in `App.tsx` with the
+  History API (no router library); `vercel.json` rewrites every non-file path to `index.html`; manifest has a
+  "Espace parent" shortcut. Back button switches between the two.
+- **Parent code**: 4-digit PIN (`src/storage/pin.ts`, only a SHA-256 fingerprint `parentPinHash` is stored) asked on a
+  big keypad (`PinPad`). No code → multiplication question. "Code oublié ?" → multiplication removes the code.
+  Created/changed/removed in Paramètres → "Code parent"; the dashboard suggests creating one until it exists.
+- Dashboard starts with "Progression des enfants": one card per child with progress bars (numbers x/16, letters x/10
+  mastered). Tapping a card makes that child active.
 
 ## Current status
 - [x] Phase 0: PRD added to repo
@@ -76,6 +84,7 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
       installable PWA (Chrome installability check passes); numbered start dots for multi-stroke shapes
 - [x] v4 (2026-11-22): strict success check with spoken Bravo/Faux + sounds; lessons unlock one by one; parent sees
       Maîtrisé / À retravailler with "x réussis · y faux"; phone layout; easy profile name editing
+- [x] v5 (2026-11-22): `/parent` address, parent code (PIN), progress bars per child
 - [ ] Prerecorded audio (device TTS for now)
 - [ ] Phase 2: lesson packages/download, backend + sync, more writing lessons
 

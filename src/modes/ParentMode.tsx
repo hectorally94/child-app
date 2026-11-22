@@ -3,6 +3,9 @@ import { useState } from 'react';
 import { AVATAR_COLORS, Avatar } from '../components/Avatar';
 import { Icon, type IconName } from '../components/Icon';
 import { InstallCard } from '../components/InstallCard';
+import { PinPad } from '../components/PinPad';
+import { learningPath, masteredIds } from '../engine/progress';
+import { hashPin } from '../storage/pin';
 import { Slate } from '../components/Slate';
 import { loadLessons } from '../content';
 import { summarize, type LessonSummary } from '../engine/summary';
@@ -88,7 +91,14 @@ export function ParentMode({ data, update, onChildMode }: Props) {
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 pt-5 pb-32">
         <AnimatePresence mode="wait">
           <motion.div key={tab + (preview?.id ?? '')} {...page}>
-            {tab === 'dashboard' && <Dashboard data={data} child={child} lang={lang} onOpen={(l) => { setTab('lessons'); setPreview(l); }} onGoLessons={() => setTab('lessons')} />}
+            {tab === 'dashboard' && (
+              <Dashboard data={data} child={child} lang={lang} onOpen={(l) => { setTab('lessons'); setPreview(l); }} onGoLessons={() => setTab('lessons')}
+                onSelectChild={(id) => update((d) => ({ ...d, activeChildId: id }))}
+                onGoSettings={() => {
+                  setTab('settings');
+                  window.setTimeout(() => document.getElementById('parent-code')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 350);
+                }} />
+            )}
             {tab === 'lessons' && (preview
               ? <Preview lesson={preview} lang={lang} child={child} onBack={() => setPreview(null)}
                   onAssign={() => setChild({ todayLessonId: preview.id })} onChildMode={onChildMode} />
@@ -144,7 +154,10 @@ const STATUS: Record<LessonSummary['status'], { icon: IconName; cls: string; key
   inProgress: { icon: 'clock', cls: 'bg-violet-soft text-violet', key: 'inProgress' },
 };
 
-function Dashboard({ data, child, lang, onOpen, onGoLessons }: { data: AppData; child: Child | null; lang: Lang; onOpen: (l: Lesson) => void; onGoLessons: () => void }) {
+function Dashboard({ data, child, lang, onOpen, onGoLessons, onSelectChild, onGoSettings }: {
+  data: AppData; child: Child | null; lang: Lang; onOpen: (l: Lesson) => void; onGoLessons: () => void;
+  onSelectChild: (id: string) => void; onGoSettings: () => void;
+}) {
   if (!child) return <p className="clay p-5 text-lg">{t('noChild', lang)}</p>;
   const sessions = data.sessions.filter((s) => s.childId === child.id);
   const rows = loadLessons()
@@ -157,6 +170,17 @@ function Dashboard({ data, child, lang, onOpen, onGoLessons }: { data: AppData; 
   return (
     <motion.div variants={list} initial="initial" animate="animate" className="flex flex-col gap-7">
       <InstallCard lang={lang} />
+      {!data.parentPinHash && (
+        <motion.div variants={item} className="clay flex flex-wrap items-center gap-3 bg-violet-soft! p-4">
+          <Icon name="lock" size={24} className="shrink-0 text-violet" />
+          <p className="m-0 min-w-[14ch] flex-1 text-ink">{t('codeTip', lang)}</p>
+          <button className="clay-btn !min-h-11 text-base" onClick={onGoSettings}>{t('createCode', lang)}</button>
+        </motion.div>
+      )}
+      <motion.section variants={item}>
+        <H2>{t('childrenProgress', lang)}</H2>
+        <ChildrenProgress data={data} activeId={child.id} lang={lang} onSelect={onSelectChild} />
+      </motion.section>
       <motion.section variants={item}>
         <H2>{t('todayActivity', lang)}</H2>
         {today ? (
@@ -407,6 +431,8 @@ function Settings({ data, update, onEdit }: { data: AppData; update: (fn: (d: Ap
         </div>
       </section>
 
+      <ParentCodeSection data={data} update={update} />
+
       <section>
         <H2>{t('settings', lang)}</H2>
         <div className="clay flex flex-col gap-5 p-5">
@@ -502,6 +528,125 @@ function ProfileEditor({ child, lang, update }: { child: Child; lang: Lang; upda
             })}
           </div>
         </fieldset>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+
+/** One card per child: progress bars for numbers and letters (lessons mastered). */
+function ChildrenProgress({ data, activeId, lang, onSelect }: { data: AppData; activeId: string; lang: Lang; onSelect: (id: string) => void }) {
+  const paths = learningPath(loadLessons());
+  const bars: { k: 'numbers' | 'letters'; color: string }[] = [
+    { k: 'numbers', color: 'from-blue to-violet' },
+    { k: 'letters', color: 'from-pink to-[#f97362]' },
+  ];
+  return (
+    <ul className="m-0 grid list-none gap-3 p-0 sm:grid-cols-2">
+      {data.children.map((c) => {
+        const mastered = masteredIds(data.sessions, c.id);
+        const active = c.id === activeId;
+        return (
+          <li key={c.id}>
+            <button onClick={() => onSelect(c.id)} aria-pressed={active}
+              className={`clay flex w-full flex-col gap-3 p-4 text-left transition active:scale-[0.99] ${active ? 'ring-4 ring-blue/30' : ''}`}>
+              <span className="flex items-center gap-3">
+                <Avatar child={c} size={40} />
+                <span className="min-w-0 flex-1 truncate font-display text-lg font-black">{c.name}</span>
+                {active && <span className="rounded-full bg-blue-soft px-2.5 py-0.5 text-xs font-bold text-blue">{t('active', lang)}</span>}
+              </span>
+              {bars.map(({ k, color }) => {
+                const path = paths[k] ?? [];
+                const n = path.filter((l) => mastered.has(l.id)).length;
+                const pct = path.length ? Math.round((n / path.length) * 100) : 0;
+                return (
+                  <span key={k} className="block">
+                    <span className="mb-1 flex items-baseline justify-between gap-2 text-sm">
+                      <span className="font-bold text-ink">{t(k, lang)}</span>
+                      <span className="text-ink-soft">{t('masteredOf', lang, { n, total: path.length })}</span>
+                    </span>
+                    <span className="block h-4 overflow-hidden rounded-full bg-canvas shadow-[inset_1px_2px_4px_rgb(43_39_64/0.12)]"
+                      role="progressbar" aria-valuemin={0} aria-valuemax={path.length} aria-valuenow={n} aria-label={`${c.name} · ${t(k, lang)}`}>
+                      <motion.span
+                        className={`block h-full rounded-full bg-gradient-to-r ${color} shadow-[inset_0_-2px_0_rgb(0_0_0/0.12)]`}
+                        initial={{ width: 0 }}
+                        animate={{ width: `${Math.max(pct, n ? 6 : 0)}%` }}
+                        transition={{ type: 'spring', stiffness: 120, damping: 20, delay: 0.15 }}
+                      />
+                    </span>
+                  </span>
+                );
+              })}
+            </button>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+/** Create, change or remove the parent code. */
+function ParentCodeSection({ data, update }: { data: AppData; update: (fn: (d: AppData) => AppData) => void }) {
+  const lang = data.parentLang;
+  const [step, setStep] = useState<'idle' | 'new' | 'confirm'>('idle');
+  const [first, setFirst] = useState('');
+  const [error, setError] = useState(0);
+  const [saved, setSaved] = useState(false);
+  const url = `${window.location.origin}/parent`;
+
+  const onNew = (pin: string) => { setFirst(pin); setStep('confirm'); };
+  const onConfirm = async (pin: string) => {
+    if (pin !== first) {
+      setError((e) => e + 1);
+      setStep('new');
+      return;
+    }
+    const hash = await hashPin(pin);
+    update((d) => ({ ...d, parentPinHash: hash }));
+    setStep('idle');
+    setError(0);
+    setSaved(true);
+    window.setTimeout(() => setSaved(false), 2200);
+  };
+
+  return (
+    <section id="parent-code" className="scroll-mt-24">
+      <H2>{t('parentCode', lang)}</H2>
+      <div className="clay flex flex-col gap-4 p-5">
+        <p className="m-0 text-ink-soft">{t('parentCodeHelp', lang)}</p>
+        {step === 'idle' ? (
+          <>
+            {data.parentPinHash && (
+              <p className="m-0 flex items-center gap-2 font-bold text-mint-deep"><Icon name="check" size={18} />{saved ? t('codeSaved', lang) : t('codeActive', lang)}</p>
+            )}
+            <div className="flex flex-wrap gap-2">
+              <button className="clay-btn" onClick={() => { setStep('new'); setError(0); }}>
+                <Icon name="lock" size={18} />{data.parentPinHash ? t('changeCode', lang) : t('createCode', lang)}
+              </button>
+              {data.parentPinHash && (
+                <button className="clay-btn is-white text-[#b91c1c]" onClick={() => update((d) => ({ ...d, parentPinHash: undefined }))}>
+                  <Icon name="trash" size={18} />{t('removeCode', lang)}
+                </button>
+              )}
+            </div>
+          </>
+        ) : (
+          <div className="flex flex-col items-center gap-3">
+            <PinPad
+              key={step}
+              label={step === 'new' ? t('newCode', lang) : t('confirmCode', lang)}
+              onComplete={step === 'new' ? onNew : onConfirm}
+              shake={error}
+              deleteLabel={t('deleteDigit', lang)}
+            />
+            {error > 0 && step === 'new' && <p role="alert" className="m-0 text-center font-medium text-[#b91c1c]">{t('codesDiffer', lang)}</p>}
+            <button className="clay-btn is-ghost !min-h-11" onClick={() => setStep('idle')}>{t('cancel', lang)}</button>
+          </div>
+        )}
+        <p className="m-0 rounded-[16px] bg-canvas p-3 text-sm break-words text-ink-soft">
+          {t('parentLink', lang, { url })}
+        </p>
       </div>
     </section>
   );

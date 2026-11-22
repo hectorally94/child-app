@@ -35,6 +35,8 @@ export interface SessionRecord {
 export interface AppData {
   version: 1;
   parentLang: Lang;
+  /** Fingerprint of the parent code (see pin.ts). No code = multiplication question only. */
+  parentPinHash?: string;
   activeChildId: string | null;
   children: Child[];
   sessions: SessionRecord[];
