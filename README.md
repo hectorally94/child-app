@@ -11,4 +11,13 @@ A home practice companion that helps young children (ages 3–6) practice founda
 
 ## Status
 
-Phase 0 — product definition. No application code yet.
+Phase 1 prototype: the "Write 0" flow works end to end in the browser (web app, data stays on the device).
+
+## Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+Tests: `npm test`. Production build: `npm run build` (output in `dist/`).

@@ -3,7 +3,7 @@
 Read this first when starting a new session on this repository.
 
 ## What this is
-Home Learning Companion: an offline-first, Android-first learning app for children aged 3–6
+Home Learning Companion: an offline-first learning app (web app first, Android later) for children aged 3–6
 (initially one 4-year-old in Burundi). Child Mode (primary) + protected Parent Mode.
 Full spec: `docs/PRD.md` (source of truth for requirements).
 
@@ -16,19 +16,49 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
 - Privacy: minimal child data, no ads, no social features, no external links in Child Mode, parental gate for Parent Mode.
 - Never present a single "ability" score; don't claim confident judgments when detection is uncertain.
 
-## Planned stack (PRD §18)
-React + TypeScript frontend, Android-first packaging, REST API, PostgreSQL, object storage for assets,
-reliable on-device store for lessons/progress/pending sync events.
+## Stack
+- Now: React 18 + TypeScript + Vite web app, no backend. Data in `localStorage` (device only).
+  Service worker (`public/sw.js`) caches the app for offline use in production builds.
+- Later (PRD §18): REST API, PostgreSQL, object storage, sync of progress; Android packaging.
+
+## Commands
+- `npm install` then `npm run dev` (local dev server)
+- `npm test` (Vitest), `npm run typecheck`, `npm run build` (outputs `dist/`)
+- Deploy for testing: Vercel (Vite preset, output `dist`).
+
+## Code map
+- `src/content/lessons/*.json` — lessons (data). New lesson = new JSON file, no code.
+- `src/engine/` — lesson types, stroke geometry, attempt evaluation (`evaluate.ts`), parent summary, speech (device TTS).
+- `src/modes/` — `ChildMode` (lesson player), `ParentGate` (multiplication gate), `ParentMode` (dashboard, lessons, settings).
+- `src/components/Slate.tsx` — canvas slate: guide, demo animation, captures strokes.
+- `src/i18n/` — UI strings + fallback (`rn` → `fr` → `en`).
+- `src/storage/` — versioned local store (children, sessions with attempts).
+
+## Design
+- Child mode = school slate (ardoise) + chalk: slate `#23443A`, chalk `#F7F3E3`, sun `#FFC93C` (start dot / main action only),
+  hibiscus `#E84A5F` (celebration), sky `#BFE6F5`, wood `#8A5A33`. Font: Baloo 2. Icons, almost no text.
+- Parent mode = notebook (cahier): paper, blue ink `#1F3A93`, ruled lines. Font: Atkinson Hyperlegible,
+  with a plain-zero override (its 0 is slashed, wrong for a lesson about writing 0).
+- Fonts are bundled (offline). Respect reduced motion.
 
 ## Current status
 - [x] Phase 0: PRD added to repo
-- [ ] Phase 0: UX flow, first lesson design, handwriting interaction prototype
-- [ ] Phase 1: child mode, parent mode, "Write 0" lesson, local progress, basic audio, basic tracing
+- [x] Phase 1 prototype: child mode, parent gate + mode, "Write 0" and "Write 1" lessons, tracing with
+      demonstration, independent writing, cautious feedback, local progress, device TTS audio, EN/FR
+- [ ] Test with the real child; adjust stroke data to match the teacher's method
+- [ ] Kirundi texts and prerecorded audio (needs a native speaker)
+- [ ] Phase 2: lesson packages/download, backend + sync, more writing lessons
 
 ## Decisions log
-- (none yet — record important decisions here with a date)
+- 2026-11-22: Start as a **web app** (not mobile). Android packaging later.
+- 2026-11-22: UI follows the frontend-design skill; slate/chalk concept for child mode, notebook for parent mode.
+- 2026-11-22: Default stroke for 0: start at top, counter-clockwise (common school convention). Change in the lesson JSON if the teacher differs.
+- 2026-11-22: Evaluation is cautious: success / retry / uncertain; uncertain is shown as encouragement, never failure. After max attempts the lesson moves on kindly.
+- 2026-11-22: No backend yet; all data stays on the device.
+- 2026-11-22: Test deployments go to Vercel (via the Vercel MCP).
 
 ## Open questions
 - Primary language for the first prototype (Kirundi / French / English)?
 - How the child's teacher demonstrates writing 0 (start point, direction) — needed for the stroke data.
-- Packaging approach for Android (PWA, Capacitor, or other).
+- Packaging approach for Android later (PWA, Capacitor, or other).
+- Graphify (context tool) requested: confirm which tool; add once there is more code.

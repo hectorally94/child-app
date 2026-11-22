@@ -1,0 +1,10 @@
+{
+  "name": "Home Learning Companion",
+  "short_name": "Learn at home",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#BFE6F5",
+  "theme_color": "#23443A",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
