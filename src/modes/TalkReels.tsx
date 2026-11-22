@@ -20,6 +20,7 @@ const SCENES: Record<string, { sky: string; ground: string; dark?: boolean }> = 
   bathroom: { sky: 'linear-gradient(180deg,#e0f6ff 0%,#d1fae5 100%)', ground: '#bae6fd' },
   bedroom: { sky: 'linear-gradient(180deg,#ede4ff 0%,#dbe7ff 100%)', ground: '#c4b5fd' },
   garden: { sky: 'linear-gradient(180deg,#bfe6f5 0%,#fff3c4 100%)', ground: '#4ade80' },
+  school: { sky: 'linear-gradient(180deg,#fff3c4 0%,#fde2f0 100%)', ground: '#fcd34d' },
 };
 
 const VOICE: Record<Speaker, { pitch: number; rate: number }> = {

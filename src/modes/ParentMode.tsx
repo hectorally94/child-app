@@ -5,7 +5,10 @@ import { Icon, type IconName } from '../components/Icon';
 import { InstallCard } from '../components/InstallCard';
 import { PinPad } from '../components/PinPad';
 import { learningPath, masteredIds } from '../engine/progress';
-import { loadReels, loadWordSets, talkKey, wordsKey } from '../content/speak';
+import { loadReels, loadWordSets, pictureUrl, talkKey, wordsKey } from '../content/speak';
+import { loadShortPacks, shortKey } from '../content/short';
+import { dayKey, hardWords, repetitionsOn, SLOTS, streak, weekGrid, type Slot } from '../engine/routine';
+import { SLOT_LABEL } from './ShortPlayer';
 import { hashPin } from '../storage/pin';
 import { Slate } from '../components/Slate';
 import { loadLessons } from '../content';
@@ -181,6 +184,9 @@ function Dashboard({ data, child, lang, onOpen, onGoLessons, onSelectChild, onGo
       <motion.section variants={item}>
         <H2>{t('childrenProgress', lang)}</H2>
         <ChildrenProgress data={data} activeId={child.id} lang={lang} onSelect={onSelectChild} />
+      </motion.section>
+      <motion.section variants={item}>
+        <ShortWeek data={data} child={child} lang={lang} />
       </motion.section>
       <motion.section variants={item}>
         <H2>{t('todayActivity', lang)}</H2>
@@ -567,9 +573,10 @@ function ProfileEditor({ child, lang, update }: { child: Child; lang: Lang; upda
 /** One card per child: progress bars for numbers and letters (lessons mastered). */
 function ChildrenProgress({ data, activeId, lang, onSelect }: { data: AppData; activeId: string; lang: Lang; onSelect: (id: string) => void }) {
   const paths = learningPath(loadLessons());
-  const bars: { k: 'numbers' | 'letters' | 'wordsProgress' | 'talkProgress'; color: string; keys: string[] }[] = [
+  const bars: { k: 'numbers' | 'letters' | 'shortProgress' | 'wordsProgress' | 'talkProgress'; color: string; keys: string[] }[] = [
     { k: 'numbers', color: 'from-blue to-violet', keys: (paths.numbers ?? []).map((l) => l.id) },
     { k: 'letters', color: 'from-pink to-[#f97362]', keys: (paths.letters ?? []).map((l) => l.id) },
+    { k: 'shortProgress', color: 'from-violet to-pink', keys: loadShortPacks().map((p) => shortKey(p.id)) },
     { k: 'wordsProgress', color: 'from-mint to-[#0ea5e9]', keys: loadWordSets().map((w) => wordsKey(w.id)) },
     { k: 'talkProgress', color: 'from-sun to-[#f97316]', keys: loadReels().map((r) => talkKey(r.id)) },
   ];
@@ -687,5 +694,64 @@ function ParentCodeSection({ data, update }: { data: AppData; update: (fn: (d: A
         </p>
       </div>
     </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+
+const SLOT_PICTURE: Record<Slot, string> = { morning: '2600', afternoon: '1f324', evening: '1f319' };
+
+/** "Petits mots" routine: the last 7 days × 3 sessions, the streak, today's repetitions and the hardest words. */
+function ShortWeek({ data, child, lang }: { data: AppData; child: Child; lang: Lang }) {
+  const now = new Date();
+  const grid = weekGrid(data.sessions, child.id, now);
+  const total = grid.reduce((a, g) => a + g.slots.size, 0);
+  const days = streak(data.sessions, child.id, now);
+  const reps = repetitionsOn(data.sessions, child.id, dayKey(now));
+  const hard = hardWords(loadShortPacks(), data.sessions, child.id);
+  return (
+    <>
+      <H2>{t('weekSessions', lang)}</H2>
+      <div className="clay flex flex-col gap-4 p-4">
+        <div className="flex flex-wrap gap-2">
+          <Chip icon="sparkle" text={t('streakDays', lang, { n: days })} />
+          <Chip icon="check" text={`${total} / 21`} />
+          <Chip icon="sound" text={t('repsToday', lang, { n: reps })} />
+        </div>
+        {total === 0 && <p className="m-0 text-ink-soft">{t('noSessionsYet', lang)}</p>}
+        <div className="grid grid-cols-[auto_repeat(7,minmax(0,1fr))] items-center gap-x-1 gap-y-1.5" role="table" aria-label={t('weekSessions', lang)}>
+          <span />
+          {grid.map((g) => (
+            <span key={g.day} className={`text-center text-xs font-bold ${g.day === dayKey(now) ? 'text-blue' : 'text-ink-soft'}`}>
+              {g.date.toLocaleDateString(lang, { weekday: 'narrow' })}
+            </span>
+          ))}
+          {SLOTS.map((slot) => (
+            <div key={slot} className="contents" role="row">
+              <img src={pictureUrl(SLOT_PICTURE[slot])} alt={t(SLOT_LABEL[slot], lang)} className="mr-1 h-6 w-6" />
+              {grid.map((g) => (
+                <span key={g.day + slot} role="cell" aria-label={`${g.day} ${t(SLOT_LABEL[slot], lang)}${g.slots.has(slot) ? ' ✓' : ''}`}
+                  className={`mx-auto grid h-7 w-7 place-items-center rounded-full ${g.slots.has(slot) ? 'bg-mint text-white' : 'bg-canvas text-transparent'}`}>
+                  <Icon name="check" size={14} />
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+        {hard.length > 0 && (
+          <div>
+            <h3 className="m-0 mb-2 font-display text-base font-black text-ink">{t('hardWordsTitle', lang)}</h3>
+            <ul className="m-0 flex list-none flex-wrap gap-2 p-0">
+              {hard.map(({ word, misses }) => (
+                <li key={word.id} className="flex items-center gap-2 rounded-full bg-sun-soft py-1 pr-3 pl-1.5 text-sm font-bold text-[#92400e]">
+                  <img src={pictureUrl(word.image)} alt="" className="h-6 w-6" />
+                  {tr(word.word, lang)} · {t('missesCount', lang, { n: misses })}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </>
   );
 }

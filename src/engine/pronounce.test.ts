@@ -49,3 +49,61 @@ describe('pronunciation check', () => {
     }
   });
 });
+
+import { COLLECTIONS } from '../content/collections';
+import { loadShortPacks } from '../content/short';
+
+describe('short words', () => {
+  const packs = loadShortPacks();
+  const spoken = packs.filter((p) => p.check !== false && p.kind !== 'listen'); // checked by speech recognition
+
+  it('has 23 packs of 5 words, each in one of the 11 collections, 01 to 07', () => {
+    expect(packs.length).toBe(23);
+    for (const p of packs) {
+      expect(p.words.length, p.id).toBe(5);
+      expect(COLLECTIONS.some((c) => c.id === p.collection), p.id).toBe(true);
+    }
+    expect(new Set(packs.map((p) => p.collection)).size).toBe(7);
+    // order follows the collections
+    const order = packs.map((p) => COLLECTIONS.findIndex((c) => c.id === p.collection));
+    expect([...order].sort((a, b) => a - b)).toEqual(order);
+  });
+
+  it('every word id is unique', () => {
+    const ids = packs.flatMap((p) => p.words.map((w) => w.id));
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it('every spoken word is accepted when said right, with its usual recognizer spellings, and refused for "miaou"', () => {
+    for (const p of spoken) for (const w of p.words) {
+      const fr = w.word.fr!;
+      expect(checkPronunciation(fr, [fr], { accept: w.accept, strict: true }).ok, w.id).toBe(true);
+      for (const a of w.accept) expect(checkPronunciation(fr, [a], { accept: w.accept, strict: true }).ok, `${w.id} ← ${a}`).toBe(true);
+      expect(checkPronunciation(fr, ['miaou'], { accept: w.accept, strict: true }).ok, `${w.id} ← miaou`).toBe(false);
+    }
+  });
+
+  it("a word of the pack is never accepted for another word of the same pack (papa ≠ maman, j'ai faim ≠ j'ai soif)", () => {
+    for (const p of spoken) for (const w of p.words) for (const other of p.words) {
+      if (other.id === w.id) continue;
+      expect(checkPronunciation(w.word.fr!, [other.word.fr!], { accept: w.accept, strict: true }).ok, `${w.id} ← ${other.id}`).toBe(false);
+    }
+  });
+
+  it('syllables rebuild the word (sound packs and spoken packs)', () => {
+    for (const p of packs.filter((x) => x.kind !== 'listen')) for (const w of p.words) {
+      const joined = w.syllables.join('').toLowerCase().replace(/[' ]/g, '');
+      const word = w.word.fr!.toLowerCase().replace(/[' ]/g, '');
+      expect(joined, w.id).toBe(word);
+    }
+  });
+
+  it('listening packs have a sound for every picture; sound packs are not checked by recognition', () => {
+    for (const p of packs.filter((x) => x.kind === 'listen')) for (const w of p.words) expect(w.sound?.fr, w.id).toBeTruthy();
+    for (const p of packs.filter((x) => x.collection === 'sons' && x.kind !== 'listen')) expect(p.check, p.id).toBe(false);
+  });
+
+  it('œ is understood: "soeur" for "sœur"', () => {
+    expect(checkPronunciation('sœur', ['soeur'], { strict: true }).ok).toBe(true);
+  });
+});

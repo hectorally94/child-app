@@ -17,6 +17,8 @@ const STOP = new Set([
 export function normalize(text: string): string {
   return text
     .toLowerCase()
+    .replace(/œ/g, 'oe')
+    .replace(/æ/g, 'ae')
     .normalize('NFD')
     .replace(/[̀-ͯ]/g, '') // accents
     .replace(/[’'`-]/g, ' ')
@@ -48,11 +50,14 @@ function levenshtein(a: string, b: string): number {
   return dp[a.length][b.length];
 }
 
-export function wordsMatch(expected: string, heard: string): boolean {
+export function wordsMatch(expected: string, heard: string, strict = false): boolean {
   if (expected === heard) return true;
   const ka = soundKey(expected);
   const kb = soundKey(heard);
   if (ka && ka === kb) return true;
+  // Strict mode (very short words): no "one letter off" tolerance, so papa ≠ papi, pain ≠ main.
+  // Known recognizer spellings are covered by the `accept` list instead.
+  if (strict) return false;
   const len = Math.max(expected.length, 1);
   const allowed = len >= 7 ? 2 : len >= 4 ? 1 : 0;
   return levenshtein(expected, heard) <= allowed || (ka.length >= 3 && levenshtein(ka, kb) <= (ka.length >= 6 ? 1 : 0));
@@ -77,14 +82,24 @@ export interface PronunciationResult {
  * Compare what the recognizer heard (all its alternatives) with what the child had to say.
  * `minScore`: 1 = every key word (single words); lower for longer sentences.
  */
-export function checkPronunciation(expected: string, alternatives: string[], opts: { minScore?: number; skip?: string[] } = {}): PronunciationResult {
+export function checkPronunciation(
+  expected: string,
+  alternatives: string[],
+  opts: { minScore?: number; skip?: string[]; accept?: string[]; strict?: boolean } = {},
+): PronunciationResult {
   const keys = keyWords(expected, opts.skip);
   const minScore = opts.minScore ?? 1;
   let best: PronunciationResult = { ok: false, score: 0, heard: alternatives[0] ?? '', missing: keys };
+  // Known spellings of the same sound (very short words are often written differently: "eau" → "o")
+  const accepted = (opts.accept ?? []).map(normalize).filter(Boolean);
   const candidates = [...alternatives, alternatives.join(' ')];
   for (const alt of candidates) {
+    const n = normalize(alt);
+    if (n && accepted.some((a) => n === a || ` ${n} `.includes(` ${a} `))) {
+      return { ok: true, score: 1, heard: alt, missing: [] };
+    }
     const heardWords = normalize(alt).split(' ').filter(Boolean);
-    const found = keys.filter((k) => heardWords.some((h) => wordsMatch(k, h)) || (soundKey(k).length >= 4 && soundKey(heardWords.join('')).includes(soundKey(k))));
+    const found = keys.filter((k) => heardWords.some((h) => wordsMatch(k, h, opts.strict)) || (soundKey(k).length >= 4 && soundKey(heardWords.join('')).includes(soundKey(k))));
     const score = keys.length ? found.length / keys.length : 0;
     if (score > best.score) best = { ok: false, score, heard: alt, missing: keys.filter((k) => !found.includes(k)) };
   }

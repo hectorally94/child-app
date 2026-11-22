@@ -26,6 +26,8 @@ export interface AttemptRecord extends Omit<AttemptMetrics, 'outcome'> {
   activity: 'trace' | 'free_write' | 'quiz' | 'speak';
   hintShown: boolean;
   at: number;
+  /** Which word or item was practiced (short words: the word id). */
+  item?: string;
 }
 
 export interface SessionRecord {
@@ -37,6 +39,10 @@ export interface SessionRecord {
   completed: boolean;
   /** Set when the activity was finished with success (writing alone, perfect quiz, or reel repeated). */
   mastered?: boolean;
+  /** Short words: which of the three daily sessions this was. */
+  slot?: 'morning' | 'afternoon' | 'evening';
+  /** Short words left for later after too many misses. */
+  skipped?: string[];
   attempts: AttemptRecord[];
 }
 

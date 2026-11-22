@@ -7,7 +7,7 @@ import { SpeakButton, type SpeakInfo } from '../components/SpeakButton';
 import { pictureUrl, wordsKey, type Word, type WordSet } from '../content/speak';
 import { playSound, speakAsync, speakFeedback, stopSpeaking } from '../engine/speech';
 import { t, tr } from '../i18n';
-import { newId, type AppData, type AttemptRecord, type Child } from '../storage/store';
+import { newId, type AppData, type AttemptRecord, type Child, type SessionRecord } from '../storage/store';
 
 /** A non-writing attempt (quiz answer or speaking) in the shared attempt format. */
 export function simpleAttempt(activity: 'quiz' | 'speak', ok: boolean): AttemptRecord {
@@ -17,20 +17,21 @@ export function simpleAttempt(activity: 'quiz' | 'speak', ok: boolean): AttemptR
   };
 }
 
-/** Session record helpers shared by the words player and the reels. */
-export function useSession(update: (fn: (d: AppData) => AppData) => void, childId: string, key: string) {
+/** Session record helpers shared by the words player, the reels and the short words. */
+export function useSession(update: (fn: (d: AppData) => AppData) => void, childId: string, key: string, slot?: SessionRecord['slot']) {
   const id = useRef(newId());
   const created = useRef(false);
   useEffect(() => {
     if (created.current) return;
     created.current = true;
-    update((d) => ({ ...d, sessions: [...d.sessions, { id: id.current, childId, lessonId: key, startedAt: Date.now(), endedAt: null, completed: false, attempts: [] }] }));
-  }, [update, childId, key]);
+    update((d) => ({ ...d, sessions: [...d.sessions, { id: id.current, childId, lessonId: key, startedAt: Date.now(), endedAt: null, completed: false, slot, attempts: [] }] }));
+  }, [update, childId, key, slot]);
   return {
     add: (a: AttemptRecord) =>
       update((d) => ({ ...d, sessions: d.sessions.map((s) => (s.id === id.current ? { ...s, endedAt: Date.now(), attempts: [...s.attempts, a] } : s)) })),
-    finish: () =>
-      update((d) => ({ ...d, sessions: d.sessions.map((s) => (s.id === id.current ? { ...s, endedAt: Date.now(), completed: true, mastered: true } : s)) })),
+    /** `mastered` = every word succeeded (default); `skipped` = words left for later. */
+    finish: (mastered = true, skipped: string[] = []) =>
+      update((d) => ({ ...d, sessions: d.sessions.map((s) => (s.id === id.current ? { ...s, endedAt: Date.now(), completed: true, mastered, skipped } : s)) })),
   };
 }
 
@@ -42,14 +43,19 @@ interface Props {
   update: (fn: (d: AppData) => AppData) => void;
   compact: boolean;
   next: WordSet | null;
+  /** "listen": a listening game (Pipo makes a sound, she finds the picture); no repetition step. */
+  mode?: 'learn' | 'listen';
+  /** Session key stored with the progress (default: words:<set id>). */
+  lessonKey?: string;
   onHome: () => void;
   onNext: (s: WordSet) => void;
 }
 
-export function WordsPlayer({ set, child, update, compact, next, onHome, onNext }: Props) {
+export function WordsPlayer({ set, child, update, compact, next, onHome, onNext, mode = 'learn', lessonKey }: Props) {
   const lang = child.childLang;
-  const session = useSession(update, child.id, wordsKey(set.id));
-  const [phase, setPhase] = useState<'learn' | 'quiz' | 'done'>('learn');
+  const listenMode = mode === 'listen';
+  const session = useSession(update, child.id, lessonKey ?? wordsKey(set.id));
+  const [phase, setPhase] = useState<'learn' | 'quiz' | 'done'>(listenMode ? 'quiz' : 'learn');
   const [i, setI] = useState(0);
   const [mood, setMood] = useState<Mood>('idle');
   const [bubble, setBubble] = useState('');
@@ -102,6 +108,8 @@ export function WordsPlayer({ set, child, update, compact, next, onHome, onNext 
   const [wrongId, setWrongId] = useState<{ id: string; n: number } | null>(null);
   const [rightId, setRightId] = useState<string | null>(null);
   const target = order[i];
+  // The question: "Où est la vache ?" — or, in the listening game, Pipo makes the sound: "Qui fait « meuh » ?"
+  const ask = (w: Word) => (listenMode ? t('whoSays', lang, { sound: tr(w.sentence, lang) }) : t('whereIs', lang, { word: tr(w.word, lang) }));
   const choices = useMemo(() => {
     if (phase !== 'quiz' || !target) return [];
     const others = shuffle(set.words.filter((w) => w.id !== target.id)).slice(0, 2);
@@ -113,8 +121,8 @@ export function WordsPlayer({ set, child, update, compact, next, onHome, onNext 
     setRightId(null);
     setWrongId(null);
     (async () => {
-      if (i === 0 && round === 0) await talk(t('quizStart', lang));
-      if (alive.current) void talk(t('whereIs', lang, { word: tr(target.word, lang) }));
+      if (i === 0 && round === 0) await talk(t(listenMode ? 'listenStart' : 'quizStart', lang));
+      if (alive.current) void talk(ask(target));
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, i, round]);
@@ -153,7 +161,7 @@ export function WordsPlayer({ set, child, update, compact, next, onHome, onNext 
       const text = t('thatIs', lang, { word: tr(w.word, lang) });
       setBubble(text);
       speakFeedback(text, lang, false);
-      window.setTimeout(() => alive.current && void talk(t('whereIs', lang, { word: tr(target.word, lang) })), 2600);
+      window.setTimeout(() => alive.current && void talk(ask(target)), 2600);
     }
   };
 
@@ -245,7 +253,7 @@ export function WordsPlayer({ set, child, update, compact, next, onHome, onNext 
                   </motion.button>
                 );
               })}
-              <button onClick={() => void talk(t('whereIs', lang, { word: tr(target.word, lang) }))} aria-label={t('listen', lang)}
+              <button onClick={() => void talk(ask(target))} aria-label={t('listen', lang)}
                 className="clay-btn is-white col-span-3 mx-auto mt-2 !h-14 !w-14 !rounded-full !p-0 text-blue">
                 <Icon name="sound" size={26} />
               </button>

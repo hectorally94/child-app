@@ -1,160 +1,7 @@
 {
  "reels": [
   {
-   "id": "bonjour",
-   "scene": "morning",
-   "prop": "2600",
-   "title": {
-    "fr": "Bonjour !",
-    "en": "Hello!"
-   },
-   "lines": [
-    {
-     "who": "pipo",
-     "text": {
-      "fr": "Bonjour Tika !",
-      "en": "Hello Tika!"
-     }
-    },
-    {
-     "who": "tika",
-     "text": {
-      "fr": "Bonjour Pipo ! Ça va ?",
-      "en": "Hello Pipo! How are you?"
-     }
-    },
-    {
-     "who": "pipo",
-     "text": {
-      "fr": "Ça va bien, merci !",
-      "en": "I'm fine, thank you!"
-     }
-    }
-   ],
-   "repeat": {
-    "fr": "Bonjour ! Ça va ?",
-    "en": "Hello! How are you?"
-   },
-   "theme": "greet",
-   "order": 0
-  },
-  {
-   "id": "bonsoir",
-   "theme": "greet",
-   "scene": "night",
-   "prop": "1f307",
-   "title": {
-    "fr": "Bonsoir !",
-    "en": "Good evening!"
-   },
-   "lines": [
-    {
-     "who": "tika",
-     "text": {
-      "fr": "Bonsoir Pipo !",
-      "en": "Good evening Pipo!"
-     }
-    },
-    {
-     "who": "pipo",
-     "text": {
-      "fr": "Bonsoir Tika ! Tu as passé une bonne journée ?",
-      "en": "Good evening Tika! Did you have a good day?"
-     }
-    },
-    {
-     "who": "tika",
-     "text": {
-      "fr": "Oui, très bonne !",
-      "en": "Yes, a very good one!"
-     }
-    }
-   ],
-   "repeat": {
-    "fr": "Bonsoir !",
-    "en": "Good evening!"
-   },
-   "order": 1
-  },
-  {
-   "id": "prenom",
-   "scene": "park",
-   "prop": "1f44b",
-   "title": {
-    "fr": "Je m'appelle…",
-    "en": "My name is…"
-   },
-   "lines": [
-    {
-     "who": "tika",
-     "text": {
-      "fr": "Comment tu t'appelles ?",
-      "en": "What is your name?"
-     }
-    },
-    {
-     "who": "pipo",
-     "text": {
-      "fr": "Je m'appelle Pipo. Et toi ?",
-      "en": "My name is Pipo. And you?"
-     }
-    },
-    {
-     "who": "tika",
-     "text": {
-      "fr": "Je m'appelle Tika.",
-      "en": "My name is Tika."
-     }
-    }
-   ],
-   "repeat": {
-    "fr": "Je m'appelle {name}.",
-    "en": "My name is {name}."
-   },
-   "theme": "greet",
-   "order": 2
-  },
-  {
-   "id": "aurevoir",
-   "scene": "night",
-   "prop": "1f319",
-   "title": {
-    "fr": "Au revoir !",
-    "en": "Goodbye!"
-   },
-   "lines": [
-    {
-     "who": "tika",
-     "text": {
-      "fr": "Il est tard. Au revoir Pipo !",
-      "en": "It's late. Goodbye Pipo!"
-     }
-    },
-    {
-     "who": "pipo",
-     "text": {
-      "fr": "Au revoir Tika, à demain !",
-      "en": "Goodbye Tika, see you tomorrow!"
-     }
-    },
-    {
-     "who": "tika",
-     "text": {
-      "fr": "Bonne nuit !",
-      "en": "Good night!"
-     }
-    }
-   ],
-   "repeat": {
-    "fr": "Au revoir, à demain !",
-    "en": "Goodbye, see you tomorrow!"
-   },
-   "theme": "greet",
-   "order": 3
-  },
-  {
    "id": "toilettes",
-   "theme": "needs",
    "scene": "home",
    "prop": "1f6bd",
    "title": {
@@ -188,7 +35,8 @@
     "fr": "Je veux aller aux toilettes, s'il te plaît.",
     "en": "I want to go to the toilet, please."
    },
-   "order": 4
+   "collection": "besoins",
+   "order": 0
   },
   {
    "id": "faim",
@@ -225,8 +73,8 @@
     "fr": "J'ai faim.",
     "en": "I'm hungry."
    },
-   "theme": "needs",
-   "order": 5
+   "collection": "besoins",
+   "order": 1
   },
   {
    "id": "soif",
@@ -263,12 +111,11 @@
     "fr": "J'ai soif. De l'eau, s'il te plaît.",
     "en": "I'm thirsty. Water, please."
    },
-   "theme": "needs",
-   "order": 6
+   "collection": "besoins",
+   "order": 2
   },
   {
    "id": "dormir",
-   "theme": "needs",
    "scene": "bedroom",
    "prop": "1f634",
    "title": {
@@ -302,11 +149,11 @@
     "fr": "Je suis fatigué{e}. Je veux dormir.",
     "en": "I am tired. I want to sleep."
    },
-   "order": 7
+   "collection": "besoins",
+   "order": 3
   },
   {
    "id": "froid",
-   "theme": "needs",
    "scene": "park",
    "prop": "1f976",
    "title": {
@@ -340,11 +187,11 @@
     "fr": "J'ai froid.",
     "en": "I'm cold."
    },
-   "order": 8
+   "collection": "besoins",
+   "order": 4
   },
   {
    "id": "laver",
-   "theme": "needs",
    "scene": "bathroom",
    "prop": "1f9fc",
    "title": {
@@ -378,7 +225,8 @@
     "fr": "Je me lave les mains.",
     "en": "I wash my hands."
    },
-   "order": 9
+   "collection": "besoins",
+   "order": 5
   },
   {
    "id": "aide",
@@ -415,8 +263,312 @@
     "fr": "Aide-moi, s'il te plaît.",
     "en": "Help me, please."
    },
-   "theme": "needs",
+   "collection": "besoins",
+   "order": 6
+  },
+  {
+   "id": "cuisine",
+   "scene": "kitchen",
+   "prop": "1f373",
+   "title": {
+    "fr": "La cuisine",
+    "en": "The kitchen"
+   },
+   "lines": [
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Où sommes-nous ?",
+      "en": "Where are we?"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Nous sommes dans la cuisine. On prépare à manger.",
+      "en": "We are in the kitchen. We cook food."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Ça sent bon !",
+      "en": "It smells good!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "C'est la cuisine.",
+    "en": "This is the kitchen."
+   },
+   "collection": "monde",
+   "order": 7
+  },
+  {
+   "id": "chambre",
+   "scene": "bedroom",
+   "prop": "1f6cf",
+   "title": {
+    "fr": "La chambre",
+    "en": "The bedroom"
+   },
+   "lines": [
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Voici ma chambre.",
+      "en": "This is my bedroom."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "C'est ton lit ?",
+      "en": "Is that your bed?"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Oui, je dors dans ma chambre.",
+      "en": "Yes, I sleep in my bedroom."
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "C'est ma chambre.",
+    "en": "This is my bedroom."
+   },
+   "collection": "monde",
+   "order": 8
+  },
+  {
+   "id": "salledebain",
+   "scene": "bathroom",
+   "prop": "1f6c1",
+   "title": {
+    "fr": "La salle de bain",
+    "en": "The bathroom"
+   },
+   "lines": [
+    {
+     "who": "tika",
+     "text": {
+      "fr": "C'est la salle de bain.",
+      "en": "This is the bathroom."
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "On prend le bain ici.",
+      "en": "We take a bath here."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Et on se brosse les dents !",
+      "en": "And we brush our teeth!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "C'est la salle de bain.",
+    "en": "This is the bathroom."
+   },
+   "collection": "monde",
+   "order": 9
+  },
+  {
+   "id": "salon",
+   "scene": "home",
+   "prop": "1f6cb",
+   "title": {
+    "fr": "Le salon",
+    "en": "The living room"
+   },
+   "lines": [
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Viens dans le salon !",
+      "en": "Come to the living room!"
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "On s'assoit sur le canapé.",
+      "en": "We sit on the sofa."
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Et on lit une histoire.",
+      "en": "And we read a story."
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "C'est le salon.",
+    "en": "This is the living room."
+   },
+   "collection": "monde",
    "order": 10
+  },
+  {
+   "id": "jardin",
+   "scene": "garden",
+   "prop": "1f333",
+   "title": {
+    "fr": "Le jardin",
+    "en": "The garden"
+   },
+   "lines": [
+    {
+     "who": "tika",
+     "text": {
+      "fr": "On va dans le jardin ?",
+      "en": "Shall we go to the garden?"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Oui ! Il y a un grand arbre.",
+      "en": "Yes! There is a big tree."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Et des fleurs !",
+      "en": "And flowers!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "On va dans le jardin.",
+    "en": "Let's go to the garden."
+   },
+   "collection": "monde",
+   "order": 11
+  },
+  {
+   "id": "maman",
+   "scene": "home",
+   "prop": "1f469",
+   "title": {
+    "fr": "Où est maman ?",
+    "en": "Where is mum?"
+   },
+   "lines": [
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Où est maman ?",
+      "en": "Where is mum?"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Maman est dans la cuisine.",
+      "en": "Mum is in the kitchen."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Merci, j'y vais !",
+      "en": "Thanks, I'm going!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Où est maman ?",
+    "en": "Where is mum?"
+   },
+   "collection": "monde",
+   "order": 12
+  },
+  {
+   "id": "donne",
+   "collection": "actions",
+   "scene": "home",
+   "prop": "1f932",
+   "title": {
+    "fr": "Donne-moi !",
+    "en": "Give me!"
+   },
+   "lines": [
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Pipo, donne-moi le ballon, s'il te plaît.",
+      "en": "Pipo, give me the ball, please."
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Tiens, prends le ballon.",
+      "en": "Here, take the ball."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Merci !",
+      "en": "Thank you!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Donne-moi, s'il te plaît.",
+    "en": "Give me, please."
+   },
+   "order": 13
+  },
+  {
+   "id": "viens",
+   "collection": "actions",
+   "scene": "park",
+   "prop": "1f449",
+   "title": {
+    "fr": "Viens jouer !",
+    "en": "Come and play!"
+   },
+   "lines": [
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Viens, Tika !",
+      "en": "Come, Tika!"
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "J'arrive ! Je cours !",
+      "en": "I am coming! I am running!"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Regarde, un ballon !",
+      "en": "Look, a ball!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Viens jouer avec moi !",
+    "en": "Come and play with me!"
+   },
+   "order": 14
   },
   {
    "id": "emotions",
@@ -453,12 +605,11 @@
     "fr": "Je suis content{e} !",
     "en": "I am happy!"
    },
-   "theme": "feelings",
-   "order": 11
+   "collection": "emotions",
+   "order": 15
   },
   {
    "id": "peur",
-   "theme": "feelings",
    "scene": "night",
    "prop": "1f628",
    "title": {
@@ -492,11 +643,11 @@
     "fr": "J'ai peur. Reste avec moi.",
     "en": "I'm scared. Stay with me."
    },
-   "order": 12
+   "collection": "emotions",
+   "order": 16
   },
   {
    "id": "jaime",
-   "theme": "feelings",
    "scene": "home",
    "prop": "2764",
    "title": {
@@ -530,11 +681,11 @@
     "fr": "Je t'aime, maman.",
     "en": "I love you, mum."
    },
-   "order": 13
+   "collection": "emotions",
+   "order": 17
   },
   {
    "id": "ouinon",
-   "theme": "feelings",
    "scene": "kitchen",
    "prop": "1f44d",
    "title": {
@@ -575,7 +726,578 @@
     "fr": "Oui, s'il te plaît. Non merci.",
     "en": "Yes, please. No, thank you."
    },
-   "order": 14
+   "collection": "phrases",
+   "order": 18
+  },
+  {
+   "id": "veuxeau",
+   "collection": "phrases",
+   "scene": "kitchen",
+   "prop": "1f4a7",
+   "title": {
+    "fr": "Je veux de l'eau",
+    "en": "I want water"
+   },
+   "lines": [
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Je veux de l'eau.",
+      "en": "I want water."
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Voilà de l'eau.",
+      "en": "Here is water."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Merci !",
+      "en": "Thank you!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Je veux de l'eau.",
+    "en": "I want water."
+   },
+   "order": 19
+  },
+  {
+   "id": "veuxjouer",
+   "collection": "phrases",
+   "scene": "park",
+   "prop": "26bd",
+   "title": {
+    "fr": "Je veux jouer",
+    "en": "I want to play"
+   },
+   "lines": [
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Je veux jouer au ballon.",
+      "en": "I want to play ball."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Moi aussi !",
+      "en": "Me too!"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Allons-y !",
+      "en": "Let's go!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Je veux jouer.",
+    "en": "I want to play."
+   },
+   "order": 20
+  },
+  {
+   "id": "mangepomme",
+   "collection": "phrases",
+   "scene": "kitchen",
+   "prop": "1f34e",
+   "title": {
+    "fr": "Je mange",
+    "en": "I eat"
+   },
+   "lines": [
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Je mange une pomme.",
+      "en": "I am eating an apple."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Moi, je mange du pain.",
+      "en": "I am eating bread."
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Miam, c'est bon !",
+      "en": "Yum, it is good!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Je mange une pomme.",
+    "en": "I am eating an apple."
+   },
+   "order": 21
+  },
+  {
+   "id": "vois",
+   "collection": "phrases",
+   "scene": "garden",
+   "prop": "1f426",
+   "title": {
+    "fr": "Je vois…",
+    "en": "I see…"
+   },
+   "lines": [
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Je vois un arbre.",
+      "en": "I see a tree."
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Moi, je vois un oiseau.",
+      "en": "I see a bird."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Il est beau !",
+      "en": "It is beautiful!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Je vois un oiseau.",
+    "en": "I see a bird."
+   },
+   "order": 22
+  },
+  {
+   "id": "jai",
+   "collection": "phrases",
+   "scene": "home",
+   "prop": "26bd",
+   "title": {
+    "fr": "J'ai un…",
+    "en": "I have a…"
+   },
+   "lines": [
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "J'ai un ballon rouge.",
+      "en": "I have a red ball."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Moi, j'ai un livre.",
+      "en": "I have a book."
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "On échange ?",
+      "en": "Shall we swap?"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "J'ai un ballon.",
+    "en": "I have a ball."
+   },
+   "order": 23
+  },
+  {
+   "id": "maitresse",
+   "collection": "ecole",
+   "scene": "school",
+   "prop": "1f3eb",
+   "title": {
+    "fr": "Bonjour maîtresse",
+    "en": "Hello teacher"
+   },
+   "lines": [
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Bonjour maîtresse !",
+      "en": "Hello teacher!"
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Bonjour Pipo ! Comment ça va ?",
+      "en": "Hello Pipo! How are you?"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Ça va bien, merci.",
+      "en": "I am fine, thank you."
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Bonjour maîtresse !",
+    "en": "Hello teacher!"
+   },
+   "order": 24
+  },
+  {
+   "id": "comprends",
+   "collection": "ecole",
+   "scene": "school",
+   "prop": "1f914",
+   "title": {
+    "fr": "Je ne comprends pas",
+    "en": "I don't understand"
+   },
+   "lines": [
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Maîtresse, je ne comprends pas.",
+      "en": "Teacher, I don't understand."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Je répète. Écoute bien.",
+      "en": "I will say it again. Listen carefully."
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Merci, j'ai compris !",
+      "en": "Thank you, I understand!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Je ne comprends pas. Répète, s'il te plaît.",
+    "en": "I don't understand. Say it again, please."
+   },
+   "order": 25
+  },
+  {
+   "id": "fini2",
+   "collection": "ecole",
+   "scene": "school",
+   "prop": "270f",
+   "title": {
+    "fr": "J'ai fini",
+    "en": "I'm finished"
+   },
+   "lines": [
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Maîtresse, j'ai fini mon dessin.",
+      "en": "Teacher, I finished my drawing."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Bravo ! C'est très joli.",
+      "en": "Well done! It is very nice."
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Merci !",
+      "en": "Thank you!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "J'ai fini !",
+    "en": "I am finished!"
+   },
+   "order": 26
+  },
+  {
+   "id": "question",
+   "collection": "ecole",
+   "scene": "school",
+   "prop": "270b",
+   "title": {
+    "fr": "J'ai une question",
+    "en": "I have a question"
+   },
+   "lines": [
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Maîtresse, j'ai une question.",
+      "en": "Teacher, I have a question."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Oui, je t’écoute.",
+      "en": "Yes, I am listening."
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "C'est quoi, ça ?",
+      "en": "What is this?"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Maîtresse, j'ai une question.",
+    "en": "Teacher, I have a question."
+   },
+   "order": 27
+  },
+  {
+   "id": "toiletteecole",
+   "collection": "ecole",
+   "scene": "school",
+   "prop": "1f6bd",
+   "title": {
+    "fr": "Aux toilettes, maîtresse",
+    "en": "Toilet, teacher"
+   },
+   "lines": [
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Maîtresse, je peux aller aux toilettes ?",
+      "en": "Teacher, may I go to the toilet?"
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Oui, vas-y.",
+      "en": "Yes, go."
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Merci maîtresse !",
+      "en": "Thank you teacher!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Je peux aller aux toilettes ?",
+    "en": "May I go to the toilet?"
+   },
+   "order": 28
+  },
+  {
+   "id": "reponse",
+   "collection": "ecole",
+   "scene": "school",
+   "prop": "2705",
+   "title": {
+    "fr": "Je réponds",
+    "en": "I answer"
+   },
+   "lines": [
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Combien font deux et deux ?",
+      "en": "How much is two and two?"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Quatre !",
+      "en": "Four!"
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Bravo, c'est la bonne réponse.",
+      "en": "Well done, that is the right answer."
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "La réponse, c’est quatre.",
+    "en": "The answer is four."
+   },
+   "order": 29
+  },
+  {
+   "id": "bonjour",
+   "scene": "morning",
+   "prop": "2600",
+   "title": {
+    "fr": "Bonjour !",
+    "en": "Hello!"
+   },
+   "lines": [
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Bonjour Tika !",
+      "en": "Hello Tika!"
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Bonjour Pipo ! Ça va ?",
+      "en": "Hello Pipo! How are you?"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Ça va bien, merci !",
+      "en": "I'm fine, thank you!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Bonjour ! Ça va ?",
+    "en": "Hello! How are you?"
+   },
+   "collection": "social",
+   "order": 30
+  },
+  {
+   "id": "bonsoir",
+   "scene": "night",
+   "prop": "1f307",
+   "title": {
+    "fr": "Bonsoir !",
+    "en": "Good evening!"
+   },
+   "lines": [
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Bonsoir Pipo !",
+      "en": "Good evening Pipo!"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Bonsoir Tika ! Tu as passé une bonne journée ?",
+      "en": "Good evening Tika! Did you have a good day?"
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Oui, très bonne !",
+      "en": "Yes, a very good one!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Bonsoir !",
+    "en": "Good evening!"
+   },
+   "collection": "social",
+   "order": 31
+  },
+  {
+   "id": "prenom",
+   "scene": "park",
+   "prop": "1f44b",
+   "title": {
+    "fr": "Je m'appelle…",
+    "en": "My name is…"
+   },
+   "lines": [
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Comment tu t'appelles ?",
+      "en": "What is your name?"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Je m'appelle Pipo. Et toi ?",
+      "en": "My name is Pipo. And you?"
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Je m'appelle Tika.",
+      "en": "My name is Tika."
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Je m'appelle {name}.",
+    "en": "My name is {name}."
+   },
+   "collection": "social",
+   "order": 32
+  },
+  {
+   "id": "aurevoir",
+   "scene": "night",
+   "prop": "1f319",
+   "title": {
+    "fr": "Au revoir !",
+    "en": "Goodbye!"
+   },
+   "lines": [
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Il est tard. Au revoir Pipo !",
+      "en": "It's late. Goodbye Pipo!"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Au revoir Tika, à demain !",
+      "en": "Goodbye Tika, see you tomorrow!"
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Bonne nuit !",
+      "en": "Good night!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Au revoir, à demain !",
+    "en": "Goodbye, see you tomorrow!"
+   },
+   "collection": "social",
+   "order": 33
   },
   {
    "id": "jouer",
@@ -612,8 +1334,8 @@
     "fr": "Tu veux jouer avec moi ?",
     "en": "Do you want to play with me?"
    },
-   "theme": "feelings",
-   "order": 15
+   "collection": "social",
+   "order": 34
   },
   {
    "id": "merci",
@@ -650,12 +1372,11 @@
     "fr": "Merci beaucoup !",
     "en": "Thank you very much!"
    },
-   "theme": "polite",
-   "order": 16
+   "collection": "social",
+   "order": 35
   },
   {
    "id": "silteplait",
-   "theme": "polite",
    "scene": "home",
    "prop": "270f",
    "title": {
@@ -689,11 +1410,11 @@
     "fr": "Je peux avoir un crayon, s'il te plaît ?",
     "en": "Can I have a pencil, please?"
    },
-   "order": 17
+   "collection": "social",
+   "order": 36
   },
   {
    "id": "pardon",
-   "theme": "polite",
    "scene": "park",
    "prop": "1f647",
    "title": {
@@ -727,235 +1448,319 @@
     "fr": "Pardon. Excuse-moi.",
     "en": "Sorry. Excuse me."
    },
-   "order": 18
+   "collection": "social",
+   "order": 37
   },
   {
-   "id": "cuisine",
-   "theme": "house",
+   "id": "tour",
+   "collection": "social",
+   "scene": "park",
+   "prop": "26bd",
+   "title": {
+    "fr": "C'est mon tour",
+    "en": "My turn"
+   },
+   "lines": [
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "C'est à moi !",
+      "en": "It is mine!"
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Attends, c'est mon tour après.",
+      "en": "Wait, it is my turn after."
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "D'accord. À toi maintenant.",
+      "en": "Okay. Now it is your turn."
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "C'est mon tour.",
+    "en": "It is my turn."
+   },
+   "order": 38
+  },
+  {
+   "id": "partage",
+   "collection": "social",
    "scene": "kitchen",
-   "prop": "1f373",
+   "prop": "1f34e",
    "title": {
-    "fr": "La cuisine",
-    "en": "The kitchen"
+    "fr": "On partage",
+    "en": "We share"
    },
    "lines": [
     {
      "who": "tika",
      "text": {
-      "fr": "Où sommes-nous ?",
-      "en": "Where are we?"
+      "fr": "Tu veux la moitié de ma pomme ?",
+      "en": "Do you want half of my apple?"
      }
     },
     {
      "who": "pipo",
      "text": {
-      "fr": "Nous sommes dans la cuisine. On prépare à manger.",
-      "en": "We are in the kitchen. We cook food."
+      "fr": "Oh oui, merci !",
+      "en": "Oh yes, thank you!"
      }
     },
     {
      "who": "tika",
      "text": {
-      "fr": "Ça sent bon !",
-      "en": "It smells good!"
+      "fr": "On partage !",
+      "en": "We share!"
      }
     }
    ],
    "repeat": {
-    "fr": "C'est la cuisine.",
-    "en": "This is the kitchen."
+    "fr": "On partage ensemble.",
+    "en": "We share together."
    },
-   "order": 19
+   "order": 39
   },
   {
-   "id": "chambre",
-   "theme": "house",
-   "scene": "bedroom",
-   "prop": "1f6cf",
-   "title": {
-    "fr": "La chambre",
-    "en": "The bedroom"
-   },
-   "lines": [
-    {
-     "who": "pipo",
-     "text": {
-      "fr": "Voici ma chambre.",
-      "en": "This is my bedroom."
-     }
-    },
-    {
-     "who": "tika",
-     "text": {
-      "fr": "C'est ton lit ?",
-      "en": "Is that your bed?"
-     }
-    },
-    {
-     "who": "pipo",
-     "text": {
-      "fr": "Oui, je dors dans ma chambre.",
-      "en": "Yes, I sleep in my bedroom."
-     }
-    }
-   ],
-   "repeat": {
-    "fr": "C'est ma chambre.",
-    "en": "This is my bedroom."
-   },
-   "order": 20
-  },
-  {
-   "id": "salledebain",
-   "theme": "house",
-   "scene": "bathroom",
-   "prop": "1f6c1",
-   "title": {
-    "fr": "La salle de bain",
-    "en": "The bathroom"
-   },
-   "lines": [
-    {
-     "who": "tika",
-     "text": {
-      "fr": "C'est la salle de bain.",
-      "en": "This is the bathroom."
-     }
-    },
-    {
-     "who": "pipo",
-     "text": {
-      "fr": "On prend le bain ici.",
-      "en": "We take a bath here."
-     }
-    },
-    {
-     "who": "tika",
-     "text": {
-      "fr": "Et on se brosse les dents !",
-      "en": "And we brush our teeth!"
-     }
-    }
-   ],
-   "repeat": {
-    "fr": "C'est la salle de bain.",
-    "en": "This is the bathroom."
-   },
-   "order": 21
-  },
-  {
-   "id": "salon",
-   "theme": "house",
+   "id": "ami",
+   "collection": "social",
    "scene": "home",
-   "prop": "1f6cb",
+   "prop": "2764",
    "title": {
-    "fr": "Le salon",
-    "en": "The living room"
+    "fr": "Tu es mon ami",
+    "en": "You're my friend"
    },
    "lines": [
     {
      "who": "pipo",
      "text": {
-      "fr": "Viens dans le salon !",
-      "en": "Come to the living room!"
+      "fr": "Tu es mon ami, Tika.",
+      "en": "You are my friend, Tika."
      }
     },
     {
      "who": "tika",
      "text": {
-      "fr": "On s'assoit sur le canapé.",
-      "en": "We sit on the sofa."
+      "fr": "Toi aussi, tu es mon ami.",
+      "en": "You too, you are my friend."
      }
     },
     {
      "who": "pipo",
      "text": {
-      "fr": "Et on lit une histoire.",
-      "en": "And we read a story."
+      "fr": "On joue ensemble ?",
+      "en": "Shall we play together?"
      }
     }
    ],
    "repeat": {
-    "fr": "C'est le salon.",
-    "en": "This is the living room."
+    "fr": "Tu es mon ami.",
+    "en": "You are my friend."
    },
-   "order": 22
+   "order": 40
   },
   {
-   "id": "jardin",
-   "theme": "house",
+   "id": "quoi",
+   "collection": "questions",
+   "scene": "home",
+   "prop": "2753",
+   "title": {
+    "fr": "C'est quoi ?",
+    "en": "What is it?"
+   },
+   "lines": [
+    {
+     "who": "tika",
+     "text": {
+      "fr": "C'est quoi, ça ?",
+      "en": "What is this?"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "C'est un ballon.",
+      "en": "It is a ball."
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Et ça ?",
+      "en": "And this?"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "C'est un livre.",
+      "en": "It is a book."
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "C'est quoi, ça ?",
+    "en": "What is this?"
+   },
+   "order": 41
+  },
+  {
+   "id": "ou",
+   "collection": "questions",
+   "scene": "home",
+   "prop": "1f511",
+   "title": {
+    "fr": "Où est… ?",
+    "en": "Where is…?"
+   },
+   "lines": [
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Où est ma clé ?",
+      "en": "Where is my key?"
+     }
+    },
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Elle est sur la table.",
+      "en": "It is on the table."
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Merci, je la vois !",
+      "en": "Thanks, I see it!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Où est ma clé ?",
+    "en": "Where is my key?"
+   },
+   "order": 42
+  },
+  {
+   "id": "qui",
+   "collection": "questions",
    "scene": "garden",
-   "prop": "1f333",
+   "prop": "1f64b",
    "title": {
-    "fr": "Le jardin",
-    "en": "The garden"
+    "fr": "Qui est-ce ?",
+    "en": "Who is it?"
    },
    "lines": [
     {
      "who": "tika",
      "text": {
-      "fr": "On va dans le jardin ?",
-      "en": "Shall we go to the garden?"
+      "fr": "Qui est-ce ?",
+      "en": "Who is it?"
      }
     },
     {
      "who": "pipo",
      "text": {
-      "fr": "Oui ! Il y a un grand arbre.",
-      "en": "Yes! There is a big tree."
+      "fr": "C'est mamie !",
+      "en": "It is grandma!"
      }
     },
     {
      "who": "tika",
      "text": {
-      "fr": "Et des fleurs !",
-      "en": "And flowers!"
+      "fr": "Bonjour mamie !",
+      "en": "Hello grandma!"
      }
     }
    ],
    "repeat": {
-    "fr": "On va dans le jardin.",
-    "en": "Let's go to the garden."
+    "fr": "Qui est-ce ?",
+    "en": "Who is it?"
    },
-   "order": 23
+   "order": 43
   },
   {
-   "id": "maman",
-   "scene": "home",
-   "prop": "1f469",
+   "id": "pourquoi",
+   "collection": "questions",
+   "scene": "park",
+   "prop": "1f622",
    "title": {
-    "fr": "Où est maman ?",
-    "en": "Where is mum?"
+    "fr": "Pourquoi ?",
+    "en": "Why?"
    },
    "lines": [
     {
+     "who": "pipo",
+     "text": {
+      "fr": "Pourquoi tu pleures ?",
+      "en": "Why are you crying?"
+     }
+    },
+    {
      "who": "tika",
      "text": {
-      "fr": "Où est maman ?",
-      "en": "Where is mum?"
+      "fr": "Parce que j'ai mal.",
+      "en": "Because it hurts."
      }
     },
     {
      "who": "pipo",
      "text": {
-      "fr": "Maman est dans la cuisine.",
-      "en": "Mum is in the kitchen."
+      "fr": "Viens, je t'aide.",
+      "en": "Come, I will help you."
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Pourquoi tu pleures ?",
+    "en": "Why are you crying?"
+   },
+   "order": 44
+  },
+  {
+   "id": "combien",
+   "collection": "questions",
+   "scene": "kitchen",
+   "prop": "1f34e",
+   "title": {
+    "fr": "Combien ?",
+    "en": "How many?"
+   },
+   "lines": [
+    {
+     "who": "tika",
+     "text": {
+      "fr": "Combien de pommes ?",
+      "en": "How many apples?"
+     }
+    },
+    {
+     "who": "pipo",
+     "text": {
+      "fr": "Il y a trois pommes.",
+      "en": "There are three apples."
      }
     },
     {
      "who": "tika",
      "text": {
-      "fr": "Merci, j'y vais !",
-      "en": "Thanks, I'm going!"
+      "fr": "Un, deux, trois !",
+      "en": "One, two, three!"
      }
     }
    ],
    "repeat": {
-    "fr": "Où est maman ?",
-    "en": "Where is mum?"
+    "fr": "Combien de pommes ?",
+    "en": "How many apples?"
    },
-   "theme": "house",
-   "order": 24
+   "order": 45
   }
  ]
 }

@@ -27,9 +27,9 @@ export type Speaker = 'pipo' | 'tika';
 export interface Reel {
   id: string;
   order: number;
-  scene: 'morning' | 'park' | 'kitchen' | 'home' | 'night' | 'bathroom' | 'bedroom' | 'garden' | string;
-  /** Theme shown as a section in the "Parler" tab: greet, needs, feelings, polite, house. */
-  theme: 'greet' | 'needs' | 'feelings' | 'polite' | 'house' | string;
+  scene: 'morning' | 'park' | 'kitchen' | 'home' | 'night' | 'bathroom' | 'bedroom' | 'garden' | 'school' | string;
+  /** One of the 11 collections (src/content/collections.ts): needs, my world, actions, feelings, sentences, school, social, questions. */
+  collection: string;
   prop: string; // picture shown in the scene
   title: Localized;
   lines: { who: Speaker; text: Localized }[];

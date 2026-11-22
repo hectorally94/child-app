@@ -11,6 +11,12 @@ import { learningPath, masteredIds, nextInPath, previousInPath, sequentialUnlock
 import { loadReels, loadWordSets, pictureUrl, talkKey, wordsKey, type Reel, type WordSet } from '../content/speak';
 import { TalkReels } from './TalkReels';
 import { WordsPlayer } from './WordsPlayer';
+import { ShortPlayer } from './ShortPlayer';
+import { ShortTab } from './ShortTab';
+import { CollectionPicker, type CollectionItem } from '../components/CollectionPicker';
+import { COLLECTIONS, collectionById, collectionNumber } from '../content/collections';
+import { loadShortPacks, shortKey, type ShortPack, type ShortWord } from '../content/short';
+import { dayKey, sessionWords, slotsDone, type Slot } from '../engine/routine';
 import { playSound, speak, speakFeedback, stopSpeaking } from '../engine/speech';
 import type { FeedbackKey, Lang, Lesson, Point } from '../engine/types';
 import { t, tr, type UIKey } from '../i18n';
@@ -20,6 +26,8 @@ interface Props {
   data: AppData;
   update: (fn: (d: AppData) => AppData) => void;
   onParent: () => void;
+  /** Tab to show first (the /seance address opens "Petits mots"). */
+  startTab?: string;
 }
 
 type Screen =
@@ -27,7 +35,9 @@ type Screen =
   | { kind: 'lesson'; lesson: Lesson; run: number }
   | { kind: 'complete'; lesson: Lesson }
   | { kind: 'words'; set: WordSet; run: number }
-  | { kind: 'talk'; index: number; run: number };
+  | { kind: 'talk'; index: number; run: number }
+  | { kind: 'short'; run: number; title: string; words: ShortWord[]; review: string[]; lessonKey: string; slot?: Slot; doneBefore: Slot[] }
+  | { kind: 'listen'; run: number; pack: ShortPack; set: WordSet };
 
 const spring = { type: 'spring', stiffness: 260, damping: 22 } as const;
 const screenMotion = {
@@ -67,7 +77,7 @@ function useTalk(): [Mood, (lang: Lang, text: string, after?: Mood, verdict?: Ve
   return [mood, say, setMood];
 }
 
-export function ChildMode({ data, update, onParent }: Props) {
+export function ChildMode({ data, update, onParent, startTab }: Props) {
   const child = data.children.find((c) => c.id === data.activeChildId) ?? null;
   const lang = child?.childLang ?? 'fr';
   const lessons = loadLessons();
@@ -87,14 +97,51 @@ export function ChildMode({ data, update, onParent }: Props) {
   const wordSets = loadWordSets();
   const reels = loadReels();
   const wordsOpen = sequentialUnlocked(wordSets.map((w) => wordsKey(w.id)), mastered, child?.unlockAll);
-  // Conversations unlock one after the other inside each theme (the first of every theme is open,
+  // Conversations unlock one after the other inside each collection (the first of every collection is open,
   // so "Les toilettes" is available right away).
   const reelsOpen = new Set(
-    [...new Set(reels.map((r) => r.theme))].flatMap((theme) => [
-      ...sequentialUnlocked(reels.filter((r) => r.theme === theme).map((r) => talkKey(r.id)), mastered, child?.unlockAll),
+    COLLECTIONS.flatMap((c) => [
+      ...sequentialUnlocked(reels.filter((r) => r.collection === c.id).map((r) => talkKey(r.id)), mastered, child?.unlockAll),
     ]),
   );
   const compactLayout = useCompact();
+  // Short words: packs unlock one after the other; a daily session (morning / afternoon / evening) mixes the
+  // current pack with two review words.
+  const shortPacks = loadShortPacks();
+  // Packs unlock one after the other inside each collection; the first pack of every collection is open.
+  const shortOpen = new Set(
+    COLLECTIONS.flatMap((c) => [
+      ...sequentialUnlocked(shortPacks.filter((p) => p.collection === c.id).map((p) => shortKey(p.id)), mastered, child?.unlockAll),
+    ]),
+  );
+  const startShort = (slot?: Slot, pack?: ShortPack) => {
+    const doneBefore = [...slotsDone(data.sessions, child?.id, dayKey(new Date()))];
+    if (pack?.kind === 'listen') {
+      // Built once: the player shuffles the questions from this set, so it must keep the same identity.
+      const set: WordSet = {
+        id: pack.id, order: pack.order, category: 'listen', title: pack.title,
+        words: pack.words.map((w) => ({ id: w.id, image: w.image, word: w.word, sentence: w.sound ?? w.word })),
+      };
+      setScreen({ kind: 'listen', run: ++runRef.current, pack, set });
+      return;
+    }
+    if (pack) {
+      setScreen({ kind: 'short', run: ++runRef.current, title: tr(pack.title, lang), words: pack.words, review: [], lessonKey: shortKey(pack.id), doneBefore });
+      return;
+    }
+    const sw = sessionWords(shortPacks, mastered, data.sessions, child?.id);
+    setScreen({
+      kind: 'short', run: ++runRef.current, slot, doneBefore,
+      title: sw.pack ? tr(sw.pack.title, lang) : t('shortWords', lang),
+      words: sw.words, review: [...sw.review], lessonKey: shortKey(sw.pack?.id ?? 'review'),
+    });
+  };
+  // The tab stays the same when she comes back from an activity
+  const [tab, setTab] = useState<string>(startTab ?? today?.group ?? 'numbers');
+  // The collection chosen in each tab is remembered too. "Petits mots" opens on the collection being learned.
+  const firstToLearn = shortPacks.find((p) => p.kind !== 'listen' && !mastered.has(shortKey(p.id)));
+  const [shortCol, setShortCol] = useState<string>(firstToLearn?.collection ?? 'sons');
+  const [talkCol, setTalkCol] = useState<string>('besoins');
 
   // Remember what was open before the lesson, to announce what the child just unlocked.
   const openBefore = useRef<Set<string>>(unlocked);
@@ -129,6 +176,45 @@ export function ChildMode({ data, update, onParent }: Props) {
             reelsOpen={reelsOpen}
             onPickSet={(set) => setScreen({ kind: 'words', set, run: ++runRef.current })}
             onPickReel={(index) => setScreen({ kind: 'talk', index, run: ++runRef.current })}
+            group={tab}
+            setGroup={setTab}
+            shortCol={shortCol}
+            setShortCol={setShortCol}
+            talkCol={talkCol}
+            setTalkCol={setTalkCol}
+            shortPacks={shortPacks}
+            shortOpen={shortOpen}
+            onStartSession={(slot) => startShort(slot)}
+            onPickPack={(pack) => startShort(undefined, pack)}
+          />
+        )}
+        {screen.kind === 'listen' && child && (
+          <WordsPlayer
+            key={`listen-${screen.run}`}
+            mode="listen"
+            lessonKey={shortKey(screen.pack.id)}
+            set={screen.set}
+            child={child}
+            update={update}
+            compact={compactLayout}
+            next={null}
+            onHome={() => { stopSpeaking(); setScreen({ kind: 'welcome' }); }}
+            onNext={() => undefined}
+          />
+        )}
+        {screen.kind === 'short' && child && (
+          <ShortPlayer
+            key={`short-${screen.run}`}
+            title={screen.title}
+            words={screen.words}
+            review={new Set(screen.review)}
+            lessonKey={screen.lessonKey}
+            slot={screen.slot}
+            doneBefore={new Set(screen.doneBefore)}
+            child={child}
+            update={update}
+            compact={compactLayout}
+            onHome={() => { stopSpeaking(); setScreen({ kind: 'welcome' }); }}
           />
         )}
         {screen.kind === 'words' && child && (
@@ -186,20 +272,21 @@ export function ChildMode({ data, update, onParent }: Props) {
 
 /* ------------------------------------------------------------------ */
 
-/** Themes of the "Parler" tab, in order, with a picture for each. */
-const THEMES: { k: string; label: UIKey; icon: string }[] = [
-  { k: 'greet', label: 'themeGreet', icon: '1f44b' },
-  { k: 'needs', label: 'themeNeeds', icon: '1f6bd' },
-  { k: 'feelings', label: 'themeFeelings', icon: '1f60a' },
-  { k: 'polite', label: 'themePolite', icon: '1f64f' },
-  { k: 'house', label: 'themeHouse', icon: '1f3e0' },
-];
-
 const TILE_COLORS = [
   'from-blue to-violet', 'from-pink to-[#f97362]', 'from-mint to-[#0ea5e9]', 'from-sun to-[#f97316]', 'from-violet to-pink',
 ];
 
 interface WelcomeProps {
+  group: string;
+  setGroup: (g: string) => void;
+  shortCol: string;
+  setShortCol: (id: string) => void;
+  talkCol: string;
+  setTalkCol: (id: string) => void;
+  shortPacks: ShortPack[];
+  shortOpen: Set<string>;
+  onStartSession: (slot: Slot) => void;
+  onPickPack: (p: ShortPack) => void;
   wordSets: WordSet[];
   reels: Reel[];
   wordsOpen: Set<string>;
@@ -217,10 +304,9 @@ interface WelcomeProps {
   onSwitch: (childId: string) => void;
 }
 
-function Welcome({ data, child, today, lessons, done, unlocked, lang, onPick, onSwitch, wordSets, reels, wordsOpen, reelsOpen, onPickSet, onPickReel }: WelcomeProps) {
+function Welcome({ data, child, today, lessons, done, unlocked, lang, onPick, onSwitch, wordSets, reels, wordsOpen, reelsOpen, onPickSet, onPickReel, group, setGroup, shortCol, setShortCol, talkCol, setTalkCol, shortPacks, shortOpen, onStartSession, onPickPack }: WelcomeProps) {
   const [mood, say] = useTalk();
   const compact = useCompact();
-  const [group, setGroup] = useState<string>(today?.group ?? 'numbers');
   const [switching, setSwitching] = useState(false);
   const [refused, setRefused] = useState<{ id: string; n: number } | null>(null);
   const [note, setNote] = useState<string | null>(null);
@@ -243,6 +329,7 @@ function Welcome({ data, child, today, lessons, done, unlocked, lang, onPick, on
   const groups: { k: string; label: UIKey; sample: string }[] = [
     { k: 'numbers', label: 'numbers', sample: '123' },
     { k: 'letters', label: 'letters', sample: 'ABC' },
+    { k: 'short', label: 'shortWords', sample: '' },
     { k: 'words', label: 'words', sample: '' },
     { k: 'talk', label: 'talk', sample: '' },
   ];
@@ -351,7 +438,7 @@ function Welcome({ data, child, today, lessons, done, unlocked, lang, onPick, on
       {/* free choice: numbers / letters */}
       {child && (
         <section className="mt-3 w-full" aria-label={t('chooseTitle', lang)}>
-          <div className="mx-auto mb-3 grid w-full max-w-lg grid-cols-4 gap-1 rounded-[26px] bg-white/80 p-1.5 shadow-[inset_2px_3px_6px_rgb(43_39_64/0.08)] sm:mb-4" role="tablist">
+          <div className="mx-auto mb-3 grid w-full max-w-xl grid-cols-5 gap-1 rounded-[26px] bg-white/80 p-1.5 shadow-[inset_2px_3px_6px_rgb(43_39_64/0.08)] sm:mb-4" role="tablist">
             {groups.map((g) => {
               const on = group === g.k;
               return (
@@ -359,7 +446,8 @@ function Welcome({ data, child, today, lessons, done, unlocked, lang, onPick, on
                   className={`relative flex min-h-16 flex-col items-center justify-center rounded-[20px] px-1 font-black transition-colors ${on ? 'text-white' : 'text-ink-soft'}`}>
                   {on && <motion.span layoutId="group-pill" className="absolute inset-0 rounded-[20px] bg-blue shadow-[inset_0_-4px_0_rgb(0_0_0/0.15)]" transition={spring} />}
                   <span className="relative grid h-8 place-items-center text-[1.45rem] leading-none tracking-tight">
-                    {g.k === 'words' ? <img src={pictureUrl('1f408')} alt="" className="h-8 w-8" />
+                    {g.k === 'short' ? <img src={pictureUrl('1f444')} alt="" className="h-8 w-8" />
+                      : g.k === 'words' ? <img src={pictureUrl('1f408')} alt="" className="h-8 w-8" />
                       : g.k === 'talk' ? <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path fill="currentColor" d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-8l-5 4v-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" opacity=".9" /><circle cx="8" cy="10.5" r="1.4" fill={on ? '#2563eb' : '#fff'} /><circle cx="12" cy="10.5" r="1.4" fill={on ? '#2563eb' : '#fff'} /><circle cx="16" cy="10.5" r="1.4" fill={on ? '#2563eb' : '#fff'} /></svg>
                       : g.sample}
                   </span>
@@ -368,6 +456,27 @@ function Welcome({ data, child, today, lessons, done, unlocked, lang, onPick, on
               );
             })}
           </div>
+
+          {group === 'short' && (
+            <ShortTab
+              lang={lang}
+              packs={shortPacks}
+              open={shortOpen}
+              mastered={done}
+              slotsToday={slotsDone(data.sessions, child.id, dayKey(new Date()))}
+              collection={shortCol}
+              setCollection={setShortCol}
+              onStartSession={onStartSession}
+              onPickPack={onPickPack}
+              refused={refused}
+              onLocked={(p, before) => {
+                setRefused((r) => ({ id: shortKey(p.id), n: (r?.n ?? 0) + 1 }));
+                const text = t('lockedPack', lang, { title: before ? tr(before.title, lang) : '' });
+                setNote(text);
+                say(lang, text, 'encourage');
+              }}
+            />
+          )}
 
           {group === 'words' && (
             <motion.ul key="words" className="m-0 grid list-none grid-cols-3 gap-3 p-0 sm:grid-cols-4" initial="hidden" animate="show"
@@ -411,55 +520,61 @@ function Welcome({ data, child, today, lessons, done, unlocked, lang, onPick, on
             </motion.ul>
           )}
 
-          {group === 'talk' && (
-            <div className="flex flex-col gap-5">
-            {THEMES.filter((th) => reels.some((r) => r.theme === th.k)).map((th) => (
-            <section key={th.k} aria-label={t(th.label, lang)}>
-            <h3 className="m-0 mb-2 flex items-center gap-2 px-1 text-lg font-black text-ink">
-              <img src={pictureUrl(th.icon)} alt="" className="h-7 w-7" />{t(th.label, lang)}
-            </h3>
-            <motion.ul key="talk" className="m-0 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3" initial="hidden" animate="show"
-              variants={{ show: { transition: { staggerChildren: 0.04 } } }}>
-              {reels.map((r, k) => ({ r, k })).filter(({ r }) => r.theme === th.k).map(({ r, k }) => {
-                const key = talkKey(r.id);
-                const locked = !reelsOpen.has(key);
-                const wiggle = refused?.id === key;
-                return (
-                  <motion.li key={r.id} variants={{ hidden: { opacity: 0, scale: 0.6, y: 14 }, show: { opacity: 1, scale: 1, y: 0, transition: { type: 'spring', stiffness: 420, damping: 20 } } }}>
-                    <motion.button
-                      key={wiggle ? `w${refused?.n}` : 'still'}
-                      onClick={() => {
-                        if (!locked) return onPickReel(k);
-                        setRefused((x) => ({ id: key, n: (x?.n ?? 0) + 1 }));
-                        const text = t('finishReelFirst', lang);
-                        setNote(text);
-                        say(lang, text, 'encourage');
-                      }}
-                      whileTap={{ scale: 0.92 }}
-                      animate={wiggle ? { rotate: [0, -6, 6, -4, 4, 0] } : undefined}
-                      aria-label={locked ? `${tr(r.title, lang)} (${t('lockedLabel', lang)})` : tr(r.title, lang)}
-                      aria-disabled={locked}
-                      className={`clay relative flex w-full items-center gap-2 !rounded-[24px] p-3 text-left ${locked ? '!bg-[#ece8f6] !shadow-none' : ''}`}
-                    >
-                      <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-[16px] bg-canvas ${locked ? 'opacity-35 grayscale' : ''}`}>
-                        <img src={pictureUrl(r.prop)} alt="" className="h-9 w-9" />
-                      </span>
-                      <span className={`min-w-0 text-[0.95rem] leading-tight font-black ${locked ? 'text-[#b9b0d3]' : 'text-ink'}`}>{tr(r.title, lang)}</span>
-                      {locked && (
-                        <span className="absolute -right-1.5 -bottom-1.5 grid h-7 w-7 place-items-center rounded-full border-2 border-canvas bg-white text-ink-soft shadow-sm" aria-hidden="true"><Icon name="lock" size={13} /></span>
-                      )}
-                      {done.has(key) && (
-                        <span className="absolute -top-2 -right-2 grid h-8 w-8 place-items-center rounded-full border-[3px] border-white bg-sun text-white shadow-md" aria-hidden="true"><Icon name="sparkle" size={16} /></span>
-                      )}
-                    </motion.button>
-                  </motion.li>
-                );
-              })}
-            </motion.ul>
-            </section>
-            ))}
-            </div>
-          )}
+          {group === 'talk' && (() => {
+            const items: CollectionItem[] = COLLECTIONS.filter((c) => reels.some((r) => r.collection === c.id)).map((c) => {
+              const mine = reels.filter((r) => r.collection === c.id);
+              return { c, total: mine.length, done: mine.filter((r) => done.has(talkKey(r.id))).length };
+            });
+            const col = collectionById(talkCol) ?? items[0].c;
+            return (
+              <div className="flex flex-col gap-4">
+                <CollectionPicker items={items} value={col.id} onChange={setTalkCol} lang={lang} />
+                <h3 className="m-0 -mt-1 px-1 text-lg leading-tight font-black text-ink">
+                  <span className="mr-1.5 rounded-full bg-blue px-2 py-0.5 text-sm text-white">{collectionNumber(col)}</span>
+                  {tr(col.title, lang)}
+                  <span className="block text-sm font-bold text-ink-soft">{tr(col.purpose, lang)}</span>
+                </h3>
+                <motion.ul key={col.id} className="m-0 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3" initial="hidden" animate="show"
+                  variants={{ show: { transition: { staggerChildren: 0.04 } } }}>
+                  {reels.map((r, k) => ({ r, k })).filter(({ r }) => r.collection === col.id).map(({ r, k }) => {
+                    const key = talkKey(r.id);
+                    const locked = !reelsOpen.has(key);
+                    const wiggle = refused?.id === key;
+                    return (
+                      <motion.li key={r.id} variants={{ hidden: { opacity: 0, scale: 0.6, y: 14 }, show: { opacity: 1, scale: 1, y: 0, transition: { type: 'spring', stiffness: 420, damping: 20 } } }}>
+                        <motion.button
+                          key={wiggle ? `w${refused?.n}` : 'still'}
+                          onClick={() => {
+                            if (!locked) return onPickReel(k);
+                            setRefused((x) => ({ id: key, n: (x?.n ?? 0) + 1 }));
+                            const text = t('finishReelFirst', lang);
+                            setNote(text);
+                            say(lang, text, 'encourage');
+                          }}
+                          whileTap={{ scale: 0.92 }}
+                          animate={wiggle ? { rotate: [0, -6, 6, -4, 4, 0] } : undefined}
+                          aria-label={locked ? `${tr(r.title, lang)} (${t('lockedLabel', lang)})` : tr(r.title, lang)}
+                          aria-disabled={locked}
+                          className={`clay relative flex w-full items-center gap-2 !rounded-[24px] p-3 text-left ${locked ? '!bg-[#ece8f6] !shadow-none' : ''}`}
+                        >
+                          <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-[16px] bg-canvas ${locked ? 'opacity-35 grayscale' : ''}`}>
+                            <img src={pictureUrl(r.prop)} alt="" className="h-9 w-9" />
+                          </span>
+                          <span className={`min-w-0 text-[0.95rem] leading-tight font-black ${locked ? 'text-[#b9b0d3]' : 'text-ink'}`}>{tr(r.title, lang)}</span>
+                          {locked && (
+                            <span className="absolute -right-1.5 -bottom-1.5 grid h-7 w-7 place-items-center rounded-full border-2 border-canvas bg-white text-ink-soft shadow-sm" aria-hidden="true"><Icon name="lock" size={13} /></span>
+                          )}
+                          {done.has(key) && (
+                            <span className="absolute -top-2 -right-2 grid h-8 w-8 place-items-center rounded-full border-[3px] border-white bg-sun text-white shadow-md" aria-hidden="true"><Icon name="sparkle" size={16} /></span>
+                          )}
+                        </motion.button>
+                      </motion.li>
+                    );
+                  })}
+                </motion.ul>
+              </div>
+            );
+          })()}
 
           {(group === 'numbers' || group === 'letters') && (
           <motion.ul

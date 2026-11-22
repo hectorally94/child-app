@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { checkPronunciation } from '../engine/pronounce';
 import { playSound, speakAsync, speakFeedback } from '../engine/speech';
 import type { Lang } from '../engine/types';
@@ -26,6 +26,12 @@ interface Props {
   minScore?: number;
   /** Words that are not required (e.g. the child's own name). */
   skip?: string[];
+  /** Other spellings of the same sound the recognizer often returns (very short words). */
+  accept?: string[];
+  /** No "one letter off" tolerance (short words that differ by one sound: papa / papi). */
+  strict?: boolean;
+  /** Repetition practice: a short "Bravo !" and no long wait before the next repetition. */
+  quick?: boolean;
   /** Called when she said it right (or spoke, without check). */
   onDone: (info: SpeakInfo) => void;
   /** Called after each wrong attempt (to record it). */
@@ -37,15 +43,19 @@ interface Props {
  * ("miaou" is not "le chat") → "Bravo ! Tu as bien dit : le chat." or "Faux. J'ai entendu « miaou »…"
  * and Pipo repeats the word slowly. Without the check (or offline): rewards speaking and plays her voice back.
  */
-export function SpeakButton({ lang, expected, check, minScore = 1, skip, onDone, onMiss }: Props) {
+export function SpeakButton({ lang, expected, check, minScore = 1, skip, accept, strict, quick, onDone, onMiss }: Props) {
   const [phase, setPhase] = useState<Phase>('idle');
   const [level, setLevel] = useState(0);
   const [note, setNote] = useState<string | null>(null);
   const [noMic, setNoMic] = useState(!micSupported());
   const fallback = useRef(false); // recognition failed once (offline…): use "she spoke" for the rest of this item
   const busy = useRef(false);
+  // The parent may move on (e.g. "later") while a sentence is still being said: then say nothing more.
+  const mounted = useRef(true);
+  useEffect(() => () => { mounted.current = false; }, []);
 
   const finish = (info: SpeakInfo) => {
+    if (!mounted.current) return;
     setPhase('done');
     busy.current = false;
     onDone(info);
@@ -54,6 +64,7 @@ export function SpeakButton({ lang, expected, check, minScore = 1, skip, onDone,
   const listenChecked = async (): Promise<boolean> => {
     // returns false when recognition is not usable → caller falls back
     const r = await recognize(lang === 'fr' ? 'fr' : 'en');
+    if (!mounted.current) return true;
     if (r.status === 'unavailable') {
       fallback.current = true;
       return false;
@@ -66,14 +77,14 @@ export function SpeakButton({ lang, expected, check, minScore = 1, skip, onDone,
       busy.current = false;
       return true;
     }
-    const res = checkPronunciation(expected, r.alternatives, { minScore, skip });
+    const res = checkPronunciation(expected, r.alternatives, { minScore, skip, accept, strict });
     const info: SpeakInfo = { checked: true, score: res.score, heard: res.heard };
     setPhase('feedback');
     if (res.ok) {
-      const text = t('saidWell', lang, { text: expected });
+      const text = quick ? t('bravo', lang) : t('saidWell', lang, { text: expected });
       setNote(text);
       speakFeedback(text, lang, true);
-      await new Promise((ok) => window.setTimeout(ok, 2200));
+      await new Promise((ok) => window.setTimeout(ok, quick ? 1100 : 2200));
       finish(info);
     } else {
       onMiss?.(info);
@@ -81,8 +92,10 @@ export function SpeakButton({ lang, expected, check, minScore = 1, skip, onDone,
       setNote(text);
       speakFeedback(text, lang, false);
       await new Promise((ok) => window.setTimeout(ok, 900 + text.length * 70));
+      if (!mounted.current) return true;
       // Pipo says it again, slowly, so she can copy the sounds
       await speakAsync(expected, lang, { rate: 0.6, pitch: 1.05 });
+      if (!mounted.current) return true;
       setNote(t('tryAgainSay', lang, { text: expected }));
       setPhase('idle');
       busy.current = false;
@@ -92,6 +105,7 @@ export function SpeakButton({ lang, expected, check, minScore = 1, skip, onDone,
 
   const listenSpoke = async () => {
     const r = await recordVoice({ onLevel: setLevel });
+    if (!mounted.current) return;
     setLevel(0);
     if (r.status === 'unavailable') {
       setNoMic(true);
@@ -113,6 +127,7 @@ export function SpeakButton({ lang, expected, check, minScore = 1, skip, onDone,
     setNote(praise);
     speakFeedback(praise, lang, true);
     await new Promise((ok) => window.setTimeout(ok, 1700));
+    if (!mounted.current) return;
     setNote(t('listenYourself', lang));
     await playRecording(r.url);
     finish({ checked: false, score: 1, heard: '' });

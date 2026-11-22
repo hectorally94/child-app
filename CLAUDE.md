@@ -63,6 +63,24 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
 - `src/engine/speech.ts` — `speak`, `speakAsync` (resolves when a line ends; reels take turns: Pipo pitch 1.05,
   Tika pitch 1.45), `speakFeedback` (Bravo/Faux), `playSound`, `primeAudio`.
 - Sessions use `lessonId` = lesson id, `words:<setId>` or `talk:<reelId>`; `mastered: true` on success.
+- **11 collections** (2026-11-22, the parent's plan; `src/content/collections.ts`): 01 Bouche et sons, 02 Premiers mots,
+  03 Mes besoins, 04 Mon monde, 05 Les actions, 06 Mes émotions, 07 Deux mots, 08 Premières phrases, 09 À l'école,
+  10 Parler avec les autres, 11 Les questions. Both speaking tabs show them as a numbered chip path
+  (`components/CollectionPicker.tsx`; only the chip row scrolls sideways, never the page).
+  **Petits mots** (tab 3, `modes/ShortTab.tsx`) = collections 01–07: `content/short/packs.json` (23 packs × 5 = 115 items,
+  loaded by `content/short.ts`; each word has syllables + `accept` spellings the recognizer often writes). Sound packs
+  (`check: false`: ba/pa/ma, la/ta, vowels, animal noises) are NOT checked by recognition (only "she spoke");
+  `kind: "listen"` pack = listening game (Pipo makes a sound, she picks the animal; reuses `WordsPlayer` with
+  `mode="listen"`). **Parler** = collections 03–06 and 08–11 (46 conversations; each reel has `collection`).
+  Unlocking: inside each collection one after the other, first one open; `unlockAll` opens everything.
+- `src/modes/ShortPlayer.tsx` — practice screen: syllable blocks light up while Pipo says the syllables slowly →
+  word slowly → word normally; 3 repetitions per word (1: after the full model, 2: after a quick model, 3: ALONE, no
+  model); strict matching (`checkPronunciation(..., {strict, accept})`: papa ≠ papi); after 3 misses a "Plus tard"
+  button; a pack is mastered only when no pack word was skipped (review words never block it).
+- `src/engine/routine.ts` — three daily sessions (morning < 12:00, afternoon < 17:00, evening), `slotsDone`, `weekGrid`,
+  `streak`, `repetitionsOn`, `sessionWords` (current pack + 2 review words: the hardest / oldest), `hardWords`.
+  A session record has `slot`, `skipped`; attempts have `item` (the word id).
+- `/seance` address opens the child space on "Petits mots" (alarm link; also a manifest shortcut).
 - `src/i18n/` — UI strings + fallback (`fr` ↔ `en`).
 - `src/storage/` — versioned local store (children, sessions with attempts).
 
@@ -110,6 +128,9 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
 - [x] v7 (2026-11-22): pronunciation check ("miaou" ≠ "le chat"); 15 new conversations (toilet, tired, cold, wash
       hands, scared, I love you, yes/no, please, sorry, rooms of the house…) grouped by theme; Fille/Garçon in profile
       — tested at home by the parent: "it works fine" (2026-11-22)
+- [x] v8 (2026-11-22): "Petits mots" tab (23 packs, 3 daily sessions with review words, 3 repetitions per word, syllable
+      blocks, listening game) + the 11 collections in both speaking tabs; 21 new conversations (actions, first sentences,
+      school, social speaking, questions); parent sees the week (7 days × 3 sessions), streak, hard words
 - [ ] Prerecorded audio (device TTS for now)
 - [ ] Phase 2: lesson packages/download, backend + sync, more writing lessons
 
@@ -145,6 +166,11 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
 - 2026-11-22 (replaces "speaking is never graded", at the parent's request): words must be pronounced right before
   the game ("miaou" was accepted for "le chat"). Recognition is tolerant and can be switched off by the parent.
   Existing Parler conversations are kept; new ones are ADDED (the parent asked not to remove anything).
+- 2026-11-22: Speaking content is organized in the parent's 11 collections (sounds → first words → needs → world →
+  actions → feelings → two words → first sentences → school → social → questions). "Petits mots" was added as a NEW
+  tab for short words (she struggles with long phrases); the existing Mots and Parler tabs were kept. The parent plans
+  to practice three times a day (morning / afternoon / evening) to make her speak faster within a week.
+  Home tabs now: 123 · ABC · Petits mots · Mots · Parler. The home remembers the selected tab and collection.
 - 2026-11-22: The daughter perceives Pipo's voice as "the teacher (madam)". Keep the guide voice warm and teacher-like.
 
 ## Open questions

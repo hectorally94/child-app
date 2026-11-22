@@ -10,17 +10,22 @@ type Mode = 'child' | 'gate' | 'parent';
 /**
  * Two addresses:
  *   /        → the child's space
+ *   /seance  → the child's space, opened on "Petits mots" (link for the morning / afternoon / evening alarm)
  *   /parent  → the parent space (always behind the gate: parent code or multiplication)
  * The browser's back button moves between them.
  */
 const PARENT_PATH = '/parent';
 const isParentPath = () => window.location.pathname.replace(/\/+$/, '') === PARENT_PATH;
+const isSeancePath = () => window.location.pathname.replace(/\/+$/, '') === '/seance';
 
 export function App() {
   const [data, update] = useAppData();
   const hasChildren = data.children.length > 0;
   // First launch (no child yet) or /parent address: start at the gate.
   const [mode, setMode] = useState<Mode>(() => (isParentPath() || !hasChildren ? 'gate' : 'child'));
+
+  // The /seance address opens the child space on "Petits mots"
+  const [startTab] = useState<string | undefined>(() => (isSeancePath() ? 'short' : undefined));
 
   const go = (next: Mode) => {
     const path = next === 'child' ? '/' : PARENT_PATH;
@@ -62,7 +67,7 @@ export function App() {
             />
           )}
           {mode === 'parent' && <ParentMode data={data} update={update} onChildMode={() => go('child')} />}
-          {mode === 'child' && <ChildMode data={data} update={update} onParent={() => go('gate')} />}
+          {mode === 'child' && <ChildMode data={data} update={update} onParent={() => go('gate')} startTab={startTab} />}
         </motion.div>
       </AnimatePresence>
     </MotionConfig>

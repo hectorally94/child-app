@@ -1,0 +1,2102 @@
+{
+ "packs": [
+  {
+   "id": "sons-levres",
+   "collection": "sons",
+   "title": {
+    "fr": "Les lèvres",
+    "en": "Lips"
+   },
+   "words": [
+    {
+     "id": "s_ba",
+     "image": "1f444",
+     "word": {
+      "fr": "ba",
+      "en": "ba"
+     },
+     "syllables": [
+      "ba"
+     ],
+     "accept": []
+    },
+    {
+     "id": "s_pa",
+     "image": "1f444",
+     "word": {
+      "fr": "pa",
+      "en": "pa"
+     },
+     "syllables": [
+      "pa"
+     ],
+     "accept": []
+    },
+    {
+     "id": "s_ma",
+     "image": "1f444",
+     "word": {
+      "fr": "ma",
+      "en": "ma"
+     },
+     "syllables": [
+      "ma"
+     ],
+     "accept": []
+    },
+    {
+     "id": "s_bi",
+     "image": "1f444",
+     "word": {
+      "fr": "bi",
+      "en": "bi"
+     },
+     "syllables": [
+      "bi"
+     ],
+     "accept": []
+    },
+    {
+     "id": "s_mo",
+     "image": "1f444",
+     "word": {
+      "fr": "mo",
+      "en": "mo"
+     },
+     "syllables": [
+      "mo"
+     ],
+     "accept": []
+    }
+   ],
+   "check": false,
+   "order": 0
+  },
+  {
+   "id": "sons-langue",
+   "collection": "sons",
+   "title": {
+    "fr": "La langue",
+    "en": "Tongue"
+   },
+   "words": [
+    {
+     "id": "s_la",
+     "image": "1f445",
+     "word": {
+      "fr": "la",
+      "en": "la"
+     },
+     "syllables": [
+      "la"
+     ],
+     "accept": []
+    },
+    {
+     "id": "s_ta",
+     "image": "1f445",
+     "word": {
+      "fr": "ta",
+      "en": "ta"
+     },
+     "syllables": [
+      "ta"
+     ],
+     "accept": []
+    },
+    {
+     "id": "s_da",
+     "image": "1f445",
+     "word": {
+      "fr": "da",
+      "en": "da"
+     },
+     "syllables": [
+      "da"
+     ],
+     "accept": []
+    },
+    {
+     "id": "s_na",
+     "image": "1f445",
+     "word": {
+      "fr": "na",
+      "en": "na"
+     },
+     "syllables": [
+      "na"
+     ],
+     "accept": []
+    },
+    {
+     "id": "s_ti",
+     "image": "1f445",
+     "word": {
+      "fr": "ti",
+      "en": "ti"
+     },
+     "syllables": [
+      "ti"
+     ],
+     "accept": []
+    }
+   ],
+   "check": false,
+   "order": 1
+  },
+  {
+   "id": "sons-voyelles",
+   "collection": "sons",
+   "title": {
+    "fr": "Les voyelles",
+    "en": "Vowels"
+   },
+   "words": [
+    {
+     "id": "s_a",
+     "image": "1f62e",
+     "word": {
+      "fr": "a",
+      "en": "a"
+     },
+     "syllables": [
+      "a"
+     ],
+     "accept": []
+    },
+    {
+     "id": "s_e",
+     "image": "1f600",
+     "word": {
+      "fr": "é",
+      "en": "é"
+     },
+     "syllables": [
+      "é"
+     ],
+     "accept": []
+    },
+    {
+     "id": "s_i",
+     "image": "1f601",
+     "word": {
+      "fr": "i",
+      "en": "i"
+     },
+     "syllables": [
+      "i"
+     ],
+     "accept": []
+    },
+    {
+     "id": "s_o",
+     "image": "1f62f",
+     "word": {
+      "fr": "o",
+      "en": "o"
+     },
+     "syllables": [
+      "o"
+     ],
+     "accept": []
+    },
+    {
+     "id": "s_ou",
+     "image": "1f617",
+     "word": {
+      "fr": "ou",
+      "en": "ou"
+     },
+     "syllables": [
+      "ou"
+     ],
+     "accept": []
+    }
+   ],
+   "check": false,
+   "order": 2
+  },
+  {
+   "id": "sons-animaux",
+   "collection": "sons",
+   "title": {
+    "fr": "Bruits d'animaux",
+    "en": "Animal sounds"
+   },
+   "words": [
+    {
+     "id": "s_miaou",
+     "image": "1f408",
+     "word": {
+      "fr": "miaou",
+      "en": "meow"
+     },
+     "syllables": [
+      "miaou"
+     ],
+     "accept": []
+    },
+    {
+     "id": "s_ouaf",
+     "image": "1f415",
+     "word": {
+      "fr": "ouaf",
+      "en": "woof"
+     },
+     "syllables": [
+      "ouaf"
+     ],
+     "accept": []
+    },
+    {
+     "id": "s_meuh",
+     "image": "1f404",
+     "word": {
+      "fr": "meuh",
+      "en": "moo"
+     },
+     "syllables": [
+      "meuh"
+     ],
+     "accept": []
+    },
+    {
+     "id": "s_be",
+     "image": "1f411",
+     "word": {
+      "fr": "bê",
+      "en": "baa"
+     },
+     "syllables": [
+      "bê"
+     ],
+     "accept": []
+    },
+    {
+     "id": "s_cot",
+     "image": "1f414",
+     "word": {
+      "fr": "cot cot",
+      "en": "cluck"
+     },
+     "syllables": [
+      "cot",
+      "cot"
+     ],
+     "accept": []
+    }
+   ],
+   "check": false,
+   "order": 3
+  },
+  {
+   "id": "ecoute",
+   "collection": "sons",
+   "title": {
+    "fr": "Écoute et trouve",
+    "en": "Listen and find"
+   },
+   "words": [
+    {
+     "id": "l_chat",
+     "image": "1f408",
+     "word": {
+      "fr": "le chat",
+      "en": "the cat"
+     },
+     "syllables": [],
+     "accept": [],
+     "sound": {
+      "fr": "miaou",
+      "en": "miaou"
+     }
+    },
+    {
+     "id": "l_chien",
+     "image": "1f415",
+     "word": {
+      "fr": "le chien",
+      "en": "the dog"
+     },
+     "syllables": [],
+     "accept": [],
+     "sound": {
+      "fr": "ouaf ouaf",
+      "en": "ouaf ouaf"
+     }
+    },
+    {
+     "id": "l_vache",
+     "image": "1f404",
+     "word": {
+      "fr": "la vache",
+      "en": "the cow"
+     },
+     "syllables": [],
+     "accept": [],
+     "sound": {
+      "fr": "meuh",
+      "en": "meuh"
+     }
+    },
+    {
+     "id": "l_mouton",
+     "image": "1f411",
+     "word": {
+      "fr": "le mouton",
+      "en": "the sheep"
+     },
+     "syllables": [],
+     "accept": [],
+     "sound": {
+      "fr": "bê",
+      "en": "bê"
+     }
+    },
+    {
+     "id": "l_poule",
+     "image": "1f414",
+     "word": {
+      "fr": "la poule",
+      "en": "the hen"
+     },
+     "syllables": [],
+     "accept": [],
+     "sound": {
+      "fr": "cot cot",
+      "en": "cot cot"
+     }
+    }
+   ],
+   "kind": "listen",
+   "order": 4
+  },
+  {
+   "id": "premiers-mots",
+   "collection": "premiers",
+   "title": {
+    "fr": "Premiers mots",
+    "en": "First words"
+   },
+   "words": [
+    {
+     "id": "maman",
+     "image": "1f469",
+     "word": {
+      "fr": "maman",
+      "en": "mum"
+     },
+     "syllables": [
+      "ma",
+      "man"
+     ],
+     "accept": [
+      "mama",
+      "mamen",
+      "mam"
+     ]
+    },
+    {
+     "id": "papa",
+     "image": "1f468",
+     "word": {
+      "fr": "papa",
+      "en": "dad"
+     },
+     "syllables": [
+      "pa",
+      "pa"
+     ],
+     "accept": [
+      "pas pas",
+      "papas"
+     ]
+    },
+    {
+     "id": "eau",
+     "image": "1f4a7",
+     "word": {
+      "fr": "eau",
+      "en": "water"
+     },
+     "syllables": [
+      "eau"
+     ],
+     "accept": [
+      "o",
+      "au",
+      "eaux",
+      "oh",
+      "haut"
+     ]
+    },
+    {
+     "id": "oui",
+     "image": "2705",
+     "word": {
+      "fr": "oui",
+      "en": "yes"
+     },
+     "syllables": [
+      "oui"
+     ],
+     "accept": [
+      "ouais",
+      "wi",
+      "oui oui"
+     ]
+    },
+    {
+     "id": "non",
+     "image": "274c",
+     "word": {
+      "fr": "non",
+      "en": "no"
+     },
+     "syllables": [
+      "non"
+     ],
+     "accept": [
+      "nom",
+      "no",
+      "n'ont",
+      "non non"
+     ]
+    }
+   ],
+   "order": 5
+  },
+  {
+   "id": "premiers-politesse",
+   "collection": "premiers",
+   "title": {
+    "fr": "Dire bonjour",
+    "en": "Say hello"
+   },
+   "words": [
+    {
+     "id": "bonjour",
+     "image": "2600",
+     "word": {
+      "fr": "bonjour",
+      "en": "hello"
+     },
+     "syllables": [
+      "bon",
+      "jour"
+     ],
+     "accept": [
+      "bonjours",
+      "bon jour",
+      "bonjour bonjour"
+     ]
+    },
+    {
+     "id": "coucou",
+     "image": "1f648",
+     "word": {
+      "fr": "coucou",
+      "en": "peekaboo"
+     },
+     "syllables": [
+      "cou",
+      "cou"
+     ],
+     "accept": [
+      "cou cou",
+      "coucous",
+      "coucou coucou"
+     ]
+    },
+    {
+     "id": "salut",
+     "image": "1f44b",
+     "word": {
+      "fr": "salut",
+      "en": "hi"
+     },
+     "syllables": [
+      "sa",
+      "lut"
+     ],
+     "accept": [
+      "salue",
+      "salut salut",
+      "saluts"
+     ]
+    },
+    {
+     "id": "merci",
+     "image": "1f64f",
+     "word": {
+      "fr": "merci",
+      "en": "thank you"
+     },
+     "syllables": [
+      "mer",
+      "ci"
+     ],
+     "accept": [
+      "mercy",
+      "mers",
+      "merci merci"
+     ]
+    },
+    {
+     "id": "bravo",
+     "image": "1f44f",
+     "word": {
+      "fr": "bravo",
+      "en": "well done"
+     },
+     "syllables": [
+      "bra",
+      "vo"
+     ],
+     "accept": [
+      "bravos",
+      "bravo bravo"
+     ]
+    }
+   ],
+   "order": 6
+  },
+  {
+   "id": "manger",
+   "collection": "besoins",
+   "title": {
+    "fr": "Manger, boire",
+    "en": "Eat and drink"
+   },
+   "words": [
+    {
+     "id": "lait",
+     "image": "1f95b",
+     "word": {
+      "fr": "lait",
+      "en": "milk"
+     },
+     "syllables": [
+      "lait"
+     ],
+     "accept": [
+      "lé",
+      "les",
+      "laid",
+      "l'est",
+      "laie",
+      "lait lait"
+     ]
+    },
+    {
+     "id": "pain",
+     "image": "1f35e",
+     "word": {
+      "fr": "pain",
+      "en": "bread"
+     },
+     "syllables": [
+      "pain"
+     ],
+     "accept": [
+      "pin",
+      "peint",
+      "pains",
+      "pins"
+     ]
+    },
+    {
+     "id": "riz",
+     "image": "1f35a",
+     "word": {
+      "fr": "riz",
+      "en": "rice"
+     },
+     "syllables": [
+      "riz"
+     ],
+     "accept": [
+      "ri",
+      "ris",
+      "rit",
+      "rie"
+     ]
+    },
+    {
+     "id": "pomme",
+     "image": "1f34e",
+     "word": {
+      "fr": "pomme",
+      "en": "apple"
+     },
+     "syllables": [
+      "pom",
+      "me"
+     ],
+     "accept": [
+      "pommes",
+      "pom",
+      "pome"
+     ]
+    },
+    {
+     "id": "miam",
+     "image": "1f60b",
+     "word": {
+      "fr": "miam",
+      "en": "yum"
+     },
+     "syllables": [
+      "miam"
+     ],
+     "accept": [
+      "mian",
+      "mia",
+      "myam",
+      "miame",
+      "niam"
+     ]
+    }
+   ],
+   "order": 7
+  },
+  {
+   "id": "petits-besoins",
+   "collection": "besoins",
+   "title": {
+    "fr": "Mes petits besoins",
+    "en": "My little needs"
+   },
+   "words": [
+    {
+     "id": "pipi",
+     "image": "1f6bd",
+     "word": {
+      "fr": "pipi",
+      "en": "wee"
+     },
+     "syllables": [
+      "pi",
+      "pi"
+     ],
+     "accept": [
+      "pipy",
+      "pipis",
+      "pi pi"
+     ]
+    },
+    {
+     "id": "dodo",
+     "image": "1f634",
+     "word": {
+      "fr": "dodo",
+      "en": "sleep"
+     },
+     "syllables": [
+      "do",
+      "do"
+     ],
+     "accept": [
+      "dodos",
+      "do do"
+     ]
+    },
+    {
+     "id": "bobo",
+     "image": "1fa79",
+     "word": {
+      "fr": "bobo",
+      "en": "ouch"
+     },
+     "syllables": [
+      "bo",
+      "bo"
+     ],
+     "accept": [
+      "bobos",
+      "beau beau",
+      "bo bo"
+     ]
+    },
+    {
+     "id": "chaud",
+     "image": "1f525",
+     "word": {
+      "fr": "chaud",
+      "en": "hot"
+     },
+     "syllables": [
+      "chaud"
+     ],
+     "accept": [
+      "show",
+      "chaux",
+      "chaut",
+      "chaude"
+     ]
+    },
+    {
+     "id": "froid",
+     "image": "1f976",
+     "word": {
+      "fr": "froid",
+      "en": "cold"
+     },
+     "syllables": [
+      "froid"
+     ],
+     "accept": [
+      "froide",
+      "froi",
+      "frois",
+      "froids"
+     ]
+    }
+   ],
+   "order": 8
+  },
+  {
+   "id": "je-demande",
+   "collection": "besoins",
+   "title": {
+    "fr": "Je demande",
+    "en": "I ask"
+   },
+   "words": [
+    {
+     "id": "aide",
+     "image": "1f198",
+     "word": {
+      "fr": "aide",
+      "en": "help"
+     },
+     "syllables": [
+      "aide"
+     ],
+     "accept": [
+      "aides",
+      "aider",
+      "èd",
+      "ède"
+     ]
+    },
+    {
+     "id": "stop",
+     "image": "1f6d1",
+     "word": {
+      "fr": "stop",
+      "en": "stop"
+     },
+     "syllables": [
+      "stop"
+     ],
+     "accept": [
+      "stoppe",
+      "stoppé",
+      "stops"
+     ]
+    },
+    {
+     "id": "encore",
+     "image": "1f501",
+     "word": {
+      "fr": "encore",
+      "en": "again"
+     },
+     "syllables": [
+      "en",
+      "core"
+     ],
+     "accept": [
+      "encor",
+      "en corps",
+      "encores"
+     ]
+    },
+    {
+     "id": "fini",
+     "image": "1f3c1",
+     "word": {
+      "fr": "fini",
+      "en": "finished"
+     },
+     "syllables": [
+      "fi",
+      "ni"
+     ],
+     "accept": [
+      "finis",
+      "finit",
+      "fini fini"
+     ]
+    },
+    {
+     "id": "donne",
+     "image": "1f932",
+     "word": {
+      "fr": "donne",
+      "en": "give"
+     },
+     "syllables": [
+      "donne"
+     ],
+     "accept": [
+      "donnes",
+      "donné",
+      "donner",
+      "don"
+     ]
+    }
+   ],
+   "order": 9
+  },
+  {
+   "id": "famille",
+   "collection": "monde",
+   "title": {
+    "fr": "Ma famille",
+    "en": "My family"
+   },
+   "words": [
+    {
+     "id": "bebe",
+     "image": "1f476",
+     "word": {
+      "fr": "bébé",
+      "en": "baby"
+     },
+     "syllables": [
+      "bé",
+      "bé"
+     ],
+     "accept": [
+      "bébés",
+      "bebe",
+      "béber"
+     ]
+    },
+    {
+     "id": "mamie",
+     "image": "1f475",
+     "word": {
+      "fr": "mamie",
+      "en": "grandma"
+     },
+     "syllables": [
+      "ma",
+      "mie"
+     ],
+     "accept": [
+      "mami",
+      "mamies",
+      "ma mie"
+     ]
+    },
+    {
+     "id": "papi",
+     "image": "1f474",
+     "word": {
+      "fr": "papi",
+      "en": "grandpa"
+     },
+     "syllables": [
+      "pa",
+      "pi"
+     ],
+     "accept": [
+      "papy",
+      "papis",
+      "pappy"
+     ]
+    },
+    {
+     "id": "frere",
+     "image": "1f466",
+     "word": {
+      "fr": "frère",
+      "en": "brother"
+     },
+     "syllables": [
+      "frère"
+     ],
+     "accept": [
+      "frères",
+      "frere",
+      "frair"
+     ]
+    },
+    {
+     "id": "soeur",
+     "image": "1f467",
+     "word": {
+      "fr": "sœur",
+      "en": "sister"
+     },
+     "syllables": [
+      "sœur"
+     ],
+     "accept": [
+      "seur",
+      "soeur",
+      "sœurs",
+      "soeurs"
+     ]
+    }
+   ],
+   "order": 10
+  },
+  {
+   "id": "maison",
+   "collection": "monde",
+   "title": {
+    "fr": "Ma maison",
+    "en": "My house"
+   },
+   "words": [
+    {
+     "id": "lit",
+     "image": "1f6cf",
+     "word": {
+      "fr": "lit",
+      "en": "bed"
+     },
+     "syllables": [
+      "lit"
+     ],
+     "accept": [
+      "lie",
+      "li",
+      "lits"
+     ]
+    },
+    {
+     "id": "porte",
+     "image": "1f6aa",
+     "word": {
+      "fr": "porte",
+      "en": "door"
+     },
+     "syllables": [
+      "porte"
+     ],
+     "accept": [
+      "portes",
+      "port",
+      "porte porte"
+     ]
+    },
+    {
+     "id": "table",
+     "image": "table",
+     "word": {
+      "fr": "table",
+      "en": "table"
+     },
+     "syllables": [
+      "ta",
+      "ble"
+     ],
+     "accept": [
+      "tables",
+      "tabl"
+     ]
+    },
+    {
+     "id": "chaise",
+     "image": "1fa91",
+     "word": {
+      "fr": "chaise",
+      "en": "chair"
+     },
+     "syllables": [
+      "chaise"
+     ],
+     "accept": [
+      "chaises",
+      "chez",
+      "chaîne"
+     ]
+    },
+    {
+     "id": "bain",
+     "image": "1f6c1",
+     "word": {
+      "fr": "bain",
+      "en": "bath"
+     },
+     "syllables": [
+      "bain"
+     ],
+     "accept": [
+      "bains",
+      "bin",
+      "bien"
+     ]
+    }
+   ],
+   "order": 11
+  },
+  {
+   "id": "corps",
+   "collection": "monde",
+   "title": {
+    "fr": "Mon corps",
+    "en": "My body"
+   },
+   "words": [
+    {
+     "id": "main",
+     "image": "270b",
+     "word": {
+      "fr": "main",
+      "en": "hand"
+     },
+     "syllables": [
+      "main"
+     ],
+     "accept": [
+      "min",
+      "mains",
+      "maint"
+     ]
+    },
+    {
+     "id": "pied",
+     "image": "1f9b6",
+     "word": {
+      "fr": "pied",
+      "en": "foot"
+     },
+     "syllables": [
+      "pied"
+     ],
+     "accept": [
+      "pié",
+      "pieds",
+      "pieds pieds"
+     ]
+    },
+    {
+     "id": "nez",
+     "image": "1f443",
+     "word": {
+      "fr": "nez",
+      "en": "nose"
+     },
+     "syllables": [
+      "nez"
+     ],
+     "accept": [
+      "né",
+      "nés",
+      "nes",
+      "nez nez"
+     ]
+    },
+    {
+     "id": "bouche",
+     "image": "1f444",
+     "word": {
+      "fr": "bouche",
+      "en": "mouth"
+     },
+     "syllables": [
+      "bou",
+      "che"
+     ],
+     "accept": [
+      "bouches",
+      "bouch",
+      "bouge"
+     ]
+    },
+    {
+     "id": "dent",
+     "image": "1f9b7",
+     "word": {
+      "fr": "dent",
+      "en": "tooth"
+     },
+     "syllables": [
+      "dent"
+     ],
+     "accept": [
+      "dents",
+      "dans",
+      "d'en",
+      "dan",
+      "dent dent"
+     ]
+    }
+   ],
+   "order": 12
+  },
+  {
+   "id": "animaux",
+   "collection": "monde",
+   "title": {
+    "fr": "Animaux courts",
+    "en": "Short animals"
+   },
+   "words": [
+    {
+     "id": "chat",
+     "image": "1f408",
+     "word": {
+      "fr": "chat",
+      "en": "cat"
+     },
+     "syllables": [
+      "chat"
+     ],
+     "accept": [
+      "cha",
+      "chats",
+      "chas"
+     ]
+    },
+    {
+     "id": "chien",
+     "image": "1f415",
+     "word": {
+      "fr": "chien",
+      "en": "dog"
+     },
+     "syllables": [
+      "chien"
+     ],
+     "accept": [
+      "chiens",
+      "chin"
+     ]
+    },
+    {
+     "id": "vache",
+     "image": "1f404",
+     "word": {
+      "fr": "vache",
+      "en": "cow"
+     },
+     "syllables": [
+      "vache"
+     ],
+     "accept": [
+      "vaches",
+      "vash"
+     ]
+    },
+    {
+     "id": "ours",
+     "image": "1f43b",
+     "word": {
+      "fr": "ours",
+      "en": "bear"
+     },
+     "syllables": [
+      "ours"
+     ],
+     "accept": [
+      "our",
+      "ourse",
+      "ourses"
+     ]
+    },
+    {
+     "id": "loup",
+     "image": "1f43a",
+     "word": {
+      "fr": "loup",
+      "en": "wolf"
+     },
+     "syllables": [
+      "loup"
+     ],
+     "accept": [
+      "loups",
+      "lou",
+      "lous"
+     ]
+    }
+   ],
+   "order": 13
+  },
+  {
+   "id": "objets",
+   "collection": "monde",
+   "title": {
+    "fr": "Mes objets",
+    "en": "My things"
+   },
+   "words": [
+    {
+     "id": "ballon",
+     "image": "26bd",
+     "word": {
+      "fr": "ballon",
+      "en": "ball"
+     },
+     "syllables": [
+      "bal",
+      "lon"
+     ],
+     "accept": [
+      "ballons",
+      "bal on",
+      "ballon ballon"
+     ]
+    },
+    {
+     "id": "livre",
+     "image": "1f4d6",
+     "word": {
+      "fr": "livre",
+      "en": "book"
+     },
+     "syllables": [
+      "livre"
+     ],
+     "accept": [
+      "livres",
+      "livre livre"
+     ]
+    },
+    {
+     "id": "cle",
+     "image": "1f511",
+     "word": {
+      "fr": "clé",
+      "en": "key"
+     },
+     "syllables": [
+      "clé"
+     ],
+     "accept": [
+      "clef",
+      "clés",
+      "clé clé"
+     ]
+    },
+    {
+     "id": "lampe",
+     "image": "1f4a1",
+     "word": {
+      "fr": "lampe",
+      "en": "lamp"
+     },
+     "syllables": [
+      "lampe"
+     ],
+     "accept": [
+      "lampes",
+      "lamp",
+      "l'ampe"
+     ]
+    },
+    {
+     "id": "sac",
+     "image": "1f392",
+     "word": {
+      "fr": "sac",
+      "en": "bag"
+     },
+     "syllables": [
+      "sac"
+     ],
+     "accept": [
+      "sacs",
+      "sak",
+      "saque"
+     ]
+    }
+   ],
+   "order": 14
+  },
+  {
+   "id": "ecole",
+   "collection": "monde",
+   "title": {
+    "fr": "L'école",
+    "en": "School"
+   },
+   "words": [
+    {
+     "id": "ecole",
+     "image": "1f3eb",
+     "word": {
+      "fr": "école",
+      "en": "school"
+     },
+     "syllables": [
+      "é",
+      "cole"
+     ],
+     "accept": [
+      "écoles",
+      "ecole",
+      "é cole"
+     ]
+    },
+    {
+     "id": "crayon",
+     "image": "270f",
+     "word": {
+      "fr": "crayon",
+      "en": "pencil"
+     },
+     "syllables": [
+      "cra",
+      "yon"
+     ],
+     "accept": [
+      "crayons",
+      "craillon",
+      "crai on"
+     ]
+    },
+    {
+     "id": "cahier",
+     "image": "1f4d3",
+     "word": {
+      "fr": "cahier",
+      "en": "notebook"
+     },
+     "syllables": [
+      "ca",
+      "hier"
+     ],
+     "accept": [
+      "cahiers",
+      "caillé",
+      "ca hier",
+      "cahier cahier"
+     ]
+    },
+    {
+     "id": "regle",
+     "image": "1f4cf",
+     "word": {
+      "fr": "règle",
+      "en": "ruler"
+     },
+     "syllables": [
+      "règle"
+     ],
+     "accept": [
+      "règles",
+      "reggle",
+      "regle",
+      "règl"
+     ]
+    },
+    {
+     "id": "stylo",
+     "image": "1f58a",
+     "word": {
+      "fr": "stylo",
+      "en": "pen"
+     },
+     "syllables": [
+      "sty",
+      "lo"
+     ],
+     "accept": [
+      "stylos",
+      "stilo",
+      "style eau"
+     ]
+    }
+   ],
+   "order": 15
+  },
+  {
+   "id": "actions-1",
+   "collection": "actions",
+   "title": {
+    "fr": "Je fais",
+    "en": "I do"
+   },
+   "words": [
+    {
+     "id": "bois",
+     "image": "1f964",
+     "word": {
+      "fr": "bois",
+      "en": "drink"
+     },
+     "syllables": [
+      "bois"
+     ],
+     "accept": [
+      "boit",
+      "boi",
+      "boie",
+      "bois bois"
+     ]
+    },
+    {
+     "id": "mange",
+     "image": "1f37d",
+     "word": {
+      "fr": "mange",
+      "en": "eat"
+     },
+     "syllables": [
+      "mange"
+     ],
+     "accept": [
+      "manche",
+      "mangé",
+      "manger",
+      "mange mange"
+     ]
+    },
+    {
+     "id": "dors",
+     "image": "1f4a4",
+     "word": {
+      "fr": "dors",
+      "en": "sleep"
+     },
+     "syllables": [
+      "dors"
+     ],
+     "accept": [
+      "dore",
+      "dort",
+      "dor",
+      "d'or"
+     ]
+    },
+    {
+     "id": "joue",
+     "image": "26bd",
+     "word": {
+      "fr": "joue",
+      "en": "play"
+     },
+     "syllables": [
+      "joue"
+     ],
+     "accept": [
+      "jou",
+      "joué",
+      "jouer",
+      "joues"
+     ]
+    },
+    {
+     "id": "lave",
+     "image": "1f9fc",
+     "word": {
+      "fr": "lave",
+      "en": "wash"
+     },
+     "syllables": [
+      "lave"
+     ],
+     "accept": [
+      "lavé",
+      "laver",
+      "laves"
+     ]
+    }
+   ],
+   "order": 16
+  },
+  {
+   "id": "actions-2",
+   "collection": "actions",
+   "title": {
+    "fr": "Viens, va, prends",
+    "en": "Come, go, take"
+   },
+   "words": [
+    {
+     "id": "viens",
+     "image": "1f449",
+     "word": {
+      "fr": "viens",
+      "en": "come"
+     },
+     "syllables": [
+      "viens"
+     ],
+     "accept": [
+      "vient",
+      "vins",
+      "viens viens",
+      "vain"
+     ]
+    },
+    {
+     "id": "va",
+     "image": "1f6b6",
+     "word": {
+      "fr": "va",
+      "en": "go"
+     },
+     "syllables": [
+      "va"
+     ],
+     "accept": [
+      "vas",
+      "vois",
+      "va va"
+     ]
+    },
+    {
+     "id": "prends",
+     "image": "1f450",
+     "word": {
+      "fr": "prends",
+      "en": "take"
+     },
+     "syllables": [
+      "prends"
+     ],
+     "accept": [
+      "prend",
+      "prent",
+      "pren",
+      "prends prends"
+     ]
+    },
+    {
+     "id": "regarde",
+     "image": "1f440",
+     "word": {
+      "fr": "regarde",
+      "en": "look"
+     },
+     "syllables": [
+      "re",
+      "garde"
+     ],
+     "accept": [
+      "regardes",
+      "regarder",
+      "regardé",
+      "regarde regarde"
+     ]
+    },
+    {
+     "id": "ecoute",
+     "image": "1f442",
+     "word": {
+      "fr": "écoute",
+      "en": "listen"
+     },
+     "syllables": [
+      "é",
+      "coute"
+     ],
+     "accept": [
+      "écoutes",
+      "écouté",
+      "écouter",
+      "ecoute",
+      "écoute écoute"
+     ]
+    }
+   ],
+   "order": 17
+  },
+  {
+   "id": "actions-3",
+   "collection": "actions",
+   "title": {
+    "fr": "Je bouge",
+    "en": "I move"
+   },
+   "words": [
+    {
+     "id": "cours",
+     "image": "1f3c3",
+     "word": {
+      "fr": "cours",
+      "en": "run"
+     },
+     "syllables": [
+      "cours"
+     ],
+     "accept": [
+      "cour",
+      "court",
+      "cours cours",
+      "coure"
+     ]
+    },
+    {
+     "id": "saute",
+     "image": "1f938",
+     "word": {
+      "fr": "saute",
+      "en": "jump"
+     },
+     "syllables": [
+      "saute"
+     ],
+     "accept": [
+      "sautes",
+      "sauté",
+      "sauter",
+      "sot",
+      "saute saute"
+     ]
+    },
+    {
+     "id": "danse",
+     "image": "1f483",
+     "word": {
+      "fr": "danse",
+      "en": "dance"
+     },
+     "syllables": [
+      "danse"
+     ],
+     "accept": [
+      "danses",
+      "dense",
+      "danser",
+      "danse danse"
+     ]
+    },
+    {
+     "id": "chante",
+     "image": "1f3a4",
+     "word": {
+      "fr": "chante",
+      "en": "sing"
+     },
+     "syllables": [
+      "chante"
+     ],
+     "accept": [
+      "chantes",
+      "chanté",
+      "chanter",
+      "chant",
+      "chante chante"
+     ]
+    },
+    {
+     "id": "dessine",
+     "image": "1f58d",
+     "word": {
+      "fr": "dessine",
+      "en": "draw"
+     },
+     "syllables": [
+      "des",
+      "sine"
+     ],
+     "accept": [
+      "dessines",
+      "dessiné",
+      "dessiner",
+      "dessin",
+      "dessine dessine"
+     ]
+    }
+   ],
+   "order": 18
+  },
+  {
+   "id": "emotions-1",
+   "collection": "emotions",
+   "title": {
+    "fr": "Je suis…",
+    "en": "I am…"
+   },
+   "words": [
+    {
+     "id": "content",
+     "image": "1f60a",
+     "word": {
+      "fr": "content",
+      "en": "happy"
+     },
+     "syllables": [
+      "con",
+      "tent"
+     ],
+     "accept": [
+      "contente",
+      "contents",
+      "content content",
+      "con tant"
+     ]
+    },
+    {
+     "id": "triste",
+     "image": "1f622",
+     "word": {
+      "fr": "triste",
+      "en": "sad"
+     },
+     "syllables": [
+      "tri",
+      "ste"
+     ],
+     "accept": [
+      "tristes",
+      "trist",
+      "triste triste"
+     ]
+    },
+    {
+     "id": "peur",
+     "image": "1f628",
+     "word": {
+      "fr": "peur",
+      "en": "scared"
+     },
+     "syllables": [
+      "peur"
+     ],
+     "accept": [
+      "peurs",
+      "pleure",
+      "peur peur",
+      "per"
+     ]
+    },
+    {
+     "id": "fache",
+     "image": "1f620",
+     "word": {
+      "fr": "fâché",
+      "en": "angry"
+     },
+     "syllables": [
+      "fâ",
+      "ché"
+     ],
+     "accept": [
+      "fâchée",
+      "fache",
+      "fâchés",
+      "fâcher",
+      "fâché fâché"
+     ]
+    },
+    {
+     "id": "fatigue",
+     "image": "1f634",
+     "word": {
+      "fr": "fatigué",
+      "en": "tired"
+     },
+     "syllables": [
+      "fa",
+      "ti",
+      "gué"
+     ],
+     "accept": [
+      "fatiguée",
+      "fatigue",
+      "fatigués",
+      "fatiguer",
+      "fatigué fatigué"
+     ]
+    }
+   ],
+   "order": 19
+  },
+  {
+   "id": "emotions-2",
+   "collection": "emotions",
+   "title": {
+    "fr": "Ça va ?",
+    "en": "How are you?"
+   },
+   "words": [
+    {
+     "id": "cava",
+     "image": "1f642",
+     "word": {
+      "fr": "ça va",
+      "en": "fine"
+     },
+     "syllables": [
+      "ça",
+      "va"
+     ],
+     "accept": [
+      "sa va",
+      "ca va",
+      "çà va",
+      "ça va ça va"
+     ]
+    },
+    {
+     "id": "bien",
+     "image": "1f44d",
+     "word": {
+      "fr": "bien",
+      "en": "good"
+     },
+     "syllables": [
+      "bien"
+     ],
+     "accept": [
+      "biens",
+      "bian",
+      "bien bien"
+     ]
+    },
+    {
+     "id": "mal",
+     "image": "1f44e",
+     "word": {
+      "fr": "mal",
+      "en": "bad"
+     },
+     "syllables": [
+      "mal"
+     ],
+     "accept": [
+      "malle",
+      "mâle",
+      "mal mal"
+     ]
+    },
+    {
+     "id": "bof",
+     "image": "1f610",
+     "word": {
+      "fr": "bof",
+      "en": "so-so"
+     },
+     "syllables": [
+      "bof"
+     ],
+     "accept": [
+      "beauf",
+      "bofs",
+      "bof bof"
+     ]
+    },
+    {
+     "id": "super",
+     "image": "1f929",
+     "word": {
+      "fr": "super",
+      "en": "great"
+     },
+     "syllables": [
+      "su",
+      "per"
+     ],
+     "accept": [
+      "supers",
+      "supère",
+      "super super"
+     ]
+    }
+   ],
+   "order": 20
+  },
+  {
+   "id": "deuxmots-1",
+   "collection": "deux",
+   "title": {
+    "fr": "Deux petits mots",
+    "en": "Two little words"
+   },
+   "words": [
+    {
+     "id": "amoi",
+     "image": "1f64b",
+     "word": {
+      "fr": "à moi",
+      "en": "mine"
+     },
+     "syllables": [
+      "à",
+      "moi"
+     ],
+     "accept": [
+      "amoi",
+      "a moi",
+      "à moi à moi"
+     ]
+    },
+    {
+     "id": "pasca",
+     "image": "1f645",
+     "word": {
+      "fr": "pas ça",
+      "en": "not that"
+     },
+     "syllables": [
+      "pas",
+      "ça"
+     ],
+     "accept": [
+      "pas sa",
+      "pas ca",
+      "pas çà"
+     ]
+    },
+    {
+     "id": "jaifaim",
+     "image": "1f37d",
+     "word": {
+      "fr": "j'ai faim",
+      "en": "I'm hungry"
+     },
+     "syllables": [
+      "j'ai",
+      "faim"
+     ],
+     "accept": [
+      "gai faim",
+      "j'ai fin",
+      "jai faim",
+      "j'ai faim j'ai faim"
+     ]
+    },
+    {
+     "id": "jaisoif",
+     "image": "1f95b",
+     "word": {
+      "fr": "j'ai soif",
+      "en": "I'm thirsty"
+     },
+     "syllables": [
+      "j'ai",
+      "soif"
+     ],
+     "accept": [
+      "gai soif",
+      "jai soif",
+      "j'ai soit",
+      "j'ai soif j'ai soif"
+     ]
+    },
+    {
+     "id": "cestbon",
+     "image": "1f44d",
+     "word": {
+      "fr": "c'est bon",
+      "en": "it's good"
+     },
+     "syllables": [
+      "c'est",
+      "bon"
+     ],
+     "accept": [
+      "cest bon",
+      "sait bon",
+      "ces bons",
+      "c'est bon c'est bon"
+     ]
+    }
+   ],
+   "order": 21
+  },
+  {
+   "id": "deuxmots-2",
+   "collection": "deux",
+   "title": {
+    "fr": "Encore deux mots",
+    "en": "Two more words"
+   },
+   "words": [
+    {
+     "id": "viensici",
+     "image": "1f449",
+     "word": {
+      "fr": "viens ici",
+      "en": "come here"
+     },
+     "syllables": [
+      "viens",
+      "ici"
+     ],
+     "accept": [
+      "vient ici",
+      "viens ici viens ici",
+      "vin ici"
+     ]
+    },
+    {
+     "id": "regardeca",
+     "image": "1f440",
+     "word": {
+      "fr": "regarde ça",
+      "en": "look at that"
+     },
+     "syllables": [
+      "re",
+      "garde",
+      "ça"
+     ],
+     "accept": [
+      "regarde sa",
+      "regarde ca",
+      "regardes ça"
+     ]
+    },
+    {
+     "id": "mercimaman",
+     "image": "1f64f",
+     "word": {
+      "fr": "merci maman",
+      "en": "thanks mum"
+     },
+     "syllables": [
+      "mer",
+      "ci",
+      "ma",
+      "man"
+     ],
+     "accept": [
+      "mercy maman",
+      "merci mama",
+      "merci maman merci maman"
+     ]
+    },
+    {
+     "id": "bonjourpapa",
+     "image": "2600",
+     "word": {
+      "fr": "bonjour papa",
+      "en": "hello dad"
+     },
+     "syllables": [
+      "bon",
+      "jour",
+      "pa",
+      "pa"
+     ],
+     "accept": [
+      "bon jour papa",
+      "bonjour papas",
+      "bonjour papa bonjour papa"
+     ]
+    },
+    {
+     "id": "moiaussi",
+     "image": "1f64b",
+     "word": {
+      "fr": "moi aussi",
+      "en": "me too"
+     },
+     "syllables": [
+      "moi",
+      "aus",
+      "si"
+     ],
+     "accept": [
+      "moi aussi moi aussi",
+      "moi ausi",
+      "moi au si"
+     ]
+    }
+   ],
+   "order": 22
+  }
+ ]
+}
