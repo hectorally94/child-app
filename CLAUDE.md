@@ -109,6 +109,7 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
       both unlock one by one; parent sees Mots x/9, Conversations x/10 and "A parlé N fois"
 - [x] v7 (2026-11-22): pronunciation check ("miaou" ≠ "le chat"); 15 new conversations (toilet, tired, cold, wash
       hands, scared, I love you, yes/no, please, sorry, rooms of the house…) grouped by theme; Fille/Garçon in profile
+      — tested at home by the parent: "it works fine" (2026-11-22)
 - [ ] Prerecorded audio (device TTS for now)
 - [ ] Phase 2: lesson packages/download, backend + sync, more writing lessons
 
