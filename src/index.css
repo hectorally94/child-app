@@ -1,0 +1,128 @@
+@import 'tailwindcss';
+
+/* ================================================================
+   Design tokens: claymorphism for kids (from the UI/UX Pro Max skill:
+   "Kids Learning" = clay + vibrant + spring bounce + soft press).
+   ================================================================ */
+@theme {
+  --font-display: 'Nunito', ui-rounded, system-ui, sans-serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+
+  --color-canvas: #f4f1fa;
+  --color-ink: #2b2740;
+  --color-ink-soft: #5d5873;
+  --color-blue: #2563eb;
+  --color-blue-deep: #1d4ed8;
+  --color-blue-soft: #dbe7ff;
+  --color-sun: #fbbf24;
+  --color-sun-deep: #d97706;
+  --color-sun-soft: #fff3c4;
+  --color-pink: #ec4899;
+  --color-pink-soft: #fde2f0;
+  --color-mint: #10b981;
+  --color-mint-deep: #047857;
+  --color-mint-soft: #d1fae5;
+  --color-violet: #7c3aed;
+  --color-violet-soft: #ede4ff;
+  --color-coral: #f97362;
+
+  --radius-clay: 28px;
+  --radius-blob: 40px;
+
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@layer base {
+  html, body, #root { height: 100%; }
+  body {
+    margin: 0;
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { cursor: pointer; }
+  button:disabled { cursor: not-allowed; }
+  :focus-visible { outline: 4px solid var(--color-violet); outline-offset: 3px; }
+}
+
+@layer components {
+  /* A clay surface: thick soft border, inner highlight + inner shade, soft outer shadow */
+  .clay {
+    border-radius: var(--radius-clay);
+    background: #fff;
+    border: 3px solid rgb(255 255 255 / 0.9);
+    box-shadow:
+      inset -4px -6px 12px rgb(43 39 64 / 0.06),
+      inset 4px 4px 10px rgb(255 255 255 / 0.9),
+      0 14px 28px -10px rgb(76 56 140 / 0.28);
+  }
+
+  /* Clay buttons: colored body + darker "base" shadow that the button sinks into on press */
+  .clay-btn {
+    --btn: var(--color-blue);
+    --btn-deep: var(--color-blue-deep);
+    --btn-text: #fff;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 52px;
+    padding: 0.75rem 1.4rem;
+    border-radius: 999px;
+    border: 3px solid rgb(255 255 255 / 0.5);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--btn) 82%, white) 0%, var(--btn) 60%);
+    color: var(--btn-text);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    box-shadow:
+      inset 0 -5px 0 rgb(0 0 0 / 0.12),
+      inset 0 3px 6px rgb(255 255 255 / 0.45),
+      0 6px 0 var(--btn-deep),
+      0 14px 22px -8px color-mix(in srgb, var(--btn-deep) 70%, transparent);
+    transition: transform 160ms var(--ease-spring), box-shadow 160ms ease-out, filter 160ms;
+  }
+  .clay-btn:active:not(:disabled) {
+    transform: translateY(5px) scale(0.98);
+    box-shadow:
+      inset 0 -3px 0 rgb(0 0 0 / 0.12),
+      inset 0 3px 6px rgb(255 255 255 / 0.45),
+      0 1px 0 var(--btn-deep),
+      0 4px 10px -6px color-mix(in srgb, var(--btn-deep) 70%, transparent);
+  }
+  .clay-btn:disabled { filter: grayscale(0.6); opacity: 0.55; }
+  .clay-btn.is-sun { --btn: var(--color-sun); --btn-deep: var(--color-sun-deep); --btn-text: var(--color-ink); }
+  .clay-btn.is-mint { --btn: var(--color-mint); --btn-deep: var(--color-mint-deep); }
+  .clay-btn.is-pink { --btn: var(--color-pink); --btn-deep: #be185d; }
+  .clay-btn.is-white { --btn: #ffffff; --btn-deep: #d9d2ec; --btn-text: var(--color-ink); }
+  .clay-btn.is-ghost {
+    background: transparent;
+    box-shadow: none;
+    border-color: transparent;
+    color: var(--color-blue);
+  }
+  .clay-btn.is-ghost:active { transform: scale(0.97); box-shadow: none; }
+
+  .clay-input {
+    width: 100%;
+    min-height: 54px;
+    padding: 0.75rem 1rem;
+    border-radius: 18px;
+    border: 3px solid #e3dcf3;
+    background: #fbfaff;
+    color: var(--color-ink);
+    font: inherit;
+    font-size: 1.05rem;
+    box-shadow: inset 2px 3px 6px rgb(43 39 64 / 0.06);
+    transition: border-color 150ms;
+  }
+  .clay-input:focus { outline: none; border-color: var(--color-violet); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
+}

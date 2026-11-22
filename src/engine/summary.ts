@@ -31,7 +31,7 @@ export function summarize(lessonId: string, sessions: SessionRecord[], lang: Lan
   const anySuccess = attempts.some((a) => a.outcome === 'success');
   const status: Status = completed === 0 ? 'inProgress' : anySuccess ? 'practiced' : 'needsPractice';
 
-  const fr = lang === 'fr' || lang === 'rn';
+  const fr = lang === 'fr';
   const notes: string[] = [];
   if (trace.some((a) => a.outcome === 'success')) notes.push(fr ? 'A réussi le traçage guidé.' : 'Completed the guided tracing.');
   if (free.length) {

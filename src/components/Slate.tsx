@@ -1,9 +1,10 @@
+import { motion, useReducedMotion } from 'framer-motion';
 import { useCallback, useEffect, useRef } from 'react';
 import { sampleStroke } from '../engine/geometry';
 import type { Point, StrokeDef } from '../engine/types';
 
 /**
- * The chalk slate: shows the guide, plays the demonstration, and captures the child's strokes.
+ * The writing board: shows the guide, plays the demonstration, and captures the child's strokes.
  * Coordinates are normalized (0..1) so lessons are independent of screen size.
  */
 export type SlateMode = 'show' | 'demo' | 'trace' | 'free';
@@ -19,9 +20,12 @@ interface Props {
   onDemoEnd?: () => void;
 }
 
-const CHALK = '#F7F3E3';
-const SUN = '#FFC93C';
-const CHILD_CHALK = '#FFE6A8';
+const GUIDE = '#c4b5fd'; // soft violet dots
+const DEMO = '#2563eb'; // learning blue crayon
+const ARROW = '#f59e0b';
+const START = '#10b981';
+const CHILD = '#ec4899'; // the child's pink crayon
+const LINES = '#e7e1f5';
 const PAUSE_MS = 1100;
 
 export function Slate({ strokes, mode, guide, resetKey, onAttempt, onDemoEnd }: Props) {
@@ -30,7 +34,7 @@ export function Slate({ strokes, mode, guide, resetKey, onAttempt, onDemoEnd }: 
   const drawingRef = useRef(false);
   const timerRef = useRef<number>();
   const demoProgressRef = useRef(mode === 'demo' ? 0 : 1);
-  const reduceMotion = typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const reduceMotion = useReducedMotion() ?? false;
 
   const paint = useCallback(() => {
     const canvas = canvasRef.current;
@@ -44,12 +48,25 @@ export function Slate({ strokes, mode, guide, resetKey, onAttempt, onDemoEnd }: 
 
     const guides = strokes.map((s) => sampleStroke(s));
 
-    // Dotted chalk guide
+    // School writing lines (top line and base line)
+    ctx.save();
+    ctx.strokeStyle = LINES;
+    ctx.lineWidth = Math.max(2, size * 0.006);
+    ctx.setLineDash([size * 0.02, size * 0.02]);
+    for (const y of [0.1, 0.9]) {
+      ctx.beginPath();
+      ctx.moveTo(size * 0.06, size * y);
+      ctx.lineTo(size * 0.94, size * y);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // Guide: a solid shape on the introduction, dotted while practising
     if (guide !== 'none' || mode === 'show' || mode === 'demo') {
       ctx.save();
-      ctx.strokeStyle = CHALK;
-      ctx.globalAlpha = mode === 'show' ? 0.95 : guide === 'faint' ? 0.18 : 0.45;
-      ctx.lineWidth = size * (mode === 'show' ? 0.06 : 0.05);
+      ctx.strokeStyle = mode === 'show' ? DEMO : GUIDE;
+      ctx.globalAlpha = mode === 'show' ? 1 : guide === 'faint' ? 0.35 : 1;
+      ctx.lineWidth = size * (mode === 'show' ? 0.075 : 0.05);
       if (mode !== 'show') ctx.setLineDash([size * 0.001, size * 0.045]);
       for (const g of guides) {
         ctx.beginPath();
@@ -65,10 +82,8 @@ export function Slate({ strokes, mode, guide, resetKey, onAttempt, onDemoEnd }: 
       let budget = Math.floor(demoProgressRef.current * total);
       let tip: Point | null = null;
       ctx.save();
-      ctx.strokeStyle = CHALK;
-      ctx.lineWidth = size * 0.05;
-      ctx.shadowColor = CHALK;
-      ctx.shadowBlur = size * 0.01;
+      ctx.strokeStyle = DEMO;
+      ctx.lineWidth = size * 0.055;
       for (const g of guides) {
         if (budget <= 0) break;
         const part = g.slice(0, Math.min(g.length, budget));
@@ -82,25 +97,19 @@ export function Slate({ strokes, mode, guide, resetKey, onAttempt, onDemoEnd }: 
       if (tip && demoProgressRef.current < 1) drawFingertip(ctx, ...px(tip), size);
     }
 
-    // Starting dot and direction arrow
+    // Direction arrow next to the start (the start dot itself is an animated overlay)
     if (mode !== 'show' && (guide !== 'none' || mode === 'demo')) {
       guides.forEach((g) => {
         const [x, y] = px(g[0]);
         const [nx, ny] = px(g[Math.min(6, g.length - 1)]);
         drawArrow(ctx, x, y, nx, ny, size);
-        ctx.beginPath();
-        ctx.fillStyle = SUN;
-        ctx.arc(x, y, size * 0.042, 0, Math.PI * 2);
-        ctx.fill();
       });
     }
 
-    // Child's chalk
+    // Child's crayon
     ctx.save();
-    ctx.strokeStyle = CHILD_CHALK;
-    ctx.lineWidth = size * 0.045;
-    ctx.shadowColor = CHILD_CHALK;
-    ctx.shadowBlur = size * 0.008;
+    ctx.strokeStyle = CHILD;
+    ctx.lineWidth = size * 0.05;
     for (const line of drawnRef.current) {
       ctx.beginPath();
       line.forEach((p, i) => (i ? ctx.lineTo(...px(p)) : ctx.moveTo(...px(p))));
@@ -157,6 +166,8 @@ export function Slate({ strokes, mode, guide, resetKey, onAttempt, onDemoEnd }: 
   }, [resetKey, mode]);
 
   const interactive = mode === 'trace' || mode === 'free';
+  const showStart = mode !== 'show' && (guide !== 'none' || mode === 'demo');
+  const start = sampleStroke(strokes[0])[0];
 
   const toPoint = (e: React.PointerEvent<HTMLCanvasElement>): Point => {
     const r = e.currentTarget.getBoundingClientRect();
@@ -195,10 +206,27 @@ export function Slate({ strokes, mode, guide, resetKey, onAttempt, onDemoEnd }: 
   };
 
   return (
-    <div className="slate-frame">
+    <div className="clay relative mx-auto aspect-square w-full max-h-[58vh] max-w-[58vh] overflow-hidden !rounded-[36px] bg-[#fffdf8]">
+      {showStart && (
+        <motion.span
+          className="pointer-events-none absolute z-10 grid -translate-x-1/2 -translate-y-1/2 place-items-center"
+          style={{ left: `${start[0] * 100}%`, top: `${start[1] * 100}%`, width: '11%', height: '11%' }}
+          aria-hidden="true"
+        >
+          {!reduceMotion && (
+            <motion.span
+              className="absolute inset-0 rounded-full"
+              style={{ background: START }}
+              animate={{ scale: [1, 1.9], opacity: [0.45, 0] }}
+              transition={{ duration: 1.4, repeat: Infinity, ease: 'easeOut' }}
+            />
+          )}
+          <span className="relative block h-[70%] w-[70%] rounded-full border-[3px] border-white shadow-[0_3px_8px_rgb(16_185_129/0.5)]" style={{ background: START }} />
+        </motion.span>
+      )}
       <canvas
         ref={canvasRef}
-        className={`slate ${interactive ? 'is-interactive' : ''}`}
+        className={`relative block h-full w-full touch-none ${interactive ? 'cursor-crosshair' : ''}`}
         onPointerDown={onDown}
         onPointerMove={onMove}
         onPointerUp={onUp}
@@ -216,14 +244,17 @@ function easeInOut(t: number) {
 
 function drawFingertip(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
   ctx.save();
-  ctx.fillStyle = 'rgba(255, 201, 60, 0.35)';
+  ctx.fillStyle = 'rgba(37, 99, 235, 0.18)';
   ctx.beginPath();
   ctx.arc(x, y, size * 0.07, 0, Math.PI * 2);
   ctx.fill();
-  ctx.fillStyle = SUN;
+  ctx.fillStyle = '#ffffff';
+  ctx.strokeStyle = DEMO;
+  ctx.lineWidth = size * 0.012;
   ctx.beginPath();
-  ctx.arc(x, y, size * 0.03, 0, Math.PI * 2);
+  ctx.arc(x, y, size * 0.035, 0, Math.PI * 2);
   ctx.fill();
+  ctx.stroke();
   ctx.restore();
 }
 
@@ -236,8 +267,8 @@ function drawArrow(ctx: CanvasRenderingContext2D, x: number, y: number, nx: numb
   const ex = ox + Math.cos(a) * len;
   const ey = oy + Math.sin(a) * len;
   ctx.save();
-  ctx.strokeStyle = SUN;
-  ctx.fillStyle = SUN;
+  ctx.strokeStyle = ARROW;
+  ctx.fillStyle = ARROW;
   ctx.lineWidth = size * 0.014;
   ctx.beginPath();
   ctx.moveTo(ox, oy);

@@ -1,4 +1,7 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
+import { Icon, type IconName } from '../components/Icon';
+import { Slate } from '../components/Slate';
 import { loadLessons } from '../content';
 import { summarize, type LessonSummary } from '../engine/summary';
 import { LANGS, type Lang, type Lesson } from '../engine/types';
@@ -13,6 +16,15 @@ interface Props {
   onChildMode: () => void;
 }
 
+const spring = { type: 'spring', stiffness: 300, damping: 26 } as const;
+const page = {
+  initial: { opacity: 0, y: 14 },
+  animate: { opacity: 1, y: 0, transition: spring },
+  exit: { opacity: 0, y: -8, transition: { duration: 0.15 } },
+};
+const list = { animate: { transition: { staggerChildren: 0.05 } } };
+const item = { initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0, transition: spring } };
+
 export function ParentMode({ data, update, onChildMode }: Props) {
   const lang = data.parentLang;
   const child = data.children.find((c) => c.id === data.activeChildId) ?? null;
@@ -22,81 +34,172 @@ export function ParentMode({ data, update, onChildMode }: Props) {
   const setChild = (patch: Partial<Child>) =>
     update((d) => ({ ...d, children: d.children.map((c) => (c.id === d.activeChildId ? { ...c, ...patch } : c)) }));
 
+  const tabs: { k: Tab; icon: IconName }[] = [
+    { k: 'dashboard', icon: 'chart' },
+    { k: 'lessons', icon: 'book' },
+    { k: 'settings', icon: 'gear' },
+  ];
+
   return (
-    <div className="parent">
-      <header className="p-header">
-        <div className="p-brand">
-          <span className="p-brand-mark" aria-hidden="true">0</span>
-          <span>{child ? child.name : t('parentArea', lang)}</span>
+    <div className="flex min-h-full flex-col bg-canvas font-body text-ink">
+      <header className="sticky top-0 z-20 border-b border-white/60 bg-canvas/85 backdrop-blur-md">
+        <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-3">
+          {child ? (
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-gradient-to-br from-sun to-coral font-display text-lg font-black text-white shadow-[inset_0_-3px_0_rgb(0_0_0/0.12)]" aria-hidden="true">
+              {child.name.slice(0, 1).toUpperCase()}
+            </span>
+          ) : null}
+          <div className="min-w-0 flex-1">
+            <p className="m-0 truncate font-display text-lg leading-tight font-black">{child ? child.name : t('parentArea', lang)}</p>
+            <p className="m-0 text-sm text-ink-soft">{t('parentArea', lang)}</p>
+          </div>
+          <button className="clay-btn is-sun !min-h-12 !px-4 text-base" onClick={onChildMode} disabled={!child}>
+            <span className="hidden sm:inline">{t('startChildMode', lang).replace(' ▶', '')}</span>
+            <span className="sm:hidden">{lang === 'fr' ? 'Enfant' : 'Child'}</span>
+            <Icon name="play" size={18} />
+          </button>
         </div>
-        <button className="btn-sun" onClick={onChildMode} disabled={!child}>{t('startChildMode', lang)}</button>
       </header>
 
-      <nav className="p-tabs" aria-label={t('parentArea', lang)}>
-        {(['dashboard', 'lessons', 'settings'] as Tab[]).map((k) => (
-          <button key={k} className={tab === k ? 'is-on' : ''} aria-current={tab === k ? 'page' : undefined}
-            onClick={() => { setTab(k); setPreview(null); }}>
-            {t(k, lang)}
-          </button>
-        ))}
-      </nav>
-
-      <main className="p-body">
-        {tab === 'dashboard' && <Dashboard data={data} child={child} lang={lang} onOpen={(l) => { setTab('lessons'); setPreview(l); }} />}
-        {tab === 'lessons' && (preview
-          ? <Preview lesson={preview} lang={lang} child={child}
-              onBack={() => setPreview(null)}
-              onAssign={() => setChild({ todayLessonId: preview.id })} />
-          : <Catalogue lang={lang} child={child} onOpen={setPreview} />)}
-        {tab === 'settings' && <Settings data={data} update={update} />}
+      <main className="mx-auto w-full max-w-3xl flex-1 px-4 pt-5 pb-32">
+        <AnimatePresence mode="wait">
+          <motion.div key={tab + (preview?.id ?? '')} {...page}>
+            {tab === 'dashboard' && <Dashboard data={data} child={child} lang={lang} onOpen={(l) => { setTab('lessons'); setPreview(l); }} onGoLessons={() => setTab('lessons')} />}
+            {tab === 'lessons' && (preview
+              ? <Preview lesson={preview} lang={lang} child={child} onBack={() => setPreview(null)}
+                  onAssign={() => setChild({ todayLessonId: preview.id })} onChildMode={onChildMode} />
+              : <Catalogue lang={lang} child={child} onOpen={setPreview} />)}
+            {tab === 'settings' && <Settings data={data} update={update} />}
+          </motion.div>
+        </AnimatePresence>
       </main>
+
+      {/* bottom navigation */}
+      <nav aria-label={t('parentArea', lang)} className="fixed inset-x-0 bottom-0 z-30 px-4 pb-[max(12px,env(safe-area-inset-bottom))]">
+        <div className="clay mx-auto flex max-w-md items-center justify-around !rounded-[26px] p-1.5">
+          {tabs.map(({ k, icon }) => {
+            const on = tab === k;
+            return (
+              <button
+                key={k}
+                onClick={() => { setTab(k); setPreview(null); }}
+                aria-current={on ? 'page' : undefined}
+                className={`relative flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 rounded-[20px] font-display text-sm font-extrabold transition-colors ${on ? 'text-blue' : 'text-ink-soft'}`}
+              >
+                {on && <motion.span layoutId="tab-pill" className="absolute inset-0 rounded-[20px] bg-blue-soft" transition={spring} />}
+                <span className="relative"><Icon name={icon} size={22} /></span>
+                <span className="relative">{t(k, lang)}</span>
+              </button>
+            );
+          })}
+        </div>
+      </nav>
     </div>
   );
 }
 
 /* ------------------------------------------------------------------ */
 
-function Dashboard({ data, child, lang, onOpen }: { data: AppData; child: Child | null; lang: Lang; onOpen: (l: Lesson) => void }) {
-  if (!child) return <p className="p-empty">{t('noChild', lang)}</p>;
+function H2({ children }: { children: React.ReactNode }) {
+  return <h2 className="m-0 mb-3 font-display text-xl font-black text-ink">{children}</h2>;
+}
+
+function Glyph({ lesson, size = 'md' }: { lesson: Lesson; size?: 'md' | 'lg' }) {
+  const s = size === 'lg' ? 'h-24 w-24 text-6xl rounded-[28px]' : 'h-16 w-16 text-4xl rounded-[20px]';
+  return (
+    <span className={`grid shrink-0 place-items-center bg-gradient-to-br from-blue to-violet font-display font-black text-white shadow-[inset_0_-4px_0_rgb(0_0_0/0.15),inset_0_3px_6px_rgb(255_255_255/0.35),0_8px_16px_-6px_rgb(37_99_235/0.6)] ${s}`} aria-hidden="true">
+      {lesson.target}
+    </span>
+  );
+}
+
+const STATUS: Record<LessonSummary['status'], { icon: IconName; cls: string; key: 'practiced' | 'needsPractice' | 'inProgress' }> = {
+  practiced: { icon: 'check', cls: 'bg-mint-soft text-mint-deep', key: 'practiced' },
+  needsPractice: { icon: 'hand', cls: 'bg-sun-soft text-[#92400e]', key: 'needsPractice' },
+  inProgress: { icon: 'clock', cls: 'bg-violet-soft text-violet', key: 'inProgress' },
+};
+
+function Dashboard({ data, child, lang, onOpen, onGoLessons }: { data: AppData; child: Child | null; lang: Lang; onOpen: (l: Lesson) => void; onGoLessons: () => void }) {
+  if (!child) return <p className="clay p-5 text-lg">{t('noChild', lang)}</p>;
   const sessions = data.sessions.filter((s) => s.childId === child.id);
   const rows = loadLessons()
     .map((l) => ({ lesson: l, sum: summarize(l.id, sessions, lang) }))
     .filter((r): r is { lesson: Lesson; sum: LessonSummary } => r.sum !== null)
     .sort((a, b) => b.sum.lastAt - a.sum.lastAt);
   const today = loadLessons().find((l) => l.id === child.todayLessonId);
+  const minutes = rows.reduce((a, r) => a + r.sum.minutes, 0);
 
   return (
-    <>
-      <section className="p-section">
-        <h2>{t('todayActivity', lang)}</h2>
-        {today
-          ? <button className="p-lesson-row" onClick={() => onOpen(today)}>
-              <span className="p-glyph">{today.target}</span>
-              <span><strong>{tr(today.title, lang)}</strong><br /><span className="muted">{tr(today.objective, lang)}</span></span>
-            </button>
-          : <p className="muted">{t('noActivity', lang)}</p>}
-      </section>
+    <motion.div variants={list} initial="initial" animate="animate" className="flex flex-col gap-7">
+      <motion.section variants={item}>
+        <H2>{t('todayActivity', lang)}</H2>
+        {today ? (
+          <button onClick={() => onOpen(today)} className="clay flex w-full items-center gap-4 p-4 text-left transition active:scale-[0.99]">
+            <Glyph lesson={today} />
+            <span className="min-w-0 flex-1">
+              <span className="block font-display text-lg font-black">{tr(today.title, lang)}</span>
+              <span className="block text-ink-soft">{tr(today.objective, lang)}</span>
+            </span>
+            <Icon name="next" size={22} className="shrink-0 text-blue" />
+          </button>
+        ) : (
+          <div className="clay flex flex-wrap items-center justify-between gap-3 p-4">
+            <p className="m-0 text-ink-soft">{t('noActivityParent', lang)}</p>
+            <button className="clay-btn !min-h-11 text-base" onClick={onGoLessons}>{t('lessons', lang)}</button>
+          </div>
+        )}
+      </motion.section>
 
-      <section className="p-section">
-        <h2>{t('progress', lang)}</h2>
-        {rows.length === 0 && <p className="muted">{t('noProgress', lang)}</p>}
-        <ul className="p-progress">
-          {rows.map(({ lesson, sum }) => (
-            <li key={lesson.id}>
-              <div className="p-progress-head">
-                <span className="p-glyph">{lesson.target}</span>
-                <strong>{tr(lesson.title, lang)}</strong>
-                <span className={`p-status is-${sum.status}`}>{t(sum.status === 'practiced' ? 'practiced' : sum.status === 'needsPractice' ? 'needsPractice' : 'inProgress', lang)}</span>
-              </div>
-              <p className="p-facts">
-                {sum.attempts} {t('attempts', lang)}, {sum.minutes} {t('minutes', lang)}, {new Date(sum.lastAt).toLocaleDateString(lang === 'en' ? 'en' : 'fr')}
-              </p>
-              {sum.notes.length > 0 && <ul className="p-notes">{sum.notes.map((n) => <li key={n}>{n}</li>)}</ul>}
-            </li>
-          ))}
-        </ul>
-      </section>
-    </>
+      {rows.length > 0 && (
+        <motion.section variants={item} className="flex flex-wrap gap-2" aria-label={t('progress', lang)}>
+          <Chip icon="book" text={`${rows.length} · ${t('lessonsDone', lang)}`} />
+          <Chip icon="clock" text={`${minutes} ${t('minutes', lang)} · ${t('totalTime', lang)}`} />
+        </motion.section>
+      )}
+
+      <motion.section variants={item}>
+        <H2>{t('progress', lang)}</H2>
+        {rows.length === 0 && <p className="clay m-0 p-5 text-ink-soft">{t('noProgress', lang)}</p>}
+        <motion.ul variants={list} initial="initial" animate="animate" className="m-0 flex list-none flex-col gap-3 p-0">
+          {rows.map(({ lesson, sum }) => {
+            const st = STATUS[sum.status];
+            return (
+              <motion.li variants={item} key={lesson.id} className="clay p-4">
+                <div className="flex items-center gap-3">
+                  <Glyph lesson={lesson} />
+                  <div className="min-w-0 flex-1">
+                    <p className="m-0 font-display text-lg font-black">{tr(lesson.title, lang)}</p>
+                    <p className="m-0 text-sm text-ink-soft">
+                      {sum.attempts} {t('attempts', lang)} · {sum.minutes} {t('minutes', lang)} · {new Date(sum.lastAt).toLocaleDateString(lang)}
+                    </p>
+                  </div>
+                  <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-3 py-1 text-sm font-bold ${st.cls}`}>
+                    <Icon name={st.icon} size={16} />{t(st.key, lang)}
+                  </span>
+                </div>
+                {sum.notes.length > 0 && (
+                  <ul className="m-0 mt-3 flex list-none flex-col gap-1.5 rounded-[18px] bg-canvas p-3">
+                    {sum.notes.map((n) => (
+                      <li key={n} className="flex gap-2 text-[0.98rem] leading-snug">
+                        <Icon name="sparkle" size={16} className="mt-0.5 shrink-0 text-violet" />{n}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </motion.li>
+            );
+          })}
+        </motion.ul>
+      </motion.section>
+    </motion.div>
+  );
+}
+
+function Chip({ icon, text }: { icon: IconName; text: string }) {
+  return (
+    <span className="inline-flex items-center gap-2 rounded-full bg-white px-3.5 py-2 text-sm font-bold text-ink-soft shadow-[0_4px_12px_-6px_rgb(76_56_140/0.35)]">
+      <Icon name={icon} size={16} className="text-blue" />{text}
+    </span>
   );
 }
 
@@ -108,56 +211,105 @@ function Catalogue({ lang, child, onOpen }: { lang: Lang; child: Child | null; o
     language: { en: 'Language', fr: 'Langage' }, reading: { en: 'Reading', fr: 'Lecture' }, discovery: { en: 'Discovery', fr: 'Découverte' },
   };
   return (
-    <>
+    <div className="flex flex-col gap-7">
       {areas.map((area) => (
-        <section className="p-section" key={area}>
-          <h2>{tr(areaName[area], lang)}</h2>
-          <ul className="p-list">
+        <section key={area}>
+          <H2>{tr(areaName[area], lang)}</H2>
+          <motion.ul variants={list} initial="initial" animate="animate" className="m-0 grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2">
             {lessons.filter((l) => l.area === area).map((l) => (
-              <li key={l.id}>
-                <button className="p-lesson-row" onClick={() => onOpen(l)}>
-                  <span className="p-glyph">{l.target}</span>
-                  <span>
-                    <strong>{tr(l.title, lang)}</strong>
-                    {child?.todayLessonId === l.id && <span className="p-tag">{t('isToday', lang)}</span>}
-                    <br /><span className="muted">{tr(l.objective, lang)}</span>
+              <motion.li variants={item} key={l.id}>
+                <button onClick={() => onOpen(l)} className="clay flex h-full w-full items-center gap-4 p-4 text-left transition active:scale-[0.98]">
+                  <Glyph lesson={l} />
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-display text-lg font-black">{tr(l.title, lang)}</span>
+                    <span className="block text-sm text-ink-soft">{tr(l.objective, lang)}</span>
+                    {child?.todayLessonId === l.id && (
+                      <span className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-sun-soft px-2.5 py-0.5 text-xs font-bold text-[#92400e]">
+                        <Icon name="sparkle" size={12} />{t('isToday', lang).replace(' ✓', '')}
+                      </span>
+                    )}
                   </span>
                 </button>
-              </li>
+              </motion.li>
             ))}
-          </ul>
+          </motion.ul>
         </section>
       ))}
-    </>
+    </div>
   );
 }
 
-function Preview({ lesson, lang, child, onBack, onAssign }: { lesson: Lesson; lang: Lang; child: Child | null; onBack: () => void; onAssign: () => void }) {
+function Preview({ lesson, lang, child, onBack, onAssign, onChildMode }: {
+  lesson: Lesson; lang: Lang; child: Child | null; onBack: () => void; onAssign: () => void; onChildMode: () => void;
+}) {
   const isToday = child?.todayLessonId === lesson.id;
+  const [demoKey, setDemoKey] = useState(0);
   return (
-    <article className="p-preview">
-      <button className="btn-quiet back" onClick={onBack}>‹ {t('lessons', lang)}</button>
-      <div className="p-preview-head">
-        <span className="p-glyph is-big">{lesson.target}</span>
+    <article className="flex flex-col gap-5">
+      <button className="clay-btn is-ghost !min-h-11 self-start !px-0" onClick={onBack}>
+        <Icon name="back" size={20} />{t('lessons', lang)}
+      </button>
+
+      <div className="flex items-center gap-4">
+        <Glyph lesson={lesson} size="lg" />
         <div>
-          <h2>{tr(lesson.title, lang)}</h2>
-          <p className="p-offline">{t('availableOffline', lang)}</p>
+          <h2 className="m-0 font-display text-3xl font-black">{tr(lesson.title, lang)}</h2>
+          <p className="m-0 mt-1 inline-flex items-center gap-1.5 text-sm font-bold text-mint-deep">
+            <Icon name="offline" size={16} />{t('availableOffline', lang)}
+          </p>
         </div>
       </div>
-      <h3>{t('objective', lang)}</h3>
-      <p>{tr(lesson.objective, lang)}</p>
-      <h3>{t('steps', lang)}</h3>
-      <ol className="p-steps">
-        {lesson.activities.map((a, i) => (
-          <li key={i}>{tr(a.say, lang)}</li>
-        ))}
-      </ol>
-      <h3>{t('howToHelp', lang)}</h3>
-      <p>{tr(lesson.parentGuide, lang)}</p>
-      <button className="btn-ink" onClick={onAssign} disabled={!child || isToday}>
-        {isToday ? t('isToday', lang) : t('setToday', lang)}
-      </button>
-      {!child && <p className="muted">{t('noChild', lang)}</p>}
+
+      <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+        <div className="relative">
+          <Slate strokes={lesson.strokes} mode="demo" guide="strong" resetKey={demoKey} />
+          <button onClick={() => setDemoKey((k) => k + 1)} aria-label={t('watchDemo', lang)}
+            className="clay-btn is-white absolute right-3 bottom-3 !h-12 !w-12 !rounded-full !p-0 text-blue">
+            <Icon name="replay" size={22} />
+          </button>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <section className="clay p-5">
+            <h3 className="m-0 font-display text-lg font-black text-blue">{t('objective', lang)}</h3>
+            <p className="m-0 mt-1 leading-relaxed">{tr(lesson.objective, lang)}</p>
+          </section>
+          <section className="clay p-5">
+            <h3 className="m-0 font-display text-lg font-black text-blue">{t('steps', lang)}</h3>
+            <ol className="m-0 mt-2 flex list-none flex-col gap-2 p-0">
+              {lesson.activities.map((a, i) => (
+                <li key={i} className="flex gap-3 leading-snug">
+                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-blue-soft font-display text-sm font-black text-blue">{i + 1}</span>
+                  <span className="pt-0.5">{tr(a.say, lang)}</span>
+                </li>
+              ))}
+            </ol>
+          </section>
+        </div>
+      </div>
+
+      <section className="clay bg-sun-soft! p-5">
+        <h3 className="m-0 flex items-center gap-2 font-display text-lg font-black text-[#92400e]"><Icon name="hand" size={20} />{t('howToHelp', lang)}</h3>
+        <p className="m-0 mt-1 max-w-[62ch] leading-relaxed">{tr(lesson.parentGuide, lang)}</p>
+      </section>
+
+      {!child && <p className="m-0 text-ink-soft">{t('noChild', lang)}</p>}
+      <div className="flex flex-wrap items-center gap-3">
+        {isToday ? (
+          <>
+            <span className="inline-flex min-h-12 items-center gap-2 rounded-full bg-mint-soft px-4 font-display font-extrabold text-mint-deep">
+              <Icon name="check" size={20} />{t('isToday', lang).replace(' ✓', '')}
+            </span>
+            <button className="clay-btn is-sun" onClick={onChildMode}>
+              {t('startChildMode', lang).replace(' ▶', '')}<Icon name="play" size={18} />
+            </button>
+          </>
+        ) : (
+          <button className="clay-btn" onClick={onAssign} disabled={!child}>
+            <Icon name="sparkle" size={20} />{t('setToday', lang)}
+          </button>
+        )}
+      </div>
     </article>
   );
 }
@@ -187,49 +339,77 @@ function Settings({ data, update }: { data: AppData; update: (fn: (d: AppData) =
   };
 
   return (
-    <>
-      <section className="p-section">
-        <h2>{t('children', lang)}</h2>
-        <ul className="p-list">
-          {data.children.map((c) => (
-            <li key={c.id} className="p-child">
-              <span className="p-avatar" aria-hidden="true">{c.name.slice(0, 1).toUpperCase()}</span>
-              <strong>{c.name}</strong>
-              {c.id === data.activeChildId
-                ? <span className="p-tag">{t('active', lang)}</span>
-                : <button className="btn-quiet" onClick={() => update((d) => ({ ...d, activeChildId: c.id }))}>{t('select', lang)}</button>}
-              <button className="btn-quiet danger" onClick={() => remove(c.id)}>{t('delete', lang)}</button>
-            </li>
-          ))}
-        </ul>
-        <form className="p-add" onSubmit={add}>
-          <label htmlFor="child-name">{t('childName', lang)}</label>
-          <div className="row">
-            <input id="child-name" value={name} onChange={(e) => setName(e.target.value)} maxLength={30} autoComplete="off" />
-            <button className="btn-ink" type="submit">{t('addChild', lang)}</button>
-          </div>
-        </form>
+    <div className="flex flex-col gap-7">
+      <section>
+        <H2>{t('children', lang)}</H2>
+        <div className="clay p-4">
+          {data.children.length > 0 && (
+            <ul className="m-0 mb-4 flex list-none flex-col gap-2 p-0">
+              <AnimatePresence initial={false}>
+                {data.children.map((c) => {
+                  const active = c.id === data.activeChildId;
+                  return (
+                    <motion.li key={c.id} layout initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, x: -30 }}
+                      className={`flex flex-wrap items-center gap-3 rounded-[20px] p-2.5 ${active ? 'bg-blue-soft' : 'bg-canvas'}`}>
+                      <span className="grid h-11 w-11 place-items-center rounded-full bg-gradient-to-br from-sun to-coral font-display text-lg font-black text-white" aria-hidden="true">
+                        {c.name.slice(0, 1).toUpperCase()}
+                      </span>
+                      <strong className="min-w-0 flex-1 truncate font-display text-lg">{c.name}</strong>
+                      {active
+                        ? <span className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-sm font-bold text-blue"><Icon name="check" size={14} />{t('active', lang)}</span>
+                        : <button className="clay-btn is-white !min-h-11 !px-4 text-sm" onClick={() => update((d) => ({ ...d, activeChildId: c.id }))}>{t('select', lang)}</button>}
+                      <button className="grid h-11 w-11 place-items-center rounded-full text-[#b91c1c] transition hover:bg-white active:scale-90" onClick={() => remove(c.id)} aria-label={`${t('delete', lang)} ${c.name}`}>
+                        <Icon name="trash" size={20} />
+                      </button>
+                    </motion.li>
+                  );
+                })}
+              </AnimatePresence>
+            </ul>
+          )}
+          <form onSubmit={add}>
+            <label htmlFor="child-name" className="mb-2 block font-bold">{t('childName', lang)}</label>
+            <div className="flex flex-wrap gap-3">
+              <input id="child-name" className="clay-input min-w-[12ch] flex-1" value={name} onChange={(e) => setName(e.target.value)} maxLength={30} autoComplete="off" />
+              <button className="clay-btn" type="submit" disabled={!name.trim()}><Icon name="plus" size={20} />{t('addChild', lang)}</button>
+            </div>
+          </form>
+        </div>
       </section>
 
-      <section className="p-section">
-        <h2>{t('settings', lang)}</h2>
-        <LangPicker id="parent-lang" label={t('parentLanguage', lang)} value={lang}
-          onChange={(v) => update((d) => ({ ...d, parentLang: v }))} />
-        {child && <LangPicker id="child-lang" label={`${t('childLanguage', lang)} (${child.name})`} value={child.childLang}
-          onChange={(v) => update((d) => ({ ...d, children: d.children.map((c) => (c.id === child.id ? { ...c, childLang: v } : c)) }))} />}
-        <p className="muted small">{t('privacyNote', lang)}</p>
+      <section>
+        <H2>{t('settings', lang)}</H2>
+        <div className="clay flex flex-col gap-5 p-5">
+          <LangSwitch label={t('parentLanguage', lang)} value={lang} onChange={(v) => update((d) => ({ ...d, parentLang: v }))} />
+          {child && (
+            <LangSwitch label={`${t('childLanguage', lang)} · ${child.name}`} value={child.childLang}
+              onChange={(v) => update((d) => ({ ...d, children: d.children.map((c) => (c.id === child.id ? { ...c, childLang: v } : c)) }))} />
+          )}
+          <p className="m-0 flex gap-2 rounded-[18px] bg-mint-soft p-3 text-sm text-mint-deep">
+            <Icon name="lock" size={18} className="shrink-0" />{t('privacyNote', lang)}
+          </p>
+        </div>
       </section>
-    </>
+    </div>
   );
 }
 
-function LangPicker({ id, label, value, onChange }: { id: string; label: string; value: Lang; onChange: (v: Lang) => void }) {
+function LangSwitch({ label, value, onChange }: { label: string; value: Lang; onChange: (v: Lang) => void }) {
   return (
-    <div className="p-field">
-      <label htmlFor={id}>{label}</label>
-      <select id={id} value={value} onChange={(e) => onChange(e.target.value as Lang)}>
-        {LANGS.map((l) => <option key={l} value={l}>{LANG_NAMES[l]}{l === 'rn' ? ' (beta)' : ''}</option>)}
-      </select>
-    </div>
+    <fieldset className="m-0 border-0 p-0">
+      <legend className="mb-2 p-0 font-bold">{label}</legend>
+      <div className="inline-flex rounded-full bg-canvas p-1 shadow-[inset_2px_3px_6px_rgb(43_39_64/0.08)]" role="radiogroup">
+        {LANGS.map((l) => {
+          const on = value === l;
+          return (
+            <button key={l} type="button" role="radio" aria-checked={on} onClick={() => onChange(l)}
+              className={`relative min-h-11 rounded-full px-5 font-display font-extrabold transition-colors ${on ? 'text-white' : 'text-ink-soft'}`}>
+              {on && <motion.span layoutId={`lang-${label}`} className="absolute inset-0 rounded-full bg-blue shadow-[inset_0_-3px_0_rgb(0_0_0/0.15)]" transition={spring} />}
+              <span className="relative">{LANG_NAMES[l]}</span>
+            </button>
+          );
+        })}
+      </div>
+    </fieldset>
   );
 }

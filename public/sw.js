@@ -1,5 +1,5 @@
 // Offline cache: network first for pages, cache first for built assets.
-const CACHE = 'hlc-v1';
+const CACHE = 'hlc-v2';
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['/', '/manifest.webmanifest'])));

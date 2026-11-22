@@ -1,10 +1,7 @@
 import type { Lang, Localized } from '../engine/types';
 
-/**
- * Fallback order when a text is missing in the chosen language.
- * Kirundi texts are not written yet (need a native speaker), so `rn` falls back to French.
- */
-const FALLBACK: Record<Lang, Lang[]> = { rn: ['rn', 'fr', 'en'], fr: ['fr', 'en'], en: ['en', 'fr'] };
+/** Fallback order when a text is missing in the chosen language. */
+const FALLBACK: Record<Lang, Lang[]> = { fr: ['fr', 'en'], en: ['en', 'fr'] };
 
 export function tr(text: Localized | undefined, lang: Lang): string {
   if (!text) return '';
@@ -12,14 +9,31 @@ export function tr(text: Localized | undefined, lang: Lang): string {
   return Object.values(text)[0] ?? '';
 }
 
-export const LANG_NAMES: Record<Lang, string> = { en: 'English', fr: 'Français', rn: 'Kirundi' };
+export const LANG_NAMES: Record<Lang, string> = { fr: 'Français', en: 'English' };
 
 /** Application UI strings (lesson texts live in the lesson files). */
 const UI = {
-  childWelcome: { en: 'Hello! Ready to play and learn?', fr: 'Bonjour ! Prêt à jouer et apprendre ?' },
+  childWelcome: { en: 'Hello {name}! Shall we play?', fr: 'Bonjour {name} ! On joue ?' },
+  tapToStart: { en: 'Tap to start', fr: 'Appuie pour commencer' },
+  watchAgainSay: { en: 'Watch me once more.', fr: 'Regarde-moi encore une fois.' },
+  listen: { en: 'Listen', fr: 'Écouter' },
+  home: { en: 'Home', fr: 'Accueil' },
+  appName: { en: 'Pipo · learn at home', fr: 'Pipo · apprendre à la maison' },
+  welcomeParent: { en: 'Welcome! Set up your child to begin.', fr: 'Bienvenue ! Créez le profil de votre enfant pour commencer.' },
+  stepIntro: { en: 'Look', fr: 'Regarder' },
+  stepDemo: { en: 'Watch', fr: 'Observer' },
+  stepTrace: { en: 'Trace', fr: 'Tracer' },
+  stepFree: { en: 'Write alone', fr: 'Écrire seul' },
+  sessions: { en: 'sessions', fr: 'séances' },
+  lastPractice: { en: 'Last practice', fr: 'Dernière séance' },
+  totalTime: { en: 'Practice time', fr: 'Temps de pratique' },
+  lessonsDone: { en: 'Lessons practiced', fr: 'Leçons pratiquées' },
+  writing: { en: 'Writing', fr: 'Écriture' },
+  childProfile: { en: 'Child profile', fr: "Profil de l'enfant" },
   todayActivity: { en: "Today's activity", fr: "L'activité du jour" },
   noActivity: { en: 'Ask a grown-up to choose an activity.', fr: 'Demande à un adulte de choisir une activité.' },
-  tryAgain: { en: 'Try again', fr: 'Recommencer' },
+  noActivityParent: { en: 'No activity chosen yet. Pick one in Lessons.', fr: 'Aucune activité choisie. Choisissez-en une dans Leçons.' },
+  tryAgain: { en: 'Again', fr: 'Encore' },
   next: { en: 'Next activity', fr: 'Activité suivante' },
   finish: { en: 'Finish', fr: 'Terminer' },
   parentArea: { en: 'Parent area', fr: 'Espace parent' },

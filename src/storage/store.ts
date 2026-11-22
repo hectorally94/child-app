@@ -37,7 +37,7 @@ export interface AppData {
 }
 
 const KEY = 'hlc.data.v1';
-const EMPTY: AppData = { version: 1, parentLang: 'en', activeChildId: null, children: [], sessions: [] };
+const EMPTY: AppData = { version: 1, parentLang: 'fr', activeChildId: null, children: [], sessions: [] };
 
 export function load(): AppData {
   try {

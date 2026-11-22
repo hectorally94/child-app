@@ -1,10 +1,10 @@
 {
-  "name": "Home Learning Companion",
-  "short_name": "Learn at home",
+  "name": "Pipo · apprendre à la maison",
+  "short_name": "Pipo",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#BFE6F5",
-  "theme_color": "#23443A",
+  "background_color": "#F4F1FA",
+  "theme_color": "#F4F1FA",
   "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
 }

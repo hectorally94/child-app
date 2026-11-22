@@ -1,6 +1,9 @@
-/** Language codes supported by the architecture (PRD §13). */
-export type Lang = 'en' | 'fr' | 'rn';
-export const LANGS: Lang[] = ['en', 'fr', 'rn'];
+/**
+ * Standard languages: French and English (decision 2026-11-22).
+ * Kirundi can be added later by adding 'rn' here and texts in the lesson files.
+ */
+export type Lang = 'fr' | 'en';
+export const LANGS: Lang[] = ['fr', 'en'];
 
 /** A text that may be provided in several languages. Missing languages fall back. */
 export type Localized = Partial<Record<Lang, string>>;
