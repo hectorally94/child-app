@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Confetti } from '../components/Decor';
 import { Icon } from '../components/Icon';
 import { Mascot, type Mood } from '../components/Mascot';
-import { SpeakButton } from '../components/SpeakButton';
+import { SpeakButton, type SpeakInfo } from '../components/SpeakButton';
 import { pictureUrl, wordsKey, type Word, type WordSet } from '../content/speak';
 import { playSound, speakAsync, speakFeedback, stopSpeaking } from '../engine/speech';
 import { t, tr } from '../i18n';
@@ -83,8 +83,8 @@ export function WordsPlayer({ set, child, update, compact, next, onHome, onNext 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, i]);
 
-  const afterSpeak = (spoke: boolean) => {
-    session.add(simpleAttempt('speak', spoke));
+  const afterSpeak = (info: SpeakInfo) => {
+    session.add({ ...simpleAttempt('speak', true), coverage: info.score });
     setMood('happy');
     window.setTimeout(() => {
       if (!alive.current) return;
@@ -211,7 +211,16 @@ export function WordsPlayer({ set, child, update, compact, next, onHome, onNext 
               </button>
               <p className="m-0 font-display text-[clamp(1.8rem,8vw,2.6rem)] leading-none font-black text-ink">{tr(word.word, lang)}</p>
               <div className="min-h-[8.5rem]">
-                {canSpeak && <SpeakButton key={`speak-${i}`} lang={lang} onDone={(spoke) => afterSpeak(spoke)} />}
+                {canSpeak && (
+                  <SpeakButton
+                    key={`speak-${i}`}
+                    lang={lang}
+                    expected={tr(word.word, lang)}
+                    check={child.checkSpeech !== false}
+                    onDone={afterSpeak}
+                    onMiss={(info) => { session.add({ ...simpleAttempt('speak', false), coverage: info.score }); setMood('encourage'); }}
+                  />
+                )}
               </div>
             </motion.div>
           )}

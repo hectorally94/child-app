@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Confetti } from '../components/Decor';
 import { Icon } from '../components/Icon';
 import { Mascot, PIPO, TIKA, type Mood } from '../components/Mascot';
-import { SpeakButton } from '../components/SpeakButton';
-import { pictureUrl, talkKey, type Reel, type Speaker } from '../content/speak';
+import { SpeakButton, type SpeakInfo } from '../components/SpeakButton';
+import { personalize, pictureUrl, talkKey, type Reel, type Speaker } from '../content/speak';
 import { playSound, speakAsync, stopSpeaking } from '../engine/speech';
 import { t, tr } from '../i18n';
 import type { AppData, Child } from '../storage/store';
@@ -17,6 +17,9 @@ const SCENES: Record<string, { sky: string; ground: string; dark?: boolean }> = 
   kitchen: { sky: 'linear-gradient(180deg,#fde2f0 0%,#fff3c4 100%)', ground: '#fcd9b6' },
   home: { sky: 'linear-gradient(180deg,#ede4ff 0%,#fde2f0 100%)', ground: '#e9d5ff' },
   night: { sky: 'linear-gradient(180deg,#1e1b4b 0%,#4c1d95 100%)', ground: '#312e81', dark: true },
+  bathroom: { sky: 'linear-gradient(180deg,#e0f6ff 0%,#d1fae5 100%)', ground: '#bae6fd' },
+  bedroom: { sky: 'linear-gradient(180deg,#ede4ff 0%,#dbe7ff 100%)', ground: '#c4b5fd' },
+  garden: { sky: 'linear-gradient(180deg,#bfe6f5 0%,#fff3c4 100%)', ground: '#4ade80' },
 };
 
 const VOICE: Record<Speaker, { pitch: number; rate: number }> = {
@@ -120,7 +123,7 @@ function ReelView({ reel, child, update, onRepeated }: { reel: Reel; child: Chil
   const [run, setRun] = useState(0);
   const alive = useRef(true);
   useEffect(() => () => { alive.current = false; stopSpeaking(); }, []);
-  const repeatText = tr(reel.repeat, lang).replace('{name}', child.name);
+  const repeatText = personalize(tr(reel.repeat, lang), child);
 
   // Play the conversation, line by line
   useEffect(() => {
@@ -148,8 +151,8 @@ function ReelView({ reel, child, update, onRepeated }: { reel: Reel; child: Chil
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reel.id, run]);
 
-  const repeated = (spoke: boolean) => {
-    session.add(simpleAttempt('speak', spoke));
+  const repeated = (info: SpeakInfo) => {
+    session.add({ ...simpleAttempt('speak', true), coverage: info.score });
     session.finish();
     onRepeated();
     setPhase('done');
@@ -202,7 +205,18 @@ function ReelView({ reel, child, update, onRepeated }: { reel: Reel; child: Chil
 
       {/* child's turn */}
       <div className="relative flex min-h-[9.5rem] w-full flex-col items-center justify-center">
-        {phase === 'repeat' && <SpeakButton key={`${reel.id}-${run}`} lang={lang} onDone={(spoke) => repeated(spoke)} />}
+        {phase === 'repeat' && (
+          <SpeakButton
+            key={`${reel.id}-${run}`}
+            lang={lang}
+            expected={repeatText}
+            check={child.checkSpeech !== false}
+            minScore={0.6}
+            skip={[child.name]}
+            onDone={repeated}
+            onMiss={(info) => { session.add({ ...simpleAttempt('speak', false), coverage: info.score }); setMoods({ pipo: 'encourage', tika: 'encourage' }); }}
+          />
+        )}
         {phase === 'done' && (
           <>
             <Confetti pieces={30} />

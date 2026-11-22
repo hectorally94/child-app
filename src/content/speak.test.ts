@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { sequentialUnlocked } from '../engine/progress';
-import { loadReels, loadWordSets } from './speak';
+import { loadReels, loadWordSets, personalize } from './speak';
 
 const sets = loadWordSets();
 const reels = loadReels();
@@ -31,6 +31,18 @@ describe('words and conversations content', () => {
       for (const l of r.lines) expect(l.text.fr && l.text.en && ['pipo', 'tika'].includes(l.who), r.id).toBeTruthy();
       expect(r.repeat.fr && r.repeat.en, r.id).toBeTruthy();
     }
+  });
+
+  it('every reel belongs to a theme, and the 10 first conversations are still there', () => {
+    for (const r of reels) expect(['greet', 'needs', 'feelings', 'polite', 'house'], r.id).toContain(r.theme);
+    for (const id of ['bonjour', 'prenom', 'faim', 'soif', 'merci', 'jouer', 'aide', 'maman', 'emotions', 'aurevoir', 'toilettes'])
+      expect(reels.some((r) => r.id === id), id).toBe(true);
+  });
+
+  it('personalizes name and girl/boy forms', () => {
+    expect(personalize('Je suis content{e} !', { name: 'Amani', gender: 'f' })).toBe('Je suis contente !');
+    expect(personalize('Je suis content{e} !', { name: 'Keza', gender: 'm' })).toBe('Je suis content !');
+    expect(personalize("Je m'appelle {name}.", { name: 'Amani' })).toBe("Je m'appelle Amani.");
   });
 
   it('unlocks one after the other', () => {

@@ -14,6 +14,10 @@ export interface Child {
   avatar?: number;
   /** Parent switch: open every lesson without having to master the previous one. */
   unlockAll?: boolean;
+  /** Speech check before the picture game (default on). */
+  checkSpeech?: boolean;
+  /** For gendered French sentences ("Je suis content/contente"). */
+  gender?: 'f' | 'm';
 }
 
 export interface AttemptRecord extends Omit<AttemptMetrics, 'outcome'> {

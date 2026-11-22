@@ -27,7 +27,9 @@ export type Speaker = 'pipo' | 'tika';
 export interface Reel {
   id: string;
   order: number;
-  scene: 'morning' | 'park' | 'kitchen' | 'home' | 'night' | string;
+  scene: 'morning' | 'park' | 'kitchen' | 'home' | 'night' | 'bathroom' | 'bedroom' | 'garden' | string;
+  /** Theme shown as a section in the "Parler" tab: greet, needs, feelings, polite, house. */
+  theme: 'greet' | 'needs' | 'feelings' | 'polite' | 'house' | string;
   prop: string; // picture shown in the scene
   title: Localized;
   lines: { who: Speaker; text: Localized }[];
@@ -36,6 +38,11 @@ export interface Reel {
 }
 
 export const pictureUrl = (image: string) => `/pictures/${image}.svg`;
+
+/** "Je suis content{e}" → "Je suis contente" for a girl; "{name}" → the child's first name. */
+export function personalize(text: string, child: { name: string; gender?: 'f' | 'm' }): string {
+  return text.replace(/\{name\}/g, child.name).replace(/\{e\}/g, child.gender === 'f' ? 'e' : '');
+}
 
 export function loadWordSets(): WordSet[] {
   return [...(setsData.sets as WordSet[])].sort((a, b) => a.order - b.order);

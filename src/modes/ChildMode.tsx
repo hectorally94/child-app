@@ -87,7 +87,13 @@ export function ChildMode({ data, update, onParent }: Props) {
   const wordSets = loadWordSets();
   const reels = loadReels();
   const wordsOpen = sequentialUnlocked(wordSets.map((w) => wordsKey(w.id)), mastered, child?.unlockAll);
-  const reelsOpen = sequentialUnlocked(reels.map((r) => talkKey(r.id)), mastered, child?.unlockAll);
+  // Conversations unlock one after the other inside each theme (the first of every theme is open,
+  // so "Les toilettes" is available right away).
+  const reelsOpen = new Set(
+    [...new Set(reels.map((r) => r.theme))].flatMap((theme) => [
+      ...sequentialUnlocked(reels.filter((r) => r.theme === theme).map((r) => talkKey(r.id)), mastered, child?.unlockAll),
+    ]),
+  );
   const compactLayout = useCompact();
 
   // Remember what was open before the lesson, to announce what the child just unlocked.
@@ -179,6 +185,15 @@ export function ChildMode({ data, update, onParent }: Props) {
 }
 
 /* ------------------------------------------------------------------ */
+
+/** Themes of the "Parler" tab, in order, with a picture for each. */
+const THEMES: { k: string; label: UIKey; icon: string }[] = [
+  { k: 'greet', label: 'themeGreet', icon: '1f44b' },
+  { k: 'needs', label: 'themeNeeds', icon: '1f6bd' },
+  { k: 'feelings', label: 'themeFeelings', icon: '1f60a' },
+  { k: 'polite', label: 'themePolite', icon: '1f64f' },
+  { k: 'house', label: 'themeHouse', icon: '1f3e0' },
+];
 
 const TILE_COLORS = [
   'from-blue to-violet', 'from-pink to-[#f97362]', 'from-mint to-[#0ea5e9]', 'from-sun to-[#f97316]', 'from-violet to-pink',
@@ -397,9 +412,15 @@ function Welcome({ data, child, today, lessons, done, unlocked, lang, onPick, on
           )}
 
           {group === 'talk' && (
+            <div className="flex flex-col gap-5">
+            {THEMES.filter((th) => reels.some((r) => r.theme === th.k)).map((th) => (
+            <section key={th.k} aria-label={t(th.label, lang)}>
+            <h3 className="m-0 mb-2 flex items-center gap-2 px-1 text-lg font-black text-ink">
+              <img src={pictureUrl(th.icon)} alt="" className="h-7 w-7" />{t(th.label, lang)}
+            </h3>
             <motion.ul key="talk" className="m-0 grid list-none grid-cols-2 gap-3 p-0 sm:grid-cols-3" initial="hidden" animate="show"
               variants={{ show: { transition: { staggerChildren: 0.04 } } }}>
-              {reels.map((r, k) => {
+              {reels.map((r, k) => ({ r, k })).filter(({ r }) => r.theme === th.k).map(({ r, k }) => {
                 const key = talkKey(r.id);
                 const locked = !reelsOpen.has(key);
                 const wiggle = refused?.id === key;
@@ -435,6 +456,9 @@ function Welcome({ data, child, today, lessons, done, unlocked, lang, onPick, on
                 );
               })}
             </motion.ul>
+            </section>
+            ))}
+            </div>
           )}
 
           {(group === 'numbers' || group === 'letters') && (

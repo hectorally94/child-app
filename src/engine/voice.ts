@@ -95,3 +95,64 @@ export function playRecording(url: string | null): Promise<void> {
     a.play().catch(() => resolve());
   });
 }
+
+/* ------------------------------------------------------------------ speech recognition */
+
+/**
+ * Speech recognition from the browser (Chrome/Android: Google's service, needs internet; Safari: Apple's).
+ * The child's voice is sent to that service to be turned into text. Used only when the parent keeps
+ * "Vérifier la prononciation" on. Returns every alternative the recognizer proposes.
+ */
+export type RecognizeResult =
+  | { status: 'heard'; alternatives: string[] }
+  | { status: 'nothing' } // no speech heard
+  | { status: 'unavailable'; reason: string }; // not supported, offline, permission refused…
+
+interface RecognitionLike {
+  lang: string;
+  interimResults: boolean;
+  maxAlternatives: number;
+  continuous: boolean;
+  onresult: ((e: { results: ArrayLike<ArrayLike<{ transcript: string }>> }) => void) | null;
+  onerror: ((e: { error: string }) => void) | null;
+  onend: (() => void) | null;
+  onaudiostart?: (() => void) | null;
+  start: () => void;
+  abort: () => void;
+}
+
+function recognitionClass(): (new () => RecognitionLike) | null {
+  const w = window as unknown as { SpeechRecognition?: new () => RecognitionLike; webkitSpeechRecognition?: new () => RecognitionLike };
+  return w.SpeechRecognition ?? w.webkitSpeechRecognition ?? null;
+}
+
+export function recognitionSupported(): boolean {
+  return typeof window !== 'undefined' && !!recognitionClass() && navigator.onLine !== false;
+}
+
+export function recognize(lang: 'fr' | 'en', opts: { timeoutMs?: number; onStart?: () => void } = {}): Promise<RecognizeResult> {
+  const Rec = recognitionClass();
+  if (!Rec) return Promise.resolve({ status: 'unavailable', reason: 'unsupported' });
+  if (navigator.onLine === false) return Promise.resolve({ status: 'unavailable', reason: 'offline' });
+  return new Promise((resolve) => {
+    let settled = false;
+    const finish = (r: RecognizeResult) => { if (!settled) { settled = true; window.clearTimeout(timer); resolve(r); } };
+    const rec = new Rec();
+    rec.lang = lang === 'fr' ? 'fr-FR' : 'en-US';
+    rec.interimResults = false;
+    rec.maxAlternatives = 5;
+    rec.continuous = false;
+    const alternatives: string[] = [];
+    rec.onaudiostart = () => opts.onStart?.();
+    rec.onresult = (e) => {
+      for (const result of Array.from(e.results)) for (const alt of Array.from(result)) if (alt.transcript.trim()) alternatives.push(alt.transcript.trim());
+    };
+    rec.onerror = (e) => {
+      if (e.error === 'no-speech' || e.error === 'aborted') finish({ status: 'nothing' });
+      else finish({ status: 'unavailable', reason: e.error });
+    };
+    rec.onend = () => finish(alternatives.length ? { status: 'heard', alternatives } : { status: 'nothing' });
+    const timer = window.setTimeout(() => { try { rec.abort(); } catch { /* ignore */ } finish(alternatives.length ? { status: 'heard', alternatives } : { status: 'nothing' }); }, opts.timeoutMs ?? 8000);
+    try { rec.start(); } catch { finish({ status: 'unavailable', reason: 'start-failed' }); }
+  });
+}

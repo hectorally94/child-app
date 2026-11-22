@@ -444,6 +444,17 @@ function Settings({ data, update, onEdit }: { data: AppData; update: (fn: (d: Ap
           )}
           {child && (
             <label className="flex cursor-pointer items-start gap-3">
+              <input type="checkbox" className="peer sr-only" checked={child.checkSpeech !== false}
+                onChange={(e) => update((d) => ({ ...d, children: d.children.map((c) => (c.id === child.id ? { ...c, checkSpeech: e.target.checked } : c)) }))} />
+              <span className="relative mt-0.5 h-8 w-14 shrink-0 rounded-full bg-[#ddd6ee] transition-colors peer-checked:bg-blue peer-focus-visible:outline-4 peer-focus-visible:outline-violet after:absolute after:top-1 after:left-1 after:h-6 after:w-6 after:rounded-full after:bg-white after:shadow after:transition-transform peer-checked:after:translate-x-6" aria-hidden="true" />
+              <span>
+                <span className="block font-bold">{t('checkSpeech', lang)} · {child.name}</span>
+                <span className="block text-sm text-ink-soft">{t('checkSpeechHelp', lang)}</span>
+              </span>
+            </label>
+          )}
+          {child && (
+            <label className="flex cursor-pointer items-start gap-3">
               <input type="checkbox" className="peer sr-only" checked={!!child.unlockAll}
                 onChange={(e) => update((d) => ({ ...d, children: d.children.map((c) => (c.id === child.id ? { ...c, unlockAll: e.target.checked } : c)) }))} />
               <span className="relative mt-0.5 h-8 w-14 shrink-0 rounded-full bg-[#ddd6ee] transition-colors peer-checked:bg-blue peer-focus-visible:outline-4 peer-focus-visible:outline-violet after:absolute after:top-1 after:left-1 after:h-6 after:w-6 after:rounded-full after:bg-white after:shadow after:transition-transform peer-checked:after:translate-x-6" aria-hidden="true" />
@@ -514,6 +525,22 @@ function ProfileEditor({ child, lang, update }: { child: Child; lang: Lang; upda
             </div>
           </form>
         </div>
+        <fieldset className="m-0 border-0 p-0">
+          <legend className="mb-2 p-0 font-bold">{t('childIs', lang)}</legend>
+          <div className="inline-flex rounded-full bg-canvas p-1 shadow-[inset_2px_3px_6px_rgb(43_39_64/0.08)]" role="radiogroup">
+            {(['f', 'm'] as const).map((g) => {
+              const on = child.gender === g;
+              return (
+                <button key={g} type="button" role="radio" aria-checked={on} onClick={() => patch({ gender: g })}
+                  className={`relative min-h-11 rounded-full px-5 font-display font-extrabold transition-colors ${on ? 'text-white' : 'text-ink-soft'}`}>
+                  {on && <motion.span layoutId="gender-pill" className="absolute inset-0 rounded-full bg-blue shadow-[inset_0_-3px_0_rgb(0_0_0/0.15)]" transition={spring} />}
+                  <span className="relative">{t(g === 'f' ? 'girl' : 'boy', lang)}</span>
+                </button>
+              );
+            })}
+          </div>
+          <p className="m-0 mt-1.5 text-sm text-ink-soft">{t('genderHelp', lang)}</p>
+        </fieldset>
         <fieldset className="m-0 border-0 p-0">
           <legend className="mb-2 p-0 font-bold">{t('avatarColor', lang)}</legend>
           <div className="flex flex-wrap gap-3" role="radiogroup">
