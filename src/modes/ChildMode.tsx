@@ -12,6 +12,8 @@ import { loadReels, loadWordSets, pictureUrl, talkKey, wordsKey, type Reel, type
 import { TalkReels } from './TalkReels';
 import { WordsPlayer } from './WordsPlayer';
 import { ShortPlayer } from './ShortPlayer';
+import { ReelFeed } from './ReelFeed';
+import { remainingToday, reelSettings } from '../engine/reelPolicy';
 import { ShortTab } from './ShortTab';
 import { CollectionPicker, type CollectionItem } from '../components/CollectionPicker';
 import { COLLECTIONS, collectionById, collectionNumber } from '../content/collections';
@@ -37,7 +39,8 @@ type Screen =
   | { kind: 'words'; set: WordSet; run: number }
   | { kind: 'talk'; index: number; run: number }
   | { kind: 'short'; run: number; title: string; words: ShortWord[]; review: string[]; lessonKey: string; slot?: Slot; doneBefore: Slot[] }
-  | { kind: 'listen'; run: number; pack: ShortPack; set: WordSet };
+  | { kind: 'listen'; run: number; pack: ShortPack; set: WordSet }
+  | { kind: 'pause'; run: number };
 
 const spring = { type: 'spring', stiffness: 260, damping: 22 } as const;
 const screenMotion = {
@@ -105,6 +108,9 @@ export function ChildMode({ data, update, onParent, startTab }: Props) {
     ]),
   );
   const compactLayout = useCompact();
+  // Video break: off (parent switch), ready, or used up for today
+  const pause: 'off' | 'ready' | 'tomorrow' = !child || !reelSettings(data).enabled ? 'off' : remainingToday(data, child.id) <= 0 ? 'tomorrow' : 'ready';
+  const startPause = () => setScreen({ kind: 'pause', run: ++runRef.current });
   // Short words: packs unlock one after the other; a daily session (morning / afternoon / evening) mixes the
   // current pack with two review words.
   const shortPacks = loadShortPacks();
@@ -176,6 +182,8 @@ export function ChildMode({ data, update, onParent, startTab }: Props) {
             reelsOpen={reelsOpen}
             onPickSet={(set) => setScreen({ kind: 'words', set, run: ++runRef.current })}
             onPickReel={(index) => setScreen({ kind: 'talk', index, run: ++runRef.current })}
+            pause={pause}
+            onPause={startPause}
             group={tab}
             setGroup={setTab}
             shortCol={shortCol}
@@ -186,6 +194,16 @@ export function ChildMode({ data, update, onParent, startTab }: Props) {
             shortOpen={shortOpen}
             onStartSession={(slot) => startShort(slot)}
             onPickPack={(pack) => startShort(undefined, pack)}
+          />
+        )}
+        {screen.kind === 'pause' && child && (
+          <ReelFeed
+            key={`pause-${screen.run}`}
+            child={child}
+            data={data}
+            update={update}
+            onHome={() => { stopSpeaking(); setScreen({ kind: 'welcome' }); }}
+            onLearn={() => { stopSpeaking(); setTab('short'); setScreen({ kind: 'welcome' }); }}
           />
         )}
         {screen.kind === 'listen' && child && (
@@ -214,6 +232,7 @@ export function ChildMode({ data, update, onParent, startTab }: Props) {
             child={child}
             update={update}
             compact={compactLayout}
+            onPause={pause === 'ready' ? startPause : undefined}
             onHome={() => { stopSpeaking(); setScreen({ kind: 'welcome' }); }}
           />
         )}
@@ -277,6 +296,8 @@ const TILE_COLORS = [
 ];
 
 interface WelcomeProps {
+  pause: 'off' | 'ready' | 'tomorrow';
+  onPause: () => void;
   group: string;
   setGroup: (g: string) => void;
   shortCol: string;
@@ -304,7 +325,7 @@ interface WelcomeProps {
   onSwitch: (childId: string) => void;
 }
 
-function Welcome({ data, child, today, lessons, done, unlocked, lang, onPick, onSwitch, wordSets, reels, wordsOpen, reelsOpen, onPickSet, onPickReel, group, setGroup, shortCol, setShortCol, talkCol, setTalkCol, shortPacks, shortOpen, onStartSession, onPickPack }: WelcomeProps) {
+function Welcome({ data, child, today, lessons, done, unlocked, lang, onPick, onSwitch, wordSets, reels, wordsOpen, reelsOpen, onPickSet, onPickReel, pause, onPause, group, setGroup, shortCol, setShortCol, talkCol, setTalkCol, shortPacks, shortOpen, onStartSession, onPickPack }: WelcomeProps) {
   const [mood, say] = useTalk();
   const compact = useCompact();
   const [switching, setSwitching] = useState(false);
@@ -351,6 +372,19 @@ function Welcome({ data, child, today, lessons, done, unlocked, lang, onPick, on
             <Avatar child={child} size={40} />
             <span className="max-w-[40vw] truncate text-lg font-black">{child.name}</span>
           </button>
+        )}
+        {child && pause !== 'off' && (
+          <motion.button
+            onClick={pause === 'ready' ? onPause : () => say(lang, t('dayDone', lang), 'encourage')}
+            whileTap={{ scale: 0.92 }}
+            aria-label={pause === 'ready' ? t('pauseVideo', lang) : `${t('pauseVideo', lang)} (${t('pauseTomorrow', lang)})`}
+            aria-disabled={pause !== 'ready'}
+            className={`ml-auto flex items-center gap-1.5 rounded-full py-2 pr-4 pl-3 text-base font-black ${
+              pause === 'ready' ? 'bg-pink text-white shadow-[0_5px_0_#be185d]' : 'bg-white/70 text-ink-soft'}`}
+          >
+            {pause === 'ready' ? <Icon name="play" size={18} /> : <Icon name="clock" size={18} />}
+            {pause === 'ready' ? t('pauseVideo', lang) : t('pauseTomorrow', lang)}
+          </motion.button>
         )}
       </div>
       <AnimatePresence>

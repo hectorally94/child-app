@@ -81,6 +81,16 @@ Full spec: `docs/PRD.md` (source of truth for requirements).
   `streak`, `repetitionsOn`, `sessionWords` (current pack + 2 review words: the hardest / oldest), `hardWords`.
   A session record has `slot`, `skipped`; attempts have `item` (the word id).
 - `/seance` address opens the child space on "Petits mots" (alarm link; also a manifest shortcut).
+- **Pause vidéos** (2026-11-23): tired child → ad-free, time-limited, TikTok-style vertical feed (`src/modes/ReelFeed.tsx`,
+  pink "Pause vidéo" pill on the child home, "Pause méritée" after a Petits mots session). Clips are ORIGINAL cartoons
+  (8, ~20 s, no audio) drawn by `tools/reels/studio.html`, listed in `tools/reels/scenes.cjs`, rendered by
+  `node tools/reels/render.cjs` (Playwright + ffmpeg → `public/reels/*.mp4|webm|jpg` + `catalog.json` with caption cues).
+  Pipo says each cue (TTS) + caption; end of clip: replay / "Dis-le !" (mic) / next. Words are NOT in the video.
+  `src/content/reels.ts` (catalog, mp4/webm pick), `src/pwa/reelCache.ts` (Cache Storage `hlc-reels-v1`, saved clips play
+  offline), `src/storage/familyDb.ts` (family videos in IndexedDB, ≤60 MB, never uploaded), `src/engine/reelPolicy.ts`
+  (break length, daily max, data policy saved|wifi|always, feed order). Parent tab "Vidéos" (`modes/VideosPanel.tsx`).
+  `sw.js` ignores `/reels/`. NO TikTok/Facebook/Instagram/YouTube content or embeds (licences, ads, comments, unsafe
+  recommendations, PRD privacy). New clips from other sources only if the licence allows (CC0/own).
 - `src/i18n/` — UI strings + fallback (`fr` ↔ `en`).
 - `src/storage/` — versioned local store (children, sessions with attempts).
 

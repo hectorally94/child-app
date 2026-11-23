@@ -9,6 +9,7 @@ import { loadReels, loadWordSets, pictureUrl, talkKey, wordsKey } from '../conte
 import { loadShortPacks, shortKey } from '../content/short';
 import { dayKey, hardWords, repetitionsOn, SLOTS, streak, weekGrid, type Slot } from '../engine/routine';
 import { SLOT_LABEL } from './ShortPlayer';
+import { VideosPanel } from './VideosPanel';
 import { hashPin } from '../storage/pin';
 import { Slate } from '../components/Slate';
 import { loadLessons } from '../content';
@@ -17,7 +18,7 @@ import { LANGS, type Lang, type Lesson } from '../engine/types';
 import { LANG_NAMES, t, tr } from '../i18n';
 import { newId, type AppData, type Child } from '../storage/store';
 
-type Tab = 'dashboard' | 'lessons' | 'settings';
+type Tab = 'dashboard' | 'lessons' | 'videos' | 'settings';
 
 interface Props {
   data: AppData;
@@ -58,6 +59,7 @@ export function ParentMode({ data, update, onChildMode }: Props) {
   const tabs: { k: Tab; icon: IconName }[] = [
     { k: 'dashboard', icon: 'chart' },
     { k: 'lessons', icon: 'book' },
+    { k: 'videos', icon: 'play' },
     { k: 'settings', icon: 'gear' },
   ];
 
@@ -107,6 +109,7 @@ export function ParentMode({ data, update, onChildMode }: Props) {
               ? <Preview lesson={preview} lang={lang} child={child} onBack={() => setPreview(null)}
                   onAssign={() => setChild({ todayLessonId: preview.id })} onChildMode={onChildMode} />
               : <Catalogue lang={lang} child={child} onOpen={setPreview} />)}
+            {tab === 'videos' && <VideosPanel data={data} update={update} child={child} />}
             {tab === 'settings' && <Settings data={data} update={update} onEdit={openProfile} />}
           </motion.div>
         </AnimatePresence>

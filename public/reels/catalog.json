@@ -1,0 +1,1237 @@
+{
+ "version": 1,
+ "items": [
+  {
+   "id": "ferme",
+   "kind": "video",
+   "src": "/reels/ferme.mp4",
+   "srcWebm": "/reels/ferme.webm",
+   "poster": "/reels/ferme.jpg",
+   "seconds": 21.4,
+   "bytes": 372011,
+   "title": {
+    "fr": "Les animaux de la ferme",
+    "en": "Farm animals"
+   },
+   "collection": "monde",
+   "audio": false,
+   "cues": [
+    {
+     "t": 0.4,
+     "show": {
+      "fr": "Regarde !",
+      "en": "Look!"
+     },
+     "say": {
+      "fr": "Regarde !",
+      "en": "Look!"
+     }
+    },
+    {
+     "t": 1.6,
+     "show": {
+      "fr": "la vache",
+      "en": "the cow"
+     },
+     "say": {
+      "fr": "la vache",
+      "en": "the cow"
+     }
+    },
+    {
+     "t": 3.1,
+     "show": {
+      "fr": "Meuh !",
+      "en": "Moo!"
+     },
+     "say": {
+      "fr": "Meuh !",
+      "en": "Moo!"
+     }
+    },
+    {
+     "t": 5.2,
+     "show": {
+      "fr": "le mouton",
+      "en": "the sheep"
+     },
+     "say": {
+      "fr": "le mouton",
+      "en": "the sheep"
+     }
+    },
+    {
+     "t": 6.7,
+     "show": {
+      "fr": "Bê !",
+      "en": "Baa!"
+     },
+     "say": {
+      "fr": "Bê !",
+      "en": "Baa!"
+     }
+    },
+    {
+     "t": 8.8,
+     "show": {
+      "fr": "la poule",
+      "en": "the hen"
+     },
+     "say": {
+      "fr": "la poule",
+      "en": "the hen"
+     }
+    },
+    {
+     "t": 10.3,
+     "show": {
+      "fr": "Cot cot !",
+      "en": "Cluck cluck!"
+     },
+     "say": {
+      "fr": "Cot cot !",
+      "en": "Cluck cluck!"
+     }
+    },
+    {
+     "t": 12.4,
+     "show": {
+      "fr": "le cochon",
+      "en": "the pig"
+     },
+     "say": {
+      "fr": "le cochon",
+      "en": "the pig"
+     }
+    },
+    {
+     "t": 13.9,
+     "show": {
+      "fr": "Groin groin !",
+      "en": "Oink oink!"
+     },
+     "say": {
+      "fr": "Groin groin !",
+      "en": "Oink oink!"
+     }
+    },
+    {
+     "t": 16,
+     "show": {
+      "fr": "le cheval",
+      "en": "the horse"
+     },
+     "say": {
+      "fr": "le cheval",
+      "en": "the horse"
+     }
+    },
+    {
+     "t": 17.5,
+     "show": {
+      "fr": "Hi hi hi !",
+      "en": "Neigh!"
+     },
+     "say": {
+      "fr": "Hi hi hi !",
+      "en": "Neigh!"
+     }
+    },
+    {
+     "t": 19.5,
+     "show": {
+      "fr": "Bravo !",
+      "en": "Well done!"
+     },
+     "say": {
+      "fr": "Bravo !",
+      "en": "Well done!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "la vache",
+    "en": "the cow"
+   },
+   "credit": "Dessins animés originaux. Images : Twemoji (CC-BY 4.0)."
+  },
+  {
+   "id": "compte",
+   "kind": "video",
+   "src": "/reels/compte.mp4",
+   "srcWebm": "/reels/compte.webm",
+   "poster": "/reels/compte.jpg",
+   "seconds": 21.4,
+   "bytes": 305175,
+   "title": {
+    "fr": "Compte avec Pipo",
+    "en": "Count with Pipo"
+   },
+   "collection": "monde",
+   "audio": false,
+   "cues": [
+    {
+     "t": 0.4,
+     "show": {
+      "fr": "On compte !",
+      "en": "Let's count!"
+     },
+     "say": {
+      "fr": "On compte !",
+      "en": "Let's count!"
+     }
+    },
+    {
+     "t": 1.6,
+     "show": {
+      "fr": "un",
+      "en": "one"
+     },
+     "say": {
+      "fr": "un",
+      "en": "one"
+     }
+    },
+    {
+     "t": 3.1,
+     "show": {
+      "fr": "un ballon",
+      "en": "one balloon"
+     },
+     "say": {
+      "fr": "un ballon",
+      "en": "one balloon"
+     }
+    },
+    {
+     "t": 5.2,
+     "show": {
+      "fr": "deux",
+      "en": "two"
+     },
+     "say": {
+      "fr": "deux",
+      "en": "two"
+     }
+    },
+    {
+     "t": 6.7,
+     "show": {
+      "fr": "deux ballons",
+      "en": "two balloons"
+     },
+     "say": {
+      "fr": "deux ballons",
+      "en": "two balloons"
+     }
+    },
+    {
+     "t": 8.8,
+     "show": {
+      "fr": "trois",
+      "en": "three"
+     },
+     "say": {
+      "fr": "trois",
+      "en": "three"
+     }
+    },
+    {
+     "t": 10.3,
+     "show": {
+      "fr": "trois ballons",
+      "en": "three balloons"
+     },
+     "say": {
+      "fr": "trois ballons",
+      "en": "three balloons"
+     }
+    },
+    {
+     "t": 12.4,
+     "show": {
+      "fr": "quatre",
+      "en": "four"
+     },
+     "say": {
+      "fr": "quatre",
+      "en": "four"
+     }
+    },
+    {
+     "t": 13.9,
+     "show": {
+      "fr": "quatre ballons",
+      "en": "four balloons"
+     },
+     "say": {
+      "fr": "quatre ballons",
+      "en": "four balloons"
+     }
+    },
+    {
+     "t": 16,
+     "show": {
+      "fr": "cinq",
+      "en": "five"
+     },
+     "say": {
+      "fr": "cinq",
+      "en": "five"
+     }
+    },
+    {
+     "t": 17.5,
+     "show": {
+      "fr": "cinq ballons",
+      "en": "five balloons"
+     },
+     "say": {
+      "fr": "cinq ballons",
+      "en": "five balloons"
+     }
+    },
+    {
+     "t": 19.5,
+     "show": {
+      "fr": "Bravo !",
+      "en": "Well done!"
+     },
+     "say": {
+      "fr": "Bravo !",
+      "en": "Well done!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "un, deux, trois",
+    "en": "one, two, three"
+   },
+   "credit": "Dessins animés originaux. Images : Twemoji (CC-BY 4.0)."
+  },
+  {
+   "id": "couleurs",
+   "kind": "video",
+   "src": "/reels/couleurs.mp4",
+   "srcWebm": "/reels/couleurs.webm",
+   "poster": "/reels/couleurs.jpg",
+   "seconds": 21.4,
+   "bytes": 418955,
+   "title": {
+    "fr": "Les couleurs",
+    "en": "Colors"
+   },
+   "collection": "monde",
+   "audio": false,
+   "cues": [
+    {
+     "t": 0.4,
+     "show": {
+      "fr": "Quelle couleur ?",
+      "en": "What color?"
+     },
+     "say": {
+      "fr": "Quelle couleur ?",
+      "en": "What color?"
+     }
+    },
+    {
+     "t": 1.6,
+     "show": {
+      "fr": "rouge",
+      "en": "red"
+     },
+     "say": {
+      "fr": "rouge",
+      "en": "red"
+     }
+    },
+    {
+     "t": 3.1,
+     "show": {
+      "fr": "comme la pomme",
+      "en": "like the apple"
+     },
+     "say": {
+      "fr": "comme la pomme",
+      "en": "like the apple"
+     }
+    },
+    {
+     "t": 5.2,
+     "show": {
+      "fr": "bleu",
+      "en": "blue"
+     },
+     "say": {
+      "fr": "bleu",
+      "en": "blue"
+     }
+    },
+    {
+     "t": 6.7,
+     "show": {
+      "fr": "comme la baleine",
+      "en": "like the whale"
+     },
+     "say": {
+      "fr": "comme la baleine",
+      "en": "like the whale"
+     }
+    },
+    {
+     "t": 8.8,
+     "show": {
+      "fr": "jaune",
+      "en": "yellow"
+     },
+     "say": {
+      "fr": "jaune",
+      "en": "yellow"
+     }
+    },
+    {
+     "t": 10.3,
+     "show": {
+      "fr": "comme le soleil",
+      "en": "like the sun"
+     },
+     "say": {
+      "fr": "comme le soleil",
+      "en": "like the sun"
+     }
+    },
+    {
+     "t": 12.4,
+     "show": {
+      "fr": "vert",
+      "en": "green"
+     },
+     "say": {
+      "fr": "vert",
+      "en": "green"
+     }
+    },
+    {
+     "t": 13.9,
+     "show": {
+      "fr": "comme l'arbre",
+      "en": "like the tree"
+     },
+     "say": {
+      "fr": "comme l'arbre",
+      "en": "like the tree"
+     }
+    },
+    {
+     "t": 16,
+     "show": {
+      "fr": "rose",
+      "en": "pink"
+     },
+     "say": {
+      "fr": "rose",
+      "en": "pink"
+     }
+    },
+    {
+     "t": 17.5,
+     "show": {
+      "fr": "comme la fleur",
+      "en": "like the flower"
+     },
+     "say": {
+      "fr": "comme la fleur",
+      "en": "like the flower"
+     }
+    },
+    {
+     "t": 19.5,
+     "show": {
+      "fr": "Bravo !",
+      "en": "Well done!"
+     },
+     "say": {
+      "fr": "Bravo !",
+      "en": "Well done!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "rouge",
+    "en": "red"
+   },
+   "credit": "Dessins animés originaux. Images : Twemoji (CC-BY 4.0)."
+  },
+  {
+   "id": "bouche",
+   "kind": "video",
+   "src": "/reels/bouche.mp4",
+   "srcWebm": "/reels/bouche.webm",
+   "poster": "/reels/bouche.jpg",
+   "seconds": 21.4,
+   "bytes": 437427,
+   "title": {
+    "fr": "Fais comme Pipo",
+    "en": "Do like Pipo"
+   },
+   "collection": "sons",
+   "audio": false,
+   "cues": [
+    {
+     "t": 0.4,
+     "show": {
+      "fr": "Fais comme moi !",
+      "en": "Do like me!"
+     },
+     "say": {
+      "fr": "Fais comme moi !",
+      "en": "Do like me!"
+     }
+    },
+    {
+     "t": 1.6,
+     "show": {
+      "fr": "Un bisou !",
+      "en": "A kiss!"
+     },
+     "say": {
+      "fr": "Un bisou !",
+      "en": "A kiss!"
+     }
+    },
+    {
+     "t": 3.1,
+     "show": {
+      "fr": "mouah !",
+      "en": "mwah!"
+     },
+     "say": {
+      "fr": "mouah !",
+      "en": "mwah!"
+     }
+    },
+    {
+     "t": 5.2,
+     "show": {
+      "fr": "Souffle fort !",
+      "en": "Blow hard!"
+     },
+     "say": {
+      "fr": "Souffle fort !",
+      "en": "Blow hard!"
+     }
+    },
+    {
+     "t": 6.7,
+     "show": {
+      "fr": "fff !",
+      "en": "fff!"
+     },
+     "say": {
+      "fr": "fff !",
+      "en": "fff!"
+     }
+    },
+    {
+     "t": 8.8,
+     "show": {
+      "fr": "Tire la langue !",
+      "en": "Stick out your tongue!"
+     },
+     "say": {
+      "fr": "Tire la langue !",
+      "en": "Stick out your tongue!"
+     }
+    },
+    {
+     "t": 10.3,
+     "show": {
+      "fr": "la la la !",
+      "en": "la la la!"
+     },
+     "say": {
+      "fr": "la la la !",
+      "en": "la la la!"
+     }
+    },
+    {
+     "t": 12.4,
+     "show": {
+      "fr": "Ouvre grand la bouche !",
+      "en": "Open your mouth wide!"
+     },
+     "say": {
+      "fr": "Ouvre grand la bouche !",
+      "en": "Open your mouth wide!"
+     }
+    },
+    {
+     "t": 13.9,
+     "show": {
+      "fr": "aaa !",
+      "en": "aaa!"
+     },
+     "say": {
+      "fr": "aaa !",
+      "en": "aaa!"
+     }
+    },
+    {
+     "t": 16,
+     "show": {
+      "fr": "Les lèvres !",
+      "en": "Your lips!"
+     },
+     "say": {
+      "fr": "Les lèvres !",
+      "en": "Your lips!"
+     }
+    },
+    {
+     "t": 17.5,
+     "show": {
+      "fr": "pa pa pa !",
+      "en": "pa pa pa!"
+     },
+     "say": {
+      "fr": "pa pa pa !",
+      "en": "pa pa pa!"
+     }
+    },
+    {
+     "t": 19.5,
+     "show": {
+      "fr": "Bravo !",
+      "en": "Well done!"
+     },
+     "say": {
+      "fr": "Bravo !",
+      "en": "Well done!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "pa pa pa",
+    "en": "pa pa pa"
+   },
+   "credit": "Dessins animés originaux. Images : Twemoji (CC-BY 4.0)."
+  },
+  {
+   "id": "lavage",
+   "kind": "video",
+   "src": "/reels/lavage.mp4",
+   "srcWebm": "/reels/lavage.webm",
+   "poster": "/reels/lavage.jpg",
+   "seconds": 21.4,
+   "bytes": 365621,
+   "title": {
+    "fr": "Je me lave les mains",
+    "en": "I wash my hands"
+   },
+   "collection": "besoins",
+   "audio": false,
+   "cues": [
+    {
+     "t": 0.4,
+     "show": {
+      "fr": "Avant de manger…",
+      "en": "Before eating…"
+     },
+     "say": {
+      "fr": "Avant de manger…",
+      "en": "Before eating…"
+     }
+    },
+    {
+     "t": 1.6,
+     "show": {
+      "fr": "de l'eau",
+      "en": "water"
+     },
+     "say": {
+      "fr": "de l'eau",
+      "en": "water"
+     }
+    },
+    {
+     "t": 3.1,
+     "show": {
+      "fr": "Je mouille mes mains.",
+      "en": "I wet my hands."
+     },
+     "say": {
+      "fr": "Je mouille mes mains.",
+      "en": "I wet my hands."
+     }
+    },
+    {
+     "t": 5.2,
+     "show": {
+      "fr": "du savon",
+      "en": "soap"
+     },
+     "say": {
+      "fr": "du savon",
+      "en": "soap"
+     }
+    },
+    {
+     "t": 6.7,
+     "show": {
+      "fr": "Je mets du savon.",
+      "en": "I use soap."
+     },
+     "say": {
+      "fr": "Je mets du savon.",
+      "en": "I use soap."
+     }
+    },
+    {
+     "t": 8.8,
+     "show": {
+      "fr": "les mains",
+      "en": "my hands"
+     },
+     "say": {
+      "fr": "les mains",
+      "en": "my hands"
+     }
+    },
+    {
+     "t": 10.3,
+     "show": {
+      "fr": "Je frotte bien.",
+      "en": "I rub well."
+     },
+     "say": {
+      "fr": "Je frotte bien.",
+      "en": "I rub well."
+     }
+    },
+    {
+     "t": 12.4,
+     "show": {
+      "fr": "rincer",
+      "en": "rinse"
+     },
+     "say": {
+      "fr": "rincer",
+      "en": "rinse"
+     }
+    },
+    {
+     "t": 13.9,
+     "show": {
+      "fr": "Je rince.",
+      "en": "I rinse."
+     },
+     "say": {
+      "fr": "Je rince.",
+      "en": "I rinse."
+     }
+    },
+    {
+     "t": 16,
+     "show": {
+      "fr": "propres",
+      "en": "clean"
+     },
+     "say": {
+      "fr": "propres",
+      "en": "clean"
+     }
+    },
+    {
+     "t": 17.5,
+     "show": {
+      "fr": "Mes mains sont propres !",
+      "en": "My hands are clean!"
+     },
+     "say": {
+      "fr": "Mes mains sont propres !",
+      "en": "My hands are clean!"
+     }
+    },
+    {
+     "t": 19.5,
+     "show": {
+      "fr": "Bravo !",
+      "en": "Well done!"
+     },
+     "say": {
+      "fr": "Bravo !",
+      "en": "Well done!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Je me lave les mains.",
+    "en": "I wash my hands."
+   },
+   "credit": "Dessins animés originaux. Images : Twemoji (CC-BY 4.0)."
+  },
+  {
+   "id": "meteo",
+   "kind": "video",
+   "src": "/reels/meteo.mp4",
+   "srcWebm": "/reels/meteo.webm",
+   "poster": "/reels/meteo.jpg",
+   "seconds": 21.4,
+   "bytes": 450155,
+   "title": {
+    "fr": "La météo",
+    "en": "The weather"
+   },
+   "collection": "monde",
+   "audio": false,
+   "cues": [
+    {
+     "t": 0.4,
+     "show": {
+      "fr": "Quel temps fait-il ?",
+      "en": "What's the weather?"
+     },
+     "say": {
+      "fr": "Quel temps fait-il ?",
+      "en": "What's the weather?"
+     }
+    },
+    {
+     "t": 1.6,
+     "show": {
+      "fr": "le soleil",
+      "en": "the sun"
+     },
+     "say": {
+      "fr": "le soleil",
+      "en": "the sun"
+     }
+    },
+    {
+     "t": 3.1,
+     "show": {
+      "fr": "Il fait beau !",
+      "en": "It is sunny!"
+     },
+     "say": {
+      "fr": "Il fait beau !",
+      "en": "It is sunny!"
+     }
+    },
+    {
+     "t": 5.2,
+     "show": {
+      "fr": "le nuage",
+      "en": "the cloud"
+     },
+     "say": {
+      "fr": "le nuage",
+      "en": "the cloud"
+     }
+    },
+    {
+     "t": 6.7,
+     "show": {
+      "fr": "Il y a des nuages.",
+      "en": "There are clouds."
+     },
+     "say": {
+      "fr": "Il y a des nuages.",
+      "en": "There are clouds."
+     }
+    },
+    {
+     "t": 8.8,
+     "show": {
+      "fr": "la pluie",
+      "en": "the rain"
+     },
+     "say": {
+      "fr": "la pluie",
+      "en": "the rain"
+     }
+    },
+    {
+     "t": 10.3,
+     "show": {
+      "fr": "Il pleut !",
+      "en": "It is raining!"
+     },
+     "say": {
+      "fr": "Il pleut !",
+      "en": "It is raining!"
+     }
+    },
+    {
+     "t": 12.4,
+     "show": {
+      "fr": "l'arc-en-ciel",
+      "en": "the rainbow"
+     },
+     "say": {
+      "fr": "l'arc-en-ciel",
+      "en": "the rainbow"
+     }
+    },
+    {
+     "t": 13.9,
+     "show": {
+      "fr": "Oh, un arc-en-ciel !",
+      "en": "Oh, a rainbow!"
+     },
+     "say": {
+      "fr": "Oh, un arc-en-ciel !",
+      "en": "Oh, a rainbow!"
+     }
+    },
+    {
+     "t": 16,
+     "show": {
+      "fr": "le vent",
+      "en": "the wind"
+     },
+     "say": {
+      "fr": "le vent",
+      "en": "the wind"
+     }
+    },
+    {
+     "t": 17.5,
+     "show": {
+      "fr": "Il y a du vent.",
+      "en": "It is windy."
+     },
+     "say": {
+      "fr": "Il y a du vent.",
+      "en": "It is windy."
+     }
+    },
+    {
+     "t": 19.5,
+     "show": {
+      "fr": "Bravo !",
+      "en": "Well done!"
+     },
+     "say": {
+      "fr": "Bravo !",
+      "en": "Well done!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Il fait beau !",
+    "en": "It is sunny!"
+   },
+   "credit": "Dessins animés originaux. Images : Twemoji (CC-BY 4.0)."
+  },
+  {
+   "id": "fruits",
+   "kind": "video",
+   "src": "/reels/fruits.mp4",
+   "srcWebm": "/reels/fruits.webm",
+   "poster": "/reels/fruits.jpg",
+   "seconds": 21.4,
+   "bytes": 379797,
+   "title": {
+    "fr": "Les fruits",
+    "en": "Fruits"
+   },
+   "collection": "besoins",
+   "audio": false,
+   "cues": [
+    {
+     "t": 0.4,
+     "show": {
+      "fr": "Miam !",
+      "en": "Yum!"
+     },
+     "say": {
+      "fr": "Miam !",
+      "en": "Yum!"
+     }
+    },
+    {
+     "t": 1.6,
+     "show": {
+      "fr": "la banane",
+      "en": "the banana"
+     },
+     "say": {
+      "fr": "la banane",
+      "en": "the banana"
+     }
+    },
+    {
+     "t": 3.1,
+     "show": {
+      "fr": "C'est bon !",
+      "en": "It is good!"
+     },
+     "say": {
+      "fr": "C'est bon !",
+      "en": "It is good!"
+     }
+    },
+    {
+     "t": 5.2,
+     "show": {
+      "fr": "la mangue",
+      "en": "the mango"
+     },
+     "say": {
+      "fr": "la mangue",
+      "en": "the mango"
+     }
+    },
+    {
+     "t": 6.7,
+     "show": {
+      "fr": "Miam miam !",
+      "en": "Yum yum!"
+     },
+     "say": {
+      "fr": "Miam miam !",
+      "en": "Yum yum!"
+     }
+    },
+    {
+     "t": 8.8,
+     "show": {
+      "fr": "l'ananas",
+      "en": "the pineapple"
+     },
+     "say": {
+      "fr": "l'ananas",
+      "en": "the pineapple"
+     }
+    },
+    {
+     "t": 10.3,
+     "show": {
+      "fr": "C'est sucré !",
+      "en": "It is sweet!"
+     },
+     "say": {
+      "fr": "C'est sucré !",
+      "en": "It is sweet!"
+     }
+    },
+    {
+     "t": 12.4,
+     "show": {
+      "fr": "la pomme",
+      "en": "the apple"
+     },
+     "say": {
+      "fr": "la pomme",
+      "en": "the apple"
+     }
+    },
+    {
+     "t": 13.9,
+     "show": {
+      "fr": "Croc croc !",
+      "en": "Crunch crunch!"
+     },
+     "say": {
+      "fr": "Croc croc !",
+      "en": "Crunch crunch!"
+     }
+    },
+    {
+     "t": 16,
+     "show": {
+      "fr": "l'avocat",
+      "en": "the avocado"
+     },
+     "say": {
+      "fr": "l'avocat",
+      "en": "the avocado"
+     }
+    },
+    {
+     "t": 17.5,
+     "show": {
+      "fr": "Un avocat vert.",
+      "en": "A green avocado."
+     },
+     "say": {
+      "fr": "Un avocat vert.",
+      "en": "A green avocado."
+     }
+    },
+    {
+     "t": 19.5,
+     "show": {
+      "fr": "Bravo !",
+      "en": "Well done!"
+     },
+     "say": {
+      "fr": "Bravo !",
+      "en": "Well done!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "la banane",
+    "en": "the banana"
+   },
+   "credit": "Dessins animés originaux. Images : Twemoji (CC-BY 4.0)."
+  },
+  {
+   "id": "nuit",
+   "kind": "video",
+   "src": "/reels/nuit.mp4",
+   "srcWebm": "/reels/nuit.webm",
+   "poster": "/reels/nuit.jpg",
+   "seconds": 21.4,
+   "bytes": 641453,
+   "title": {
+    "fr": "Bonne nuit",
+    "en": "Good night"
+   },
+   "collection": "social",
+   "audio": false,
+   "cues": [
+    {
+     "t": 0.4,
+     "show": {
+      "fr": "Il est tard…",
+      "en": "It is late…"
+     },
+     "say": {
+      "fr": "Il est tard…",
+      "en": "It is late…"
+     }
+    },
+    {
+     "t": 1.6,
+     "show": {
+      "fr": "la lune",
+      "en": "the moon"
+     },
+     "say": {
+      "fr": "la lune",
+      "en": "the moon"
+     }
+    },
+    {
+     "t": 3.1,
+     "show": {
+      "fr": "La lune brille.",
+      "en": "The moon shines."
+     },
+     "say": {
+      "fr": "La lune brille.",
+      "en": "The moon shines."
+     }
+    },
+    {
+     "t": 5.2,
+     "show": {
+      "fr": "les étoiles",
+      "en": "the stars"
+     },
+     "say": {
+      "fr": "les étoiles",
+      "en": "the stars"
+     }
+    },
+    {
+     "t": 6.7,
+     "show": {
+      "fr": "Les étoiles dorment.",
+      "en": "The stars are sleeping."
+     },
+     "say": {
+      "fr": "Les étoiles dorment.",
+      "en": "The stars are sleeping."
+     }
+    },
+    {
+     "t": 8.8,
+     "show": {
+      "fr": "dormir",
+      "en": "sleep"
+     },
+     "say": {
+      "fr": "dormir",
+      "en": "sleep"
+     }
+    },
+    {
+     "t": 10.3,
+     "show": {
+      "fr": "Je dors. Dodo.",
+      "en": "I sleep. Nighty-night."
+     },
+     "say": {
+      "fr": "Je dors. Dodo.",
+      "en": "I sleep. Nighty-night."
+     }
+    },
+    {
+     "t": 12.4,
+     "show": {
+      "fr": "un câlin",
+      "en": "a hug"
+     },
+     "say": {
+      "fr": "un câlin",
+      "en": "a hug"
+     }
+    },
+    {
+     "t": 13.9,
+     "show": {
+      "fr": "Un gros câlin.",
+      "en": "A big hug."
+     },
+     "say": {
+      "fr": "Un gros câlin.",
+      "en": "A big hug."
+     }
+    },
+    {
+     "t": 16,
+     "show": {
+      "fr": "à demain",
+      "en": "see you tomorrow"
+     },
+     "say": {
+      "fr": "à demain",
+      "en": "see you tomorrow"
+     }
+    },
+    {
+     "t": 17.5,
+     "show": {
+      "fr": "À demain !",
+      "en": "See you tomorrow!"
+     },
+     "say": {
+      "fr": "À demain !",
+      "en": "See you tomorrow!"
+     }
+    },
+    {
+     "t": 19.5,
+     "show": {
+      "fr": "Bonne nuit !",
+      "en": "Good night!"
+     },
+     "say": {
+      "fr": "Bonne nuit !",
+      "en": "Good night!"
+     }
+    }
+   ],
+   "repeat": {
+    "fr": "Bonne nuit",
+    "en": "Good night"
+   },
+   "credit": "Dessins animés originaux. Images : Twemoji (CC-BY 4.0)."
+  }
+ ]
+}

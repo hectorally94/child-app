@@ -32,6 +32,8 @@ interface Props {
   child: Child;
   update: (fn: (d: AppData) => AppData) => void;
   compact: boolean;
+  /** A well-earned video break after the session (only when the parent allows videos and time is left). */
+  onPause?: () => void;
   onHome: () => void;
 }
 
@@ -40,7 +42,7 @@ interface Props {
  * whole word slowly, then normally; the child repeats. Three repetitions per word: after the full model, after a quick
  * model, and ALONE (no model). After three misses a "later" button lets the parent move on.
  */
-export function ShortPlayer({ title, words, review, lessonKey, slot, doneBefore, child, update, compact, onHome }: Props) {
+export function ShortPlayer({ title, words, review, lessonKey, slot, doneBefore, child, update, compact, onPause, onHome }: Props) {
   const lang = child.childLang;
   const session = useSession(update, child.id, lessonKey, slot);
   const [wi, setWi] = useState(0);
@@ -290,7 +292,10 @@ export function ShortPlayer({ title, words, review, lessonKey, slot, doneBefore,
               </div>
             )}
             {slot && nextSlot && <p className="m-0 text-center font-bold text-ink-soft">{t('nextSession', lang, { slot: t(SLOT_LABEL[nextSlot], lang).toLowerCase() })}</p>}
-            <button onClick={onHome} className="clay-btn is-sun !mt-1 !px-8 text-lg"><Icon name="home" size={22} />{t('finish', lang)}</button>
+            {onPause && (
+              <button onClick={onPause} className="clay-btn is-pink !mt-1 !px-6 text-lg"><Icon name="play" size={22} />{t('earnedBreak', lang)}</button>
+            )}
+            <button onClick={onHome} className={`clay-btn ${onPause ? 'is-white text-blue' : 'is-sun'} !mt-1 !px-8 text-lg`}><Icon name="home" size={22} />{t('finish', lang)}</button>
           </motion.div>
         )}
       </AnimatePresence>

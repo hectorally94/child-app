@@ -1,5 +1,5 @@
 // Offline cache: network first for pages, cache first for built assets.
-const CACHE = 'hlc-v5';
+const CACHE = 'hlc-v6';
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(['/', '/manifest.webmanifest', '/icon-192.png', '/icon.svg'])));
@@ -14,6 +14,8 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
+  // Videos and their list are handled by the app itself (partial "Range" requests cannot be cached here).
+  if (new URL(req.url).pathname.startsWith('/reels/')) return;
   if (req.mode === 'navigate') {
     e.respondWith(
       fetch(req)

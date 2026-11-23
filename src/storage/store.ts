@@ -46,9 +46,31 @@ export interface SessionRecord {
   attempts: AttemptRecord[];
 }
 
+/** Parent settings of the "Pause vidéos" feed. */
+export interface ReelSettings {
+  enabled: boolean;
+  /** Length of one break, in minutes. */
+  breakMinutes: number;
+  /** Most minutes of videos per day. */
+  dayMinutes: number;
+  /** saved = only clips already saved on the phone (no data); wifi = also stream/save on Wi-Fi; always = any connection. */
+  data: 'saved' | 'wifi' | 'always';
+}
+
+export interface FamilyVideoMeta {
+  id: string;
+  title: string;
+  bytes: number;
+  createdAt: number;
+}
+
 export interface AppData {
   version: 1;
   parentLang: Lang;
+  reels?: Partial<ReelSettings>;
+  /** Seconds watched per child and day ("childId|2026-11-23"), and when each clip was last watched. */
+  reelLog?: { seconds: Record<string, number>; seen: Record<string, number> };
+  family?: FamilyVideoMeta[];
   /** Fingerprint of the parent code (see pin.ts). No code = multiplication question only. */
   parentPinHash?: string;
   activeChildId: string | null;
